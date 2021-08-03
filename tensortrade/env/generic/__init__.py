@@ -1,3 +1,4 @@
+  
 # Copyright 2020 The TensorTrade Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-
 from tensortrade.env.generic.components.reward_scheme import RewardScheme
 from tensortrade.env.generic.components.action_scheme import ActionScheme
 from tensortrade.env.generic.components.observer import Observer
@@ -20,3 +20,4 @@ from tensortrade.env.generic.components.informer import Informer
 from tensortrade.env.generic.components.renderer import Renderer
 
 from tensortrade.env.generic.environment import TradingEnv
+from tensortrade.env.generic.environment_online import TradingEnv_v1
