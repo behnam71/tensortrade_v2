@@ -13,8 +13,7 @@
 # limitations under the License
 import uuid
 import logging
-
-from typing import Dict, Any, Tuple
+from typing import Union, Tuple, List, Dict, Any
 
 import gym
 import numpy as np
