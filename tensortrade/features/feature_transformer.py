@@ -18,7 +18,7 @@ from copy import copy
 from typing import List, Union
 from abc import ABCMeta, abstractmethod
 
-from tensortrade import Component
+from tensortrade.core import Component
 
 
 class FeatureTransformer(Component, metaclass=ABCMeta):
