@@ -17,7 +17,7 @@ import numpy as np
 from gym import Space
 from typing import List, Union, Callable
 
-from tensortrade import Component
+from tensortrade.core import Component
 from .feature_transformer import FeatureTransformer
 
 
