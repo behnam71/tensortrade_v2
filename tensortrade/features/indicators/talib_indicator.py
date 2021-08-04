@@ -37,8 +37,8 @@ class TAlibIndicator(FeatureTransformer):
         self._indicator_params = {indicator[0]: indicator[1]['params'] for indicator in indicators}
         self._indicators = [getattr(talib, name.split('-')[0]) for name in self._indicator_names]
         
-        self.db = pd.DataFrame(columns=['BTC/USDT_date', 'BTC/USDT_open', 'BTC/USDT_high', 'BTC/USDT_low', 'BTC/USDT_close', 'BTC/USDT_volume', 
-                                        'BTC', 'USDT', 'BTC_pending', 'USDT_pending'], dtype=float)
+        self.db = pd.DataFrame(columns=['BTC/USDT:date', 'BTC/USDT:open', 'BTC/USDT:high', 'BTC/USDT:low', 'BTC/USDT:close', 'BTC/USDT:volume', 
+                                        'BTC', 'USDT', 'BTC:pending', 'USDT:pending'], dtype=float)
         
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = pd.DataFrame(X)
@@ -47,7 +47,7 @@ class TAlibIndicator(FeatureTransformer):
             ignore_index=True, 
             sort=False
         )
-        self.db.drop_duplicates(subset=['BTC/USDT_date'], 
+        self.db.drop_duplicates(subset=['BTC/USDT:date'], 
                                 keep='first', 
                                 inplace=True)
         self.db = self.db.reset_index(drop=True)
