@@ -24,8 +24,10 @@ from tensortrade.core import TimeIndexed, Clock, Component
 from tensortrade.env.generic import (
     ActionScheme,
     RewardScheme,
+    Observer,
     Stopper,
-    Informer
+    Informer,
+    Renderer
 )
 from tensortrade.features import FeaturePipeline
 from tensortrade.features.indicators.talib_indicator import TAlibIndicator
