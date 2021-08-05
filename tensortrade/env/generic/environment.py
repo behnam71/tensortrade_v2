@@ -69,11 +69,11 @@ class TradingEnv(gym.Env, TimeIndexed):
                  **kwargs) -> None:
         super().__init__()
         self.clock = Clock()
-
+        
+        self.stopper = stopper
         self.action_scheme = action_scheme
         self.reward_scheme = reward_scheme
         self.observer = observer
-        self.stopper = stopper
         self.informer = informer
         self.renderer = renderer
 
@@ -99,7 +99,8 @@ class TradingEnv(gym.Env, TimeIndexed):
             indicators_list = eval(file.readline())
         TAlib_Indicator = TAlibIndicator(indicators_list)
         self.feature_pipeline = FeaturePipeline(
-            steps=[TAlib_Indicator]
+            steps=[TAlib_Indicator],
+            window_size=self._window_size
         )
 
         self._enable_logger = kwargs.get('enable_logger', False)
@@ -134,15 +135,15 @@ class TradingEnv(gym.Env, TimeIndexed):
 
     def _next_observation(self) -> np.ndarray:
         observation = self.ccxt.next_observation(self._window_size)
-        if self._feature_pipeline is not None:
-            observation = self._feature_pipeline.transform(observation)
-        
         if len(observations) < self._window_size:
             size = self.window_size - len(observations)
             padding = np.zeros(size, len(self.observation_columns()))
             padding = pd.DataFrame(padding, columns=self.observation_columns())
             observations = pd.concat([padding, observation], ignore_index=True, sort=False)
                 
+        if self._feature_pipeline is not None:
+            observation = self._feature_pipeline.transform(observation)
+            
         observations = self.observations.select_dtypes(include='number')
         if isinstance(observations, pd.DataFrame):
             observations = observations.fillna(0, axis=1)
