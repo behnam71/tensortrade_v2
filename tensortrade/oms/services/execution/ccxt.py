@@ -83,7 +83,7 @@ class CCXTExchange():
         if len(self._Obs_DB) >= window_size:
             observations = self._Obs_DB.iloc[-(window_size):]
         
-        return observations.to_numpy()
+        return observations
 
     
     def pair_to_symbol(self, 
