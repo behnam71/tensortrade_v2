@@ -20,4 +20,3 @@ from tensortrade.env.generic.components.informer import Informer
 from tensortrade.env.generic.components.renderer import Renderer
 
 from tensortrade.env.generic.environment import TradingEnv
-from tensortrade.env.generic.environment_online import TradingEnv_v1
