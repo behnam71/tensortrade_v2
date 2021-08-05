@@ -119,7 +119,6 @@ class TradingEnv(gym.Env, TimeIndexed):
             "informer": self.informer,
             "renderer": self.renderer
         }
-
     
     @property
     def feature_pipeline(self) -> FeaturePipeline:
@@ -128,25 +127,25 @@ class TradingEnv(gym.Env, TimeIndexed):
 
     @feature_pipeline.setter
     def feature_pipeline(self, feature_pipeline: Union[FeaturePipeline, str] = None):
-        self._feature_pipeline = features.get(feature_pipeline) if isinstance(
-            feature_pipeline, str
-        ) else feature_pipeline
+        self._feature_pipeline = features.get(feature_pipeline) if isinstance(feature_pipeline, str) else feature_pipeline
 
     def _next_observation(self) -> np.ndarray:
         observation = self.ccxt.next_observation(self._window_size)
         if len(observations) < self._window_size:
             size = self.window_size - len(observations)
-            padding = np.zeros(size, len(self.observation_columns()))
-            padding = pd.DataFrame(padding, columns=self.observation_columns())
+            padding = np.zeros(size, len(observation.columns))
+            padding = pd.DataFrame(padding, columns=observation.columns)
             observations = pd.concat([padding, observation], ignore_index=True, sort=False)
                 
         if self._feature_pipeline is not None:
             observation = self._feature_pipeline.transform(observation)
-            
-        observations = self.observations.select_dtypes(include='number')
+        observation.set_index('date', inplace = True)
+        observation = observation.add_prefix("BTC:")
+        
+        observations = observations.select_dtypes(include='number')
         if isinstance(observations, pd.DataFrame):
             observations = observations.fillna(0, axis=1)
-        observations = np.nan_to_num(self.observations)
+        observations = np.nan_to_num(observations)
         
         return observations.to_numpy()
         
