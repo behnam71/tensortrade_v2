@@ -83,6 +83,7 @@ def create(portfolio: 'Portfolio',
         stopper=kwargs.get("stopper", stopper),
         informer=kwargs.get("informer", informers.TensorTradeInformer()),
         renderer=renderer,
+        window_size=window_size,
         train=train
     )
     return env
