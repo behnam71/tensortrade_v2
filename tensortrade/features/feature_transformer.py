@@ -32,8 +32,8 @@ class FeatureTransformer(Component, metaclass=ABCMeta):
             columns (optional): A list of column names to normalize.
             inplace (optional): If `False`, a new column will be added to the output for each input column.
         """
-        self._inplace = self.default('inplace', inplace)
         self.columns = self.default('columns', columns)
+        self._inplace = self.default('inplace', inplace)
 
     @property
     def columns(self) -> List[str]:
