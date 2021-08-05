@@ -49,6 +49,7 @@ def create(portfolio: 'Portfolio',
     action_scheme = actions.get(action_scheme) if isinstance(action_scheme, str) else action_scheme
     reward_scheme = rewards.get(reward_scheme) if isinstance(reward_scheme, str) else reward_scheme
     action_scheme.portfolio = portfolio
+    print("9999999999999999999999999999999999999999999999999999999999999999")
            
     if train:
         observer = observers.TensorTradeObserver(
