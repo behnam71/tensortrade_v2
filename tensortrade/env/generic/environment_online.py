@@ -66,13 +66,14 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
                  window_size: int,
                  **kwargs) -> None:
         super().__init__()
+        print("555555555555555555555555555555555555555555555555555555555555555522")
         self.clock = Clock()
 
         self.action_scheme = action_scheme
         self.reward_scheme = reward_scheme
         self.stopper = stopper
         self.informer = informer
-        print("5555555555555555555555555555555555555555555555555555555555555555")
+        print("555555555555555555555555555555555555555555555555555555555555555577")
 
         for c in self.components.values():
             c.clock = self.clock
