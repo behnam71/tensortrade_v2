@@ -52,10 +52,13 @@ class MaxLossStopper_v1(Stopper):
     -----
     This stopper also stops if it has reached the end of the observation feed.
     """
+    print("11111111111111111111111111111111111111111111111111111111111")
 
     def __init__(self, max_allowed_loss: float):
         super().__init__()
+        print("22222222222222222222222222222222222222222222222222222222222")
         self.max_allowed_loss = max_allowed_loss
 
     def stop(self, env: 'TradingEnv_v1') -> bool:
+        print("33333333333333333333333333333333333333333333333333333333333")
         return env.action_scheme.portfolio.profit_loss > self.max_allowed_loss
