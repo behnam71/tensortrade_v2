@@ -48,16 +48,11 @@ class CCXTExchange():
         ]
         self._timeframe = '1m'
 
-        self._Obs_DB = pd.DataFrame([], columns=self.observation_columns())
+        self._Obs_DB = pd.DataFrame([], columns=['open', 'high', 'low', 'close', 'volume'])
         self._f_time = self.UTC_Time()
         
         self._exchange.load_markets()
                 
-        
-    def observation_columns(self) -> List[str]:
-        return np.array([[
-            'open', 'high', 'low', 'close', 'volume',
-        ] for symbol in self._observation_symbols]).flatten()
 
     def UTC_Time(self):
         now_utc = datetime.now(timezone.utc)
@@ -66,31 +61,29 @@ class CCXTExchange():
 
     def next_observation(self, 
                          window_size: int = 1) -> pd.DataFrame:
-        self.observations = pd.DataFrame([], columns=self.observation_columns())
-        for symbol in self._observation_symbols:
-            while self._f_time == self.UTC_Time():
-                sleep(1)
-            self.ohlcv = self._exchange.fetch_ohlcv(
-                self._observation_symbols[0],
-                timeframe=self._timeframe,
-                limit=1,
+        while self._f_time == self.UTC_Time():
+            sleep(1)
+        ohlcv = self._exchange.fetch_ohlcv(
+            self._observation_symbols[0],
+            timeframe=self._timeframe,
+            limit=1,
+        )
+        observations = pd.DataFrame.from_records(ohlcv)
+        for i in range(0, len(observations)):
+            observations.loc[i, 'date'] = datetime.utcfromtimestamp(
+                observations.loc[i, 'date']/1000
             )
-            self.observations = pd.DataFrame.from_records(self.ohlcv)
-        for i in range(0, len(self.observations)):
-            self.observations.loc[i, 'date'] = datetime.utcfromtimestamp(
-                self.observations.loc[i, 'date']/1000
-            )
-        self._f_time = self.observations.loc[len(self.observations)-1, 'date']
+        self._f_time = observations.loc[len(observations)-1, 'date']
 
         self._Obs_DB = pd.concat(
-            [self._Obs_DB, self.observations],
+            [self._Obs_DB, observations],
             ignore_index=True, 
             sort=False
         )
         if len(self._Obs_DB) >= window_size:
-            self.observations = self._Obs_DB.iloc[-(window_size):]
+            observations = self._Obs_DB.iloc[-(window_size):]
         
-        return self.observations.to_numpy()
+        return observations.to_numpy()
 
     
     def pair_to_symbol(self, 
