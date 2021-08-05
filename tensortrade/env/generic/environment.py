@@ -33,7 +33,7 @@ from tensortrade.features import FeaturePipeline
 from tensortrade.features.indicators.talib_indicator import TAlibIndicator
 
 
-class TradingEnv_v1(gym.Env, TimeIndexed):
+class TradingEnv(gym.Env, TimeIndexed):
     """A trading environment made for use with Gym-compatible reinforcement
     learning algorithms.
     Parameters
