@@ -57,5 +57,5 @@ class MaxLossStopper_v1(Stopper):
         super().__init__()
         self.max_allowed_loss = max_allowed_loss
 
-    def stop(self, env: 'TradingEnv') -> bool:
+    def stop(self, env: 'TradingEnv_v1') -> bool:
         return env.action_scheme.portfolio.profit_loss > self.max_allowed_loss
