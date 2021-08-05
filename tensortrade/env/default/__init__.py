@@ -49,11 +49,8 @@ def create(portfolio: 'Portfolio',
     action_scheme = actions.get(action_scheme) if isinstance(action_scheme, str) else action_scheme
     reward_scheme = rewards.get(reward_scheme) if isinstance(reward_scheme, str) else reward_scheme
     action_scheme.portfolio = portfolio
-    print("9999999999999999999999999999999999999999999999999999999999999999")
-           
+
     if train:
-        print("8888888888888888888888888888888888888888888888888888888888888888")
-        print(train)
         observer = observers.TensorTradeObserver(
             portfolio=portfolio,
             feed=feed,
@@ -89,19 +86,16 @@ def create(portfolio: 'Portfolio',
         )
            
     else:
-        print("11111111111111111111111111111111111111111111111111111111111111111")
-        stopper = stoppers.MaxLossStopper(
+        stopper = stoppers.MaxLossStopper_v1(
             max_allowed_loss=kwargs.get("max_allowed_loss", 0.5)
         )
-        print("22222222222222222222222222222222222222222222222222222222222222222")
-
+           
         env = TradingEnv_v1(
             action_scheme=action_scheme,
             reward_scheme=reward_scheme,
             stopper=kwargs.get("stopper", stopper),
-            informer=kwargs.get("informer", informers.TensorTradeInformer()),
+            informer=kwargs.get("informer", informers.TensorTradeInformer_v1()),
             window_size=window_size,
         )
-        print("3333333333333333333333333333333333333333333333333333333333333333")
 
     return env
