@@ -26,14 +26,12 @@ class FeaturePipeline(Component):
     registered_name = "features"
     def __init__(self, 
                  steps: List[FeatureTransformer], 
-                 window_size: int,
                  **kwargs):
         """
         Arguments:
             steps: A list of feature transformations to apply to observations.
         """
         self._steps = steps
-        self._window_size = window_size
         self._dtype: Union[type, str] = self.default('dtype', np.float32, kwargs)
 
     @property
@@ -53,7 +51,7 @@ class FeaturePipeline(Component):
     def _transform(self, observations: pd.DataFrame) -> pd.DataFrame:
         """Utility method for transforming observations via a list of "FeatureTransformer" objects."""
         for transformer in self._steps:
-            observations = transformer.transform(observations, self._window_size)
+            observations = transformer.transform(observations)
         return observations
 
     def transform(self, observation: pd.DataFrame) -> pd.DataFrame:
