@@ -58,22 +58,27 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
     def __init__(self,
                  action_scheme: ActionScheme,
                  reward_scheme: RewardScheme,
+                 observer: Observer,
                  stopper: Stopper,
                  informer: Informer,
-                 window_size: int,
+                 renderer: Renderer,
+                 train: bool,
                  **kwargs) -> None:
         super().__init__()
         self.clock = Clock()
 
         self.action_scheme = action_scheme
         self.reward_scheme = reward_scheme
+        self.observer = observer
         self.stopper = stopper
         self.informer = informer
+        self.renderer = renderer
 
         for c in self.components.values():
             c.clock = self.clock
 
         self.action_space = action_scheme.action_space
+        self.observation_space = observer.observation_space
 
         credentials = { 
             'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
@@ -85,6 +90,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         )
         
         self._window_size = window_size
+        self._train = train
         
         with open("/mnt/c/Users/BEHNAMH721AS.RN/OneDrive/Desktop/indicators.txt", "r") as file:
             indicators_list = eval(file.readline())
@@ -92,8 +98,8 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         self.feature_pipeline = FeaturePipeline(
             steps=[TAlib_Indicator]
         )
-            
-        self._enable_logger = kwargs.get('enable_logger', True)
+
+        self._enable_logger = kwargs.get('enable_logger', False)
         if self._enable_logger:
             self.logger = logging.getLogger(kwargs.get('logger_name', __name__))
             self.logger.setLevel(kwargs.get('log_level', logging.DEBUG))
@@ -105,8 +111,10 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         return {
             "action_scheme": self.action_scheme,
             "reward_scheme": self.reward_scheme,
+            "observer": self.observer,
             "stopper": self.stopper,
             "informer": self.informer,
+            "renderer": self.renderer
         }
 
     
@@ -160,7 +168,11 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         """
         self.action_scheme.perform(self, action)
 
-        obs = self._next_observation()
+        if self._train == True:
+            obs = self.observer.observe(self)
+        else:
+            obs = self._next_observation()
+            
         reward = self.reward_scheme.reward(self)
         done = self.stopper.stop(self)
         info = self.informer.info(self)
@@ -183,7 +195,23 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
             if hasattr(c, "reset"):
                 c.reset()
 
-        obs = self._next_observation()
+        if self._train == True:
+            obs = self.observer.observe(self)
+        else:
+            obs = self._next_observation()
 
         self.clock.increment()
+
         return obs
+    
+    def render(self, **kwargs) -> None:
+        """Renders the environment."""
+        self.renderer.render(self, **kwargs)
+
+    def save(self) -> None:
+        """Saves the rendered view of the environment."""
+        self.renderer.save()
+
+    def close(self) -> None:
+        """Closes the environment."""
+        self.renderer.close()
