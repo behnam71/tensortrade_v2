@@ -19,7 +19,7 @@ def create(portfolio: 'Portfolio',
            feed: 'DataFeed',
            window_size: int = 1,
            min_periods: int = None,
-           train: bool,
+           train: bool = True,
            **kwargs) -> TradingEnv:
     """Creates the default `TradingEnv` of the project to be used in training
     RL agents.
