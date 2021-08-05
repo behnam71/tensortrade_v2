@@ -24,10 +24,7 @@ from tensortrade.core import TimeIndexed, Clock, Component
 from tensortrade.env.generic import (
     ActionScheme,
     RewardScheme,
-    Observer,
-    Stopper,
-    Informer,
-    Renderer
+    Informer
 )
 from tensortrade.features import FeaturePipeline
 from tensortrade.features.indicators.talib_indicator import TAlibIndicator
@@ -56,24 +53,19 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
     """
     agent_id: str = None
     episode_id: str = None
-    print("4444444444444444444444444444444444444444444444444444444444444444")
 
     def __init__(self,
                  action_scheme: ActionScheme,
                  reward_scheme: RewardScheme,
-                 stopper: Stopper,
                  informer: Informer,
                  window_size: int,
                  **kwargs) -> None:
         super().__init__()
-        print("555555555555555555555555555555555555555555555555555555555555555522")
         self.clock = Clock()
 
         self.action_scheme = action_scheme
         self.reward_scheme = reward_scheme
-        self.stopper = stopper
         self.informer = informer
-        print("555555555555555555555555555555555555555555555555555555555555555577")
 
         for c in self.components.values():
             c.clock = self.clock
@@ -110,7 +102,6 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         return {
             "action_scheme": self.action_scheme,
             "reward_scheme": self.reward_scheme,
-            "stopper": self.stopper,
             "informer": self.informer,
         }
 
@@ -163,12 +154,11 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         dict
             The information gathered after completing the step.
         """
-        print("6666666666666666666666666666666666666666666666666666666666666666")
         self.action_scheme.perform(self, action)
 
         obs = self._next_observation()
         reward = self.reward_scheme.reward(self)
-        done = self.stopper.stop(self)
+        done = False
         info = self.informer.info(self)
 
         self.clock.increment()
@@ -184,7 +174,6 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         """
         self.episode_id = str(uuid.uuid4())
         self.clock.reset()
-        print("7777777777777777777777777777777777777777777777777777777777777777")
 
         for c in self.components.values():
             if hasattr(c, "reset"):
