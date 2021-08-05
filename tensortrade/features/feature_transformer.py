@@ -33,7 +33,7 @@ class FeatureTransformer(Component, metaclass=ABCMeta):
             inplace (optional): If `False`, a new column will be added to the output for each input column.
         """
         self.columns = self.default('columns', columns)
-        self._inplace = self.default('inplace', inplace)
+        self.inplace = self.default('inplace', inplace)
 
     @property
     def columns(self) -> List[str]:
