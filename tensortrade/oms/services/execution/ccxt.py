@@ -48,7 +48,7 @@ class CCXTExchange():
         ]
         self._timeframe = '1m'
 
-        self._Obs_DB = pd.DataFrame([], columns=['open', 'high', 'low', 'close', 'volume'])
+        self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         self._f_time = self.UTC_Time()
         
         self._exchange.load_markets()
