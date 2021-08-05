@@ -97,10 +97,9 @@ class TradingEnv(gym.Env, TimeIndexed):
         
         with open("/mnt/c/Users/BEHNAMH721AS.RN/OneDrive/Desktop/indicators.txt", "r") as file:
             indicators_list = eval(file.readline())
-        TAlib_Indicator = TAlibIndicator(indicators_list)
+        TAlib_Indicator = TAlibIndicator(indicators_list, self._window_size)
         self.feature_pipeline = FeaturePipeline(
-            steps=[TAlib_Indicator],
-            window_size=self._window_size
+            steps=[TAlib_Indicator]
         )
 
         self._enable_logger = kwargs.get('enable_logger', False)
