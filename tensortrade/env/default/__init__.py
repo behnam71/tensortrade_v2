@@ -52,6 +52,8 @@ def create(portfolio: 'Portfolio',
     print("9999999999999999999999999999999999999999999999999999999999999999")
            
     if train:
+        print("8888888888888888888888888888888888888888888888888888888888888888")
+        print(train)
         observer = observers.TensorTradeObserver(
             portfolio=portfolio,
             feed=feed,
