@@ -1,5 +1,5 @@
 
-from tensortrade.env.generic import Informer, TradingEnv, TradingEnv_v1
+from tensortrade.env.generic import Informer, TradingEnv
 
 
 class TensorTradeInformer(Informer):
