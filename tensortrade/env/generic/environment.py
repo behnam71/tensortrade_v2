@@ -64,6 +64,7 @@ class TradingEnv(gym.Env, TimeIndexed):
                  stopper: Stopper,
                  informer: Informer,
                  renderer: Renderer,
+                 window_size: int,
                  train: bool,
                  **kwargs) -> None:
         super().__init__()
