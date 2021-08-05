@@ -24,6 +24,7 @@ from tensortrade.core import TimeIndexed, Clock, Component
 from tensortrade.env.generic import (
     ActionScheme,
     RewardScheme,
+    Stopper,
     Informer
 )
 from tensortrade.features import FeaturePipeline
@@ -57,6 +58,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
     def __init__(self,
                  action_scheme: ActionScheme,
                  reward_scheme: RewardScheme,
+                 stopper: Stopper,
                  informer: Informer,
                  window_size: int,
                  **kwargs) -> None:
@@ -65,6 +67,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
 
         self.action_scheme = action_scheme
         self.reward_scheme = reward_scheme
+        self.stopper = stopper
         self.informer = informer
 
         for c in self.components.values():
@@ -102,6 +105,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         return {
             "action_scheme": self.action_scheme,
             "reward_scheme": self.reward_scheme,
+            "stopper": self.stopper,
             "informer": self.informer,
         }
 
@@ -158,7 +162,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
 
         obs = self._next_observation()
         reward = self.reward_scheme.reward(self)
-        done = False
+        done = self.stopper.stop(self)
         info = self.informer.info(self)
 
         self.clock.increment()
