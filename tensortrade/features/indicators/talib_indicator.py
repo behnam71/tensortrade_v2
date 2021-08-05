@@ -39,13 +39,10 @@ class TAlibIndicator(FeatureTransformer):
         
         self._window_size = window_size
         
-        self.db = pd.DataFrame(columns=[
-            'BTC/USDT:date', 'BTC/USDT:open', 'BTC/USDT:high', 'BTC/USDT:low', 'BTC/USDT:close', 'BTC/USDT:volume'
-        ], dtype=float)
+        self.db = pd.DataFrame(columns=['date', 'open', 'high', 'low', 'close', 'volume'], dtype=float)
         
         
-    def transform(self, 
-                  X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = pd.DataFrame(X)
         self.db = pd.concat(
             [self.db, X],
@@ -63,15 +60,19 @@ class TAlibIndicator(FeatureTransformer):
                 self.db[arg].values for arg in self._indicator_args[indicator_name]
             ]
             indicator_params = self._indicator_params[indicator_name]
+            
             if indicator_name == 'MACD':
                 macd , macdsignal , macdhist  = indicator(*indicator_args, **indicator_params)
                 X["macd"] = macd[self._window_size:]; X["macd_signal"] = macdsignal[self._window_size:]; X["macd_hist"] = macdhist[self._window_size:]
+            
             elif indicator_name == 'BBANDS':
                 upper, middle, lower = indicator(*indicator_args, **indicator_params)
                 X["bb_upper"] = upper[self._window_size:]; X["bb_middle"] = middle[self._window_size:]; X["bb_lower"] = lower[self._window_size:]
+            
             elif indicator_name == 'STOCH':
                 slowk , slowd = indicator(*indicator_args, **indicator_params)
                 X["slowk"] = slowk[self._window_size:]; X["slowd"] = slowd[self._window_size:]
+           
             else:
                 value = indicator(*indicator_args, **indicator_params)
                 X[indicator_name] = value[self._window_size:]
