@@ -48,17 +48,15 @@ class CCXTExchange():
         ]
         self._timeframe = '1m'
 
-        self.observations = pd.DataFrame([], columns=self.observation_columns())
+        self._Obs_DB = pd.DataFrame([], columns=self.observation_columns())
         self._f_time = self.UTC_Time()
-        self.streams = 0
         
         self._exchange.load_markets()
                 
         
     def observation_columns(self) -> List[str]:
         return np.array([[
-            '{}:open'.format(symbol), '{}:high'.format(symbol), '{}:low'.format(symbol), 
-            '{}:close'.format(symbol), '{}:volume'.format(symbol),
+            'open', 'high', 'low', 'close', 'volume',
         ] for symbol in self._observation_symbols]).flatten()
 
     def UTC_Time(self):
@@ -78,22 +76,19 @@ class CCXTExchange():
                 limit=1,
             )
             self.observations = pd.DataFrame.from_records(self.ohlcv)
-            self.observations.columns = ['{}:date'.format(symbol), '{}:open'.format(symbol), '{}:high'.format(symbol), '{}:low'.format(symbol),
-                                         '{}:close'.format(symbol), '{}:volume'.format(symbol)]
         for i in range(0, len(self.observations)):
-            self.observations.loc[i, 'BTC:date'] = datetime.utcfromtimestamp(
-                self.observations.loc[i, 'BTC:date']/1000
+            self.observations.loc[i, 'date'] = datetime.utcfromtimestamp(
+                self.observations.loc[i, 'date']/1000
             )
-        self._f_time = self.observations.loc[len(self.observations)-1, 'BTC:date']
+        self._f_time = self.observations.loc[len(self.observations)-1, 'date']
 
-        self.observations = pd.concat(
-            [self._data_frame, self.observations],
+        self._Obs_DB = pd.concat(
+            [self._Obs_DB, self.observations],
             ignore_index=True, 
             sort=False
         )
-        self._data_frame = self.observations
-        if len(self._data_frame) >= window_size:
-            self._data_frame = self._data_frame.iloc[-(window_size):]
+        if len(self._Obs_DB) >= window_size:
+            self.observations = self._Obs_DB.iloc[-(window_size):]
         
         return self.observations.to_numpy()
 
