@@ -56,6 +56,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
     """
     agent_id: str = None
     episode_id: str = None
+    print("4444444444444444444444444444444444444444444444444444444444444444")
 
     def __init__(self,
                  action_scheme: ActionScheme,
@@ -71,6 +72,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         self.reward_scheme = reward_scheme
         self.stopper = stopper
         self.informer = informer
+        print("5555555555555555555555555555555555555555555555555555555555555555")
 
         for c in self.components.values():
             c.clock = self.clock
@@ -160,6 +162,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         dict
             The information gathered after completing the step.
         """
+        print("6666666666666666666666666666666666666666666666666666666666666666")
         self.action_scheme.perform(self, action)
 
         obs = self._next_observation()
@@ -180,6 +183,7 @@ class TradingEnv_v1(gym.Env, TimeIndexed):
         """
         self.episode_id = str(uuid.uuid4())
         self.clock.reset()
+        print("7777777777777777777777777777777777777777777777777777777777777777")
 
         for c in self.components.values():
             if hasattr(c, "reset"):
