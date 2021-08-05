@@ -127,7 +127,9 @@ class TradingEnv(gym.Env, TimeIndexed):
 
     @feature_pipeline.setter
     def feature_pipeline(self, feature_pipeline: Union[FeaturePipeline, str] = None):
-        self._feature_pipeline = features.get(feature_pipeline) if isinstance(feature_pipeline, str) else feature_pipeline
+        self._feature_pipeline = features.get(
+            feature_pipeline
+        ) if isinstance(feature_pipeline, str) else feature_pipeline
 
     def _next_observation(self) -> np.ndarray:
         observation = self.ccxt.next_observation(self._window_size)
@@ -139,10 +141,11 @@ class TradingEnv(gym.Env, TimeIndexed):
                 
         if self._feature_pipeline is not None:
             observation = self._feature_pipeline.transform(observation)
+            
         observation.set_index('date', inplace = True)
         observation = observation.add_prefix("BTC:")
-        
         observations = observations.select_dtypes(include='number')
+        
         if isinstance(observations, pd.DataFrame):
             observations = observations.fillna(0, axis=1)
         observations = np.nan_to_num(observations)
@@ -154,22 +157,17 @@ class TradingEnv(gym.Env, TimeIndexed):
         """Makes on step through the environment.
         Parameters
         ----------
-        action : Any
-            An action to perform on the environment.
+        action : Any (An action to perform on the environment.)
+        
         Returns
         -------
-        `np.array`
-            The observation of the environment after the action being
-            performed.
-        float
-            The computed reward for performing the action.
-        bool
-            Whether or not the episode is complete.
-        dict
-            The information gathered after completing the step.
+        np.array (The observation of the environment after the action being performed.)
+        float (The computed reward for performing the action.)
+        bool (Whether or not the episode is complete.)
+        dict (The information gathered after completing the step.)
         """
         self.action_scheme.perform(self, action)
-
+        
         if self._train == True:
             obs = self.observer.observe(self)
         else:
@@ -178,7 +176,6 @@ class TradingEnv(gym.Env, TimeIndexed):
         reward = self.reward_scheme.reward(self)
         done = self.stopper.stop(self)
         info = self.informer.info(self)
-
         self.clock.increment()
         return obs, reward, done, info
 
@@ -187,12 +184,11 @@ class TradingEnv(gym.Env, TimeIndexed):
         """Resets the environment.
         Returns
         -------
-        obs : `np.array`
+        obs : np.array
             The first observation of the environment.
         """
         self.episode_id = str(uuid.uuid4())
         self.clock.reset()
-
         for c in self.components.values():
             if hasattr(c, "reset"):
                 c.reset()
@@ -203,7 +199,6 @@ class TradingEnv(gym.Env, TimeIndexed):
             obs = self._next_observation()
 
         self.clock.increment()
-
         return obs
     
     def render(self, **kwargs) -> None:
