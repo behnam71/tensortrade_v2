@@ -86,9 +86,11 @@ def create(portfolio: 'Portfolio',
         )
            
     else:
+        print("11111111111111111111111111111111111111111111111111111111111111111")
         stopper = stoppers.MaxLossStopper(
             max_allowed_loss=kwargs.get("max_allowed_loss", 0.5)
         )
+        print("22222222222222222222222222222222222222222222222222222222222222222")
 
         env = TradingEnv_v1(
             action_scheme=action_scheme,
@@ -97,5 +99,6 @@ def create(portfolio: 'Portfolio',
             informer=kwargs.get("informer", informers.TensorTradeInformer()),
             window_size=window_size,
         )
+        print("3333333333333333333333333333333333333333333333333333333333333333")
 
     return env
