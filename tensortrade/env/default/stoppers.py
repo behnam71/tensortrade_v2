@@ -1,5 +1,5 @@
 
-from tensortrade.env.generic import Stopper, TradingEnv, TradingEnv_v1
+from tensortrade.env.generic import Stopper, TradingEnv
 
 
 class MaxLossStopper(Stopper):
