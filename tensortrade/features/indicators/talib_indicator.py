@@ -37,10 +37,15 @@ class TAlibIndicator(FeatureTransformer):
         self._indicator_params = {indicator[0]: indicator[1]['params'] for indicator in indicators}
         self._indicators = [getattr(talib, name.split('-')[0]) for name in self._indicator_names]
         
-        self.db = pd.DataFrame(columns=['BTC/USDT:date', 'BTC/USDT:open', 'BTC/USDT:high', 'BTC/USDT:low', 'BTC/USDT:close', 'BTC/USDT:volume', 
-                                        'BTC', 'USDT', 'BTC:pending', 'USDT:pending'], dtype=float)
+        self._window_size = window_size
         
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        self.db = pd.DataFrame(columns=[
+            'BTC/USDT:date', 'BTC/USDT:open', 'BTC/USDT:high', 'BTC/USDT:low', 'BTC/USDT:close', 'BTC/USDT:volume'
+        ], dtype=float)
+        
+        
+    def transform(self, 
+                  X: pd.DataFrame) -> pd.DataFrame:
         X = pd.DataFrame(X)
         self.db = pd.concat(
             [self.db, X],
@@ -51,6 +56,7 @@ class TAlibIndicator(FeatureTransformer):
                                 keep='first', 
                                 inplace=True)
         self.db = self.db.reset_index(drop=True)
+        
         for idx, indicator in enumerate(self._indicators):
             indicator_name = self._indicator_names[idx]
             indicator_args = [
@@ -59,16 +65,16 @@ class TAlibIndicator(FeatureTransformer):
             indicator_params = self._indicator_params[indicator_name]
             if indicator_name == 'MACD':
                 macd , macdsignal , macdhist  = indicator(*indicator_args, **indicator_params)
-                X["macd"] = macd[-len(X):]; X["macd_signal"] = macdsignal[-len(X):]; X["macd_hist"] = macdhist[-len(X):]
+                X["macd"] = macd[self._window_size:]; X["macd_signal"] = macdsignal[self._window_size:]; X["macd_hist"] = macdhist[self._window_size:]
             elif indicator_name == 'BBANDS':
                 upper, middle, lower = indicator(*indicator_args, **indicator_params)
-                X["bb_upper"] = upper[-len(X):]; X["bb_middle"] = middle[-len(X):]; X["bb_lower"] = lower[-len(X):]
+                X["bb_upper"] = upper[self._window_size:]; X["bb_middle"] = middle[self._window_size:]; X["bb_lower"] = lower[self._window_size:]
             elif indicator_name == 'STOCH':
                 slowk , slowd = indicator(*indicator_args, **indicator_params)
-                X["slowk"] = slowk[-len(X):]; X["slowd"] = slowd[-len(X):]
+                X["slowk"] = slowk[self._window_size:]; X["slowd"] = slowd[self._window_size:]
             else:
                 value = indicator(*indicator_args, **indicator_params)
-                X[indicator_name] = value[-len(X):]
+                X[indicator_name] = value[self._window_size:]
 
         self.db = self.db.reset_index(drop=True)
         return X
