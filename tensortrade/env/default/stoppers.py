@@ -31,34 +31,3 @@ class MaxLossStopper(Stopper):
         c1 = env.action_scheme.portfolio.profit_loss > self.max_allowed_loss
         c2 = not env.observer.has_next()
         return c1 or c2
-    
-class MaxLossStopper_v1(Stopper):
-    """A stopper that stops an episode if the portfolio has lost a particular
-    percentage of its wealth.
-
-    Parameters
-    ----------
-    max_allowed_loss : float
-        The maximum percentage of initial funds that is willing to
-        be lost before stopping the episode.
-
-    Attributes
-    ----------
-    max_allowed_loss : float
-        The maximum percentage of initial funds that is willing to
-        be lost before stopping the episode.
-
-    Notes
-    -----
-    This stopper also stops if it has reached the end of the observation feed.
-    """
-    print("11111111111111111111111111111111111111111111111111111111111")
-
-    def __init__(self, max_allowed_loss: float):
-        super().__init__()
-        print("22222222222222222222222222222222222222222222222222222222222")
-        self.max_allowed_loss = max_allowed_loss
-
-    def stop(self, env: 'TradingEnv_v1') -> bool:
-        print("33333333333333333333333333333333333333333333333333333333333")
-        return env.action_scheme.portfolio.profit_loss > self.max_allowed_loss
