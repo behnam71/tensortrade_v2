@@ -171,17 +171,17 @@ class TradingEnv(gym.Env, TimeIndexed):
         
         if self._train == True:
             obs = self.observer.observe(self)
+            reward = self.reward_scheme.reward(self)
+            done = self.stopper.stop(self)
+            info = self.informer.info(self)
+            self.clock.increment()
         else:
             obs = self._next_observation()
-        print("Online Observation:\n")
-        print(obs)
+            print("Online Observation:\n"); print(obs)
+            return obs
         
-        reward = self.reward_scheme.reward(self)
-        done = self.stopper.stop(self)
-        info = self.informer.info(self)
-        self.clock.increment()
         return obs, reward, done, info
-
+    
     
     def reset(self) -> 'np.array':
         """Resets the environment.
