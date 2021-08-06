@@ -50,7 +50,7 @@ class TAlibIndicator(FeatureTransformer):
             ignore_index=True, 
             sort=False
         )
-        self.db.drop_duplicates(subset=['BTC/USDT:date'], 
+        self.db.drop_duplicates(subset=['date'], 
                                 keep='first', 
                                 inplace=True)
         self.db = self.db.reset_index(drop=True)
