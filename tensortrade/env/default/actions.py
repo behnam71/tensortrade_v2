@@ -384,10 +384,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
 
         if size < 10 ** -instrument.precision or size < self.min_order_abs:
             return []
-
-        print("111111111111111111111111111111111111111111111111111111111aa")
-        print(ep.pair)
-        print(instrument)
+        
         params = {
             'side': side,
             'exchange_pair': ep,
