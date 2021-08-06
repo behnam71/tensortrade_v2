@@ -64,22 +64,20 @@ class TAlibIndicator(FeatureTransformer):
             
             if indicator_name == 'MACD':
                 macd , macdsignal , macdhist  = indicator(*indicator_args, **indicator_params)
-                X["macd"] = macd[self._window_size:]; X["macd_signal"] = macdsignal[self._window_size:]; X["macd_hist"] = macdhist[self._window_size:]
+                X["macd"] = macd[-self._window_size:]; X["macd_signal"] = macdsignal[-self._window_size:]; X["macd_hist"] = macdhist[-self._window_size:]
             
             elif indicator_name == 'BBANDS':
                 upper, middle, lower = indicator(*indicator_args, **indicator_params)
-                X["bb_upper"] = upper[self._window_size:]; X["bb_middle"] = middle[self._window_size:]; X["bb_lower"] = lower[self._window_size:]
+                X["bb_upper"] = upper[-self._window_size:]; X["bb_middle"] = middle[-self._window_size:]; X["bb_lower"] = lower[-self._window_size:]
             
             elif indicator_name == 'STOCH':
                 slowk , slowd = indicator(*indicator_args, **indicator_params)
-                X["slowk"] = slowk[self._window_size:]; X["slowd"] = slowd[self._window_size:]
+                X["slowk"] = slowk[-self._window_size:]; X["slowd"] = slowd[-self._window_size:]
            
             else:
-                print("1111111111111111111111111111111111111111111111111111111111")
-                print(self._window_size)
                 value = indicator(*indicator_args, **indicator_params)
                 print(value)
-                X[indicator_name] = value[self._window_size:]
+                X[indicator_name] = value[-self._window_size:]
 
         self.db = self.db.reset_index(drop=True)
         return X
