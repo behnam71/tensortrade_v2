@@ -102,7 +102,7 @@ class TradingEnv(gym.Env, TimeIndexed):
             steps=[TAlib_Indicator]
         )
 
-        self._enable_logger = kwargs.get('enable_logger', False)
+        self._enable_logger = kwargs.get('enable_logger', True)
         if self._enable_logger:
             self.logger = logging.getLogger(kwargs.get('logger_name', __name__))
             self.logger.setLevel(kwargs.get('log_level', logging.DEBUG))
