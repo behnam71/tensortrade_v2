@@ -27,9 +27,9 @@ class TAlibIndicator(FeatureTransformer):
     """Adds one or more TAlib indicators to a data frame, based on existing open, high, low, and close column values."""
     def __init__(self, 
                  indicators: List[str],
+                 window_size: int,
                  lows: Union[List[float], List[int]] = None, 
                  highs: Union[List[float], List[int]] = None,
-                 window_size: int = 24,
                  **kwargs):
         self._indicator_names = [
             indicator[0].upper() for indicator in indicators
