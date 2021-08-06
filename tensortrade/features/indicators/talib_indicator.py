@@ -50,12 +50,8 @@ class TAlibIndicator(FeatureTransformer):
             ignore_index=True, 
             sort=False
         )
-        self.db.drop_duplicates(subset=['date'], 
-                                keep='first', 
-                                inplace=True)
         self.db = self.db.reset_index(drop=True)
         print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        print(X)
         print(self.db)
         for idx, indicator in enumerate(self._indicators):
             indicator_name = self._indicator_names[idx]
@@ -78,10 +74,6 @@ class TAlibIndicator(FeatureTransformer):
            
             else:
                 print("sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
-                print(indicator)
-                print(indicator_name)
-                print(*indicator_args)
-                print(**indicator_params)
                 value = indicator(*indicator_args, **indicator_params)
                 print(value)
                 X[indicator_name] = value[-self._window_size+1:]
