@@ -43,7 +43,6 @@ class TensorTradeActionScheme(ActionScheme):
     get_orders(action,portfolio)
         Gets the list of orders to be submitted for the given action.
     """
-
     def __init__(self) -> None:
         super().__init__()
         self.portfolio: 'Portfolio' = None
@@ -87,8 +86,10 @@ class TensorTradeActionScheme(ActionScheme):
             The specific action selected from the action space.
         """
         orders = self.get_orders(action, self.portfolio)
-
+        
         for order in orders:
+            orders = self.get_orders(action, self.portfolio)
+            print("Order Status:\n" + order)
             if order:
                 logging.info('Step {}: {} {}'.format(order.step, order.side, order.quantity))
                 self.broker.submit(order)
