@@ -47,8 +47,9 @@ class CCXTExchange():
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
         self._timeframe = '1m'
-
-        self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
+        
+        self.observation_columns = ['date', 'open', 'high', 'low', 'close', 'volume']
+        self._Obs_DB = pd.DataFrame([], columns=self.observation_columns)
         self._f_time = self.UTC_Time()
         
         self._exchange.load_markets()
@@ -61,6 +62,7 @@ class CCXTExchange():
 
     def next_observation(self, 
                          window_size: int = 1) -> pd.DataFrame:
+        observations = pd.DataFrame([], columns=self.observation_columns)
         while self._f_time == self.UTC_Time():
             sleep(1)
         ohlcv = self._exchange.fetch_ohlcv(
