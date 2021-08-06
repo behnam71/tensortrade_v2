@@ -134,8 +134,7 @@ class TradingEnv(gym.Env, TimeIndexed):
 
     def _next_observation(self) -> np.ndarray:
         observation = self.ccxt.next_observation(self._window_size)
-        print("1111111111111111111111111111111111111111111111111111111111")
-        print(observation)
+
         if len(observation) < self._window_size:
             size = self._window_size - len(observation)
             padding = np.zeros((size, len(observation.columns)))
@@ -144,16 +143,19 @@ class TradingEnv(gym.Env, TimeIndexed):
                 
         if self._feature_pipeline is not None:
             observation = self._feature_pipeline.transform(observation)
-        print("2222222222222222222222222222222222222222222222222222222222")
-        print(observation) 
+        
         observation.set_index('date', inplace = True)
         observation = observation.add_prefix("BTC:")
         observations = observations.select_dtypes(include='number')
         
+        print("2222222222222222222222222222222222222222222222222222222222")
+        print(observation) 
+        
         if isinstance(observations, pd.DataFrame):
             observations = observations.fillna(0, axis=1)
         observations = np.nan_to_num(observations)
-        
+        print("Online Observation:\n")
+        print(observation)
         return observations.to_numpy()
         
         
