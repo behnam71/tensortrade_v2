@@ -150,9 +150,9 @@ class TradingEnv(gym.Env, TimeIndexed):
         
         if isinstance(observation, pd.DataFrame):
             observation = observation.fillna(0, axis=1)
-        observation = np.nan_to_num(observation)
         print("Online Observation:\n")
         print(observation)
+        
         return observation.to_numpy()
         
         
