@@ -75,7 +75,10 @@ class TAlibIndicator(FeatureTransformer):
                 X["slowk"] = slowk[self._window_size:]; X["slowd"] = slowd[self._window_size:]
            
             else:
+                print("1111111111111111111111111111111111111111111111111111111111")
+                print(self._window_size)
                 value = indicator(*indicator_args, **indicator_params)
+                print(value)
                 X[indicator_name] = value[self._window_size:]
 
         self.db = self.db.reset_index(drop=True)
