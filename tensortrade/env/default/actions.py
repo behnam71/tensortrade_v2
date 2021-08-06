@@ -391,7 +391,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             'side': side,
             'exchange_pair': ep,
             #'price': ep.price,
-            'price': self.ccxt.quote_price(ep.pair)
+            'price': self.ccxt.quote_price(ep.pair),
             'quantity': quantity,
             'down_percent': stop,
             'up_percent': take,
