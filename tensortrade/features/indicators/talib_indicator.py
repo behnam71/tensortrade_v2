@@ -29,6 +29,7 @@ class TAlibIndicator(FeatureTransformer):
                  indicators: List[str],
                  lows: Union[List[float], List[int]] = None, 
                  highs: Union[List[float], List[int]] = None,
+                 window_size: int = 24,
                  **kwargs):
         self._indicator_names = [
             indicator[0].upper() for indicator in indicators
