@@ -25,7 +25,7 @@ from tensortrade.core.exceptions import (
     InvalidNonNumericQuantity,
     QuantityOpPathMismatch
 )
-
+from tensortrade.oms.services.execution.ccxt import CCXTExchange
 
 T = TypeVar("T")
 
@@ -60,6 +60,15 @@ class Quantity:
         self.instrument = instrument
         self.size = size if isinstance(size, Decimal) else Decimal(size)
         self.path_id = path_id
+        
+        credentials = { 
+            'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
+            'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
+        }
+        self.ccxt = CCXTExchange(
+            exchange='binance',
+            credentials=credentials,
+        )
 
     @property
     def is_locked(self) -> bool:
@@ -153,7 +162,8 @@ class Quantity:
             A quantity compatible with the given exchange.
         """
         options = exchange_pair.exchange.options
-        price = exchange_pair.price
+        price = self.ccxt.quote_price('USDT/BTC')
+        #price = exchange_pair.price
 
         if exchange_pair.pair.base == self.instrument:
             size = self.size
