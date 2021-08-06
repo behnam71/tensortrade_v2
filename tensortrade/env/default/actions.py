@@ -373,7 +373,6 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         quantity = (size * instrument).quantize()
 
         if size < 10 ** -instrument.precision \
-                or size < self.min_order_pct * portfolio.net_worth \
                 or size < self.min_order_abs:
             return []
 
