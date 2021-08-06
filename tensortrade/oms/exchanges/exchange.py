@@ -16,7 +16,6 @@ from decimal import Decimal
 
 from tensortrade.core import Component, TimedIdentifiable
 from tensortrade.oms.instruments import TradingPair
-from tensortrade.oms.services.execution.ccxt import CCXTExchange
 
 
 class ExchangeOptions:
@@ -37,7 +36,6 @@ class ExchangeOptions:
     is_live : bool, default False
         Whether live orders should be submitted to the exchange.
     """
-
     def __init__(self,
                  commission: float = 0.003,
                  min_trade_size: float = 1e-6,
@@ -78,6 +76,7 @@ class Exchange(Component, TimedIdentifiable):
         self.options = options if options else ExchangeOptions()
         self._price_streams = {}
         
+        from tensortrade.oms.services.execution.ccxt import CCXTExchange
         credentials = { 
             'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
             'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
