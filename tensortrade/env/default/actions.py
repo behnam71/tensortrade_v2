@@ -80,7 +80,7 @@ class TensorTradeActionScheme(ActionScheme):
         for c in components:
             c.clock = clock
         self.broker.clock = clock
-
+ 
     def perform(self, env: 'TradingEnv', action: Any) -> None:
         """Performs the action on the given environment.
 
@@ -98,7 +98,7 @@ class TensorTradeActionScheme(ActionScheme):
         orders = self.get_orders(action, self.portfolio)
         
         for order in orders:
-            orders = self.get_orders(action, self.portfolio)
+            print("Order Status:\n" + str(order))
             if order:
                 logging.info('Step {}: {} {}'.format(order.step, order.side, order.quantity))
                 self.broker.submit(order)
