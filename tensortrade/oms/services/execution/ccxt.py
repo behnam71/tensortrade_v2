@@ -48,8 +48,7 @@ class CCXTExchange():
         ]
         self._timeframe = '1m'
         
-        self.observation_columns = ['date', 'open', 'high', 'low', 'close', 'volume']
-        self._Obs_DB = pd.DataFrame([], columns=self.observation_columns)
+        self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         self._f_time = self.UTC_Time()
         
         self._exchange.load_markets()
@@ -62,7 +61,6 @@ class CCXTExchange():
 
     def next_observation(self, 
                          window_size: int = 1) -> pd.DataFrame:
-        observations = pd.DataFrame([], columns=self.observation_columns)
         while self._f_time == self.UTC_Time():
             sleep(1)
         ohlcv = self._exchange.fetch_ohlcv(
@@ -71,6 +69,7 @@ class CCXTExchange():
             limit=1,
         )
         observations = pd.DataFrame.from_records(ohlcv)
+        observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
         print("3333333333333333333333333333333333333333333333333333333333")
         print(observations)
         for i in range(0, len(observations)):
