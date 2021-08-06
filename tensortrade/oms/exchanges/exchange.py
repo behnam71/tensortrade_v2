@@ -11,13 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from typing import Callable
 from decimal import Decimal
 
 from tensortrade.core import Component, TimedIdentifiable
 from tensortrade.oms.instruments import TradingPair
+from tensortrade.oms.services.execution.ccxt import CCXTExchange
 
 
 class ExchangeOptions:
@@ -78,6 +77,15 @@ class Exchange(Component, TimedIdentifiable):
         self._service = service
         self.options = options if options else ExchangeOptions()
         self._price_streams = {}
+        
+        credentials = { 
+            'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
+            'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
+        }
+        self.ccxt = CCXTExchange(
+            exchange='binance',
+            credentials=credentials,
+        )
 
     def __call__(self, *streams) -> "Exchange":
         """Sets up the price streams used to generate the prices.
@@ -164,7 +172,8 @@ class Exchange(Component, TimedIdentifiable):
             order=order,
             base_wallet=portfolio.get_wallet(self.id, order.pair.base),
             quote_wallet=portfolio.get_wallet(self.id, order.pair.quote),
-            current_price=self.quote_price(order.pair),
+            #current_price=self.quote_price(order.pair),
+            current_price=self.ccxt.quote_price(order.pair),
             options=self.options,
             clock=self.clock
         )
