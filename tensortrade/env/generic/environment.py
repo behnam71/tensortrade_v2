@@ -135,11 +135,11 @@ class TradingEnv(gym.Env, TimeIndexed):
         observation = self.ccxt.next_observation(self._window_size)
         print("1111111111111111111111111111111111111111111111111111111111")
         print(observation)
-        if len(observations) < self._window_size:
-            size = self.window_size - len(observations)
+        if len(observation) < self._window_size:
+            size = self.window_size - len(observation)
             padding = np.zeros(size, len(observation.columns))
             padding = pd.DataFrame(padding, columns=observation.columns)
-            observations = pd.concat([padding, observation], ignore_index=True, sort=False)
+            observation = pd.concat([padding, observation], ignore_index=True, sort=False)
                 
         if self._feature_pipeline is not None:
             observation = self._feature_pipeline.transform(observation)
