@@ -141,22 +141,19 @@ class TradingEnv(gym.Env, TimeIndexed):
             padding = pd.DataFrame(padding, columns=observation.columns)
             observation = pd.concat([padding, observation], ignore_index=True, sort=False)
         
-        print("2222222222222222222222222222222222222222222222222222222222")
-        print(observation) 
-        
         if self._feature_pipeline is not None:
             observation = self._feature_pipeline.transform(observation)
         
         observation.set_index('date', inplace = True)
         observation = observation.add_prefix("BTC:")
-        observations = observations.select_dtypes(include='number')
+        observation = observation.select_dtypes(include='number')
         
-        if isinstance(observations, pd.DataFrame):
-            observations = observations.fillna(0, axis=1)
-        observations = np.nan_to_num(observations)
+        if isinstance(observation, pd.DataFrame):
+            observation = observation.fillna(0, axis=1)
+        observation = np.nan_to_num(observation)
         print("Online Observation:\n")
         print(observation)
-        return observations.to_numpy()
+        return observation.to_numpy()
         
         
     def step(self, action: Any) -> 'Tuple[np.array, float, bool, dict]':
