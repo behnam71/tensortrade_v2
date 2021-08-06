@@ -72,11 +72,8 @@ class TAlibIndicator(FeatureTransformer):
                 X["slowk"] = slowk[-self._window_size:]; X["slowd"] = slowd[-self._window_size:]
            
             else:
-                print("sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
                 value = indicator(*indicator_args, **indicator_params)
-                print(type(value))
                 value = np.nan_to_num(value)
-                print(value)
                 X[indicator_name] = value[-self._window_size:]
 
         return X
