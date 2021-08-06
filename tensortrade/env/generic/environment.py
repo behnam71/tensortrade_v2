@@ -150,9 +150,7 @@ class TradingEnv(gym.Env, TimeIndexed):
         
         if isinstance(observation, pd.DataFrame):
             observation = observation.fillna(0, axis=1)
-        print("Online Observation:\n")
-        print(observation)
-        
+            
         return observation.to_numpy()
         
         
@@ -175,7 +173,9 @@ class TradingEnv(gym.Env, TimeIndexed):
             obs = self.observer.observe(self)
         else:
             obs = self._next_observation()
-            
+        print("Online Observation:\n")
+        print(obs)
+        
         reward = self.reward_scheme.reward(self)
         done = self.stopper.stop(self)
         info = self.informer.info(self)
@@ -200,7 +200,9 @@ class TradingEnv(gym.Env, TimeIndexed):
             obs = self.observer.observe(self)
         else:
             obs = self._next_observation()
-
+        print("Online Observation (reset):\n")
+        print(obs)
+        
         self.clock.increment()
         return obs
     
