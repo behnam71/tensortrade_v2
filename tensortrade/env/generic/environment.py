@@ -136,7 +136,7 @@ class TradingEnv(gym.Env, TimeIndexed):
         print("1111111111111111111111111111111111111111111111111111111111")
         print(observation)
         if len(observation) < self._window_size:
-            size = self.window_size - len(observation)
+            size = self._window_size - len(observation)
             padding = np.zeros(size, len(observation.columns))
             padding = pd.DataFrame(padding, columns=observation.columns)
             observation = pd.concat([padding, observation], ignore_index=True, sort=False)
