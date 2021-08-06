@@ -69,6 +69,8 @@ class CCXTExchange():
             limit=1,
         )
         observations = pd.DataFrame.from_records(ohlcv)
+        print("3333333333333333333333333333333333333333333333333333333333")
+        print(observations)
         for i in range(0, len(observations)):
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
