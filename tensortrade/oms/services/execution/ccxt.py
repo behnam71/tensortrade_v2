@@ -94,12 +94,8 @@ class CCXTExchange():
 
     def quote_price(self, 
                     pair: 'TradingPair'):
-        print("22222222222222222222222222222222222222222222222222222ss")
-        print(pair)
         symbol = self.pair_to_symbol(pair)
-        print(symbol)
         try:
-            print(float(self._exchange.fetch_ticker(symbol)['close']))
             return float(self._exchange.fetch_ticker(symbol)['close'])
         except BadRequest:
             return np.inf
