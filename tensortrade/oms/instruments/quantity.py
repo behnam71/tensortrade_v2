@@ -25,7 +25,6 @@ from tensortrade.core.exceptions import (
     InvalidNonNumericQuantity,
     QuantityOpPathMismatch
 )
-from tensortrade.oms.instruments import TradingPair, BTC, USDT
 
 T = TypeVar("T")
 
@@ -70,8 +69,8 @@ class Quantity:
             exchange='binance',
             credentials=credentials,
         )
-        self.pair = TradingPair(USDT,  BTC)
 
+        
     @property
     def is_locked(self) -> bool:
         """If quantity is locked for an order. (bool, read-only)"""
@@ -165,7 +164,7 @@ class Quantity:
         """
         options = exchange_pair.exchange.options
         
-        price = self.ccxt.quote_price(self.pair)
+        price = self.ccxt.quote_price(exchange_pair.pair)
         #price = exchange_pair.price
 
         if exchange_pair.pair.base == self.instrument:
