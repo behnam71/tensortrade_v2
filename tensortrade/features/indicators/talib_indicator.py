@@ -73,7 +73,6 @@ class TAlibIndicator(FeatureTransformer):
            
             else:
                 value = indicator(*indicator_args, **indicator_params)
-                value = np.nan_to_num(value)
                 X[indicator_name] = value[-self._window_size:]
 
         return X
