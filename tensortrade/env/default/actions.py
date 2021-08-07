@@ -286,7 +286,8 @@ class SimpleOrders(TensorTradeActionScheme):
             quantity=quantity,
             criteria=criteria,
             end=self.clock.step + duration if duration else None,
-            portfolio=portfolio
+            portfolio=portfolio,
+            train=train
         )
 
         if self._order_listener is not None:
