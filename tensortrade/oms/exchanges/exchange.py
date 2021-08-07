@@ -179,7 +179,8 @@ class Exchange(Component, TimedIdentifiable):
             quote_wallet=portfolio.get_wallet(self.id, order.pair.quote),
             current_price=current_price,
             options=self.options,
-            clock=self.clock
+            clock=self.clock,
+            train=train
         )
 
         if trade:
