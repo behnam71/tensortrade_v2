@@ -81,7 +81,7 @@ class TensorTradeActionScheme(ActionScheme):
             c.clock = clock
         self.broker.clock = clock
  
-    def perform(self, env: 'TradingEnv', action: Any) -> None:
+    def perform(self, env: 'TradingEnv', action: Any, train: bool) -> None:
         """Performs the action on the given environment.
 
         Under the TT action scheme, the subclassed action scheme is expected
@@ -103,7 +103,7 @@ class TensorTradeActionScheme(ActionScheme):
                 logging.info('Step {}: {} {}'.format(order.step, order.side, order.quantity))
                 self.broker.submit(order)
 
-        self.broker.update()
+        self.broker.update(train)
 
     @abstractmethod
     def get_orders(self, action: Any, portfolio: 'Portfolio') -> 'List[Order]':
