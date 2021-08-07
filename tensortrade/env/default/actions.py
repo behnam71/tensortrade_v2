@@ -369,7 +369,10 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             self._action_space = Discrete(len(self.actions))
         return self._action_space
 
-    def get_orders(self, action: int, portfolio: 'Portfolio', train: bool) -> 'List[Order]':
+    def get_orders(self, 
+                   action: int, 
+                   portfolio: 'Portfolio',
+                   train: bool) -> 'List[Order]':
 
         if action == 0:
             return []
