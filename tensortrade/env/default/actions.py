@@ -19,7 +19,6 @@ from tensortrade.oms.orders import (
     TradeType
 )
 from tensortrade.oms.wallets import Portfolio
-from tensortrade.oms.services.execution.ccxt import CCXTExchange
 
 
 class TensorTradeActionScheme(ActionScheme):
