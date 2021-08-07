@@ -17,15 +17,6 @@ class ExchangePair:
         self.exchange = exchange
         self.pair = pair
         
-        from tensortrade.oms.services.execution.ccxt import CCXTExchange
-        credentials = { 
-            'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
-            'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
-        }
-        self.ccxt = CCXTExchange(
-            exchange='binance',
-            credentials=credentials,
-        )
 
     @property
     def price(self) -> "Decimal":
@@ -35,7 +26,7 @@ class ExchangePair:
     @property
     def price_v1(self) -> "Decimal":
         """The quoted price of the trading pair. (online)"""
-        return self.ccxt.quote_price(self.pair)
+        return self.exchange.quote_price_v1(self.pair)
     
     @property
     def inverse_price(self) -> "Decimal":
