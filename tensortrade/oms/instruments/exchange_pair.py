@@ -19,14 +19,12 @@ class ExchangePair:
         
 
     @property
-    def price(self) -> "Decimal":
+    def price(self, train: bool) -> "Decimal":
         """The quoted price of the trading pair. (`Decimal`, read-only)"""
-        return self.exchange.quote_price(self.pair)
-
-    @property
-    def price_v1(self) -> "Decimal":
-        """The quoted price of the trading pair. (online)"""
-        return self.exchange.quote_price_v1(self.pair)
+        if train:
+            return self.exchange.quote_price(self.pair)
+        else:
+            return self.exchange.quote_price_v1(self.pair)
     
     @property
     def inverse_price(self) -> "Decimal":
