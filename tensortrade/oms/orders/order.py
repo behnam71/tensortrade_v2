@@ -233,7 +233,7 @@ class Order(TimedIdentifiable, Observable):
 
         self.exchange_pair.exchange.execute_order(self, self.portfolio, train)
 
-    def fill(self, trade: 'Trade') -> None:
+    def fill(self, trade: 'Trade', train: bool) -> None:
         """Fills the order.
 
         Parameters
@@ -249,7 +249,7 @@ class Order(TimedIdentifiable, Observable):
         self.trades += [trade]
 
         for listener in self.listeners or []:
-            listener.on_fill(self, trade)
+            listener.on_fill(self, trade, train)
 
     def complete(self) -> 'Order':
         """Completes an order.
