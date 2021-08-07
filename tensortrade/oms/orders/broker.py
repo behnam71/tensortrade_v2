@@ -70,7 +70,7 @@ class Broker(OrderListener, TimeIndexed):
 
         order.cancel()
 
-    def update(self) -> None:
+    def update(self, train: bool) -> None:
         """Updates the brokers order management system.
 
         The broker will look through the unexecuted orders and if an order
@@ -87,7 +87,7 @@ class Broker(OrderListener, TimeIndexed):
                 self.executed[order.id] = order
 
                 order.attach(self)
-                order.execute()
+                order.execute(train)
         
         for order_id in executed_ids:
             self.unexecuted.remove(self.executed[order_id])
@@ -96,7 +96,7 @@ class Broker(OrderListener, TimeIndexed):
             if order.is_active and order.is_expired:
                 self.cancel(order)
 
-    def on_fill(self, order: "Order", trade: "Trade") -> None:
+    def on_fill(self, order: "Order", trade: "Trade", train: bool) -> None:
         """Updates the broker after an order has been filled.
 
         Parameters
@@ -118,7 +118,7 @@ class Broker(OrderListener, TimeIndexed):
                         self.executed[next_order.id] = next_order
 
                         next_order.attach(self)
-                        next_order.execute()
+                        next_order.execute(train)
                     else:
                         self.submit(next_order)
 
