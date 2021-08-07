@@ -167,9 +167,9 @@ class TradingEnv(gym.Env, TimeIndexed):
         bool (Whether or not the episode is complete.)
         dict (The information gathered after completing the step.)
         """
-        self.action_scheme.perform(self, action)
+        self.action_scheme.perform(self, action, self._train)
         
-        if self._train == True:
+        if self._train:
             obs = self.observer.observe(self)
             reward = self.reward_scheme.reward(self)
             done = self.stopper.stop(self)
