@@ -48,15 +48,6 @@ class TensorTradeActionScheme(ActionScheme):
         super().__init__()
         self.portfolio: 'Portfolio' = None
         self.broker: 'Broker' = Broker()
-            
-        credentials = { 
-            'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
-            'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
-        }
-        self.ccxt = CCXTExchange(
-            exchange='binance',
-            credentials=credentials,
-        )
 
     @property
     def clock(self) -> 'Clock':
@@ -319,6 +310,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
     """
 
     def __init__(self,
+                 t_signal: bool,
                  stop: 'List[float]' = [0.02, 0.04, 0.06],
                  take: 'List[float]' = [0.01, 0.02, 0.03],
                  trade_sizes: 'Union[List[float], int]' = 10,
@@ -347,6 +339,8 @@ class ManagedRiskOrders(TensorTradeActionScheme):
 
         self._action_space = None
         self.actions = None
+        
+        self.t_signal = t_signal
 
     @property
     def action_space(self) -> 'Space':
@@ -385,11 +379,11 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         if size < 10 ** -instrument.precision or size < self.min_order_abs:
             return []
         
+        c_price = ep.price(self.t_signal)
         params = {
             'side': side,
             'exchange_pair': ep,
-            #'price': ep.price,
-            'price': self.ccxt.quote_price(ep.pair),
+            'price': c_price,
             'quantity': quantity,
             'down_percent': stop,
             'up_percent': take,
