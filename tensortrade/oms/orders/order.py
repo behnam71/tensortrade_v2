@@ -221,7 +221,7 @@ class Order(TimedIdentifiable, Observable):
         self._specs += [order_spec]
         return self
 
-    def execute(self) -> None:
+    def execute(self, train) -> None:
         """Executes the order."""
         self.status = OrderStatus.OPEN
 
@@ -231,7 +231,7 @@ class Order(TimedIdentifiable, Observable):
         for listener in self.listeners or []:
             listener.on_execute(self)
 
-        self.exchange_pair.exchange.execute_order(self, self.portfolio)
+        self.exchange_pair.exchange.execute_order(self, self.portfolio, train)
 
     def fill(self, trade: 'Trade') -> None:
         """Fills the order.
