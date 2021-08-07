@@ -46,7 +46,7 @@ class TAlibIndicator(FeatureTransformer):
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = pd.DataFrame(X)
         self.db = pd.concat(
-            [self.db, X],
+            [self.db, X[-1:]],
             ignore_index=True, 
             sort=False
         )
