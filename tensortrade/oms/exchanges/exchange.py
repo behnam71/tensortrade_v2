@@ -184,4 +184,4 @@ class Exchange(Component, TimedIdentifiable):
         )
 
         if trade:
-            order.fill(trade)
+            order.fill(trade, train)
