@@ -141,6 +141,12 @@ class Exchange(Component, TimedIdentifiable):
 
         return price
 
+    def quote_price_v1(self, trading_pair: "TradingPair") -> "Decimal":
+        """The quote price of a trading pair on the exchange, denoted in the core instrument.
+        """
+        price = self.ccxt.quote_price(trading_pair)
+        return price
+    
     def is_pair_tradable(self, trading_pair: 'TradingPair') -> bool:
         """Whether or not the specified trading pair is tradable on this
         exchange.
@@ -167,12 +173,16 @@ class Exchange(Component, TimedIdentifiable):
         portfolio : `Portfolio`
             The portfolio to use.
         """
+        if train:
+            current_price = self.quote_price(order.pair)
+        else:
+            current_price = self.quote_price_v1(order.pair)
+            
         trade = self._service(
             order=order,
             base_wallet=portfolio.get_wallet(self.id, order.pair.base),
             quote_wallet=portfolio.get_wallet(self.id, order.pair.quote),
-            #current_price=self.quote_price(order.pair),
-            current_price=self.ccxt.quote_price(order.pair),
+            current_price=current_price,
             options=self.options,
             clock=self.clock
         )
