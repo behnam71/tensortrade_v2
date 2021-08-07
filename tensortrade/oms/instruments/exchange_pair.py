@@ -12,13 +12,11 @@ class ExchangePair:
     pair : `TradingPair`
         A trading pair available on the `exchange`.
     """
-
     def __init__(self, exchange: "Exchange", pair: "TradingPair"):
         self.exchange = exchange
         self.pair = pair
         
 
-    @property
     def price(self, train: bool) -> "Decimal":
         """The quoted price of the trading pair. (`Decimal`, read-only)"""
         return self.exchange.quote_price(self.pair, train)
