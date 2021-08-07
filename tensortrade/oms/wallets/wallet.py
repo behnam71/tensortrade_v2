@@ -324,7 +324,7 @@ class Wallet(Identifiable):
         commission = source.withdraw(commission, "COMMISSION")
         quantity = source.withdraw(quantity, "FILL ORDER")
 
-        c_price = exchange_pair.price(train=train)
+        c_price = exchange_pair.price(train)
         if quantity.instrument == exchange_pair.pair.base:
             instrument = exchange_pair.pair.quote
             converted_size = quantity.size / c_price
