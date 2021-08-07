@@ -114,7 +114,7 @@ class Exchange(Component, TimedIdentifiable):
         """
         return list(self._price_streams.values())
 
-    def quote_price(self, trading_pair: "TradingPair") -> "Decimal":
+    def quote_price(self, trading_pair: "TradingPair", train: bool) -> "Decimal":
         """The quote price of a trading pair on the exchange, denoted in the
         core instrument.
 
@@ -128,23 +128,21 @@ class Exchange(Component, TimedIdentifiable):
         `Decimal`
             The quote price of the specified trading pair, denoted in the core instrument.
         """
-        price = Decimal(self._price_streams[str(trading_pair)].value)
-        if price == 0:
-            raise ValueError("Price of trading pair {} is 0. Please check your input data to make sure there always is "
-                             "a valid (nonzero) price.".format(trading_pair))
+        if train:
+            price = Decimal(self._price_streams[str(trading_pair)].value)
+            if price == 0:
+                raise ValueError("Price of trading pair {} is 0. Please check your input data to make sure there always is "
+                                 "a valid (nonzero) price.".format(trading_pair))
 
-        price = price.quantize(Decimal(10) ** -trading_pair.base.precision)
-        if price == 0:
-            raise ValueError("Price quantized in base currency precision ({}) would amount to 0 {}. "
-                             "Please consider defining a custom instrument with a higher precision."
-                             .format(trading_pair.base.precision, trading_pair.base))
+            price = price.quantize(Decimal(10) ** -trading_pair.base.precision)
+            if price == 0:
+                raise ValueError("Price quantized in base currency precision ({}) would amount to 0 {}. "
+                                 "Please consider defining a custom instrument with a higher precision."
+                                 .format(trading_pair.base.precision, trading_pair.base))
+        
+        else:
+            price = self.ccxt.quote_price(trading_pair)
 
-        return price
-
-    def quote_price_v1(self, trading_pair: "TradingPair") -> "Decimal":
-        """The quote price of a trading pair on the exchange, denoted in the core instrument.
-        """
-        price = self.ccxt.quote_price(trading_pair)
         return price
     
     def is_pair_tradable(self, trading_pair: 'TradingPair') -> bool:
@@ -163,7 +161,7 @@ class Exchange(Component, TimedIdentifiable):
         """
         return str(trading_pair) in self._price_streams.keys()
 
-    def execute_order(self, order: 'Order', portfolio: 'Portfolio') -> None:
+    def execute_order(self, order: 'Order', portfolio: 'Portfolio', train: bool) -> None:
         """Execute an order on the exchange.
 
         Parameters
@@ -173,10 +171,7 @@ class Exchange(Component, TimedIdentifiable):
         portfolio : `Portfolio`
             The portfolio to use.
         """
-        if train:
-            current_price = self.quote_price(order.pair)
-        else:
-            current_price = self.quote_price_v1(order.pair)
+        current_price = self.quote_price(order.pair, train)
             
         trade = self._service(
             order=order,
