@@ -136,23 +136,20 @@ class TradingEnv(gym.Env, TimeIndexed):
         observation = self.ccxt.next_observation(self._window_size)
         if self._feature_pipeline is not None:
             observation = self._feature_pipeline.transform(observation)
-        print("3333333333333333333333333333333333333333333333333333333")
-        print(observation)
 
         if len(observation) < self._window_size:
             size = self._window_size - len(observation)
             padding = np.zeros((size, len(observation.columns)))
             padding = pd.DataFrame(padding, columns=observation.columns)
             observation = pd.concat([padding, observation], ignore_index=True, sort=False)
-        
-        print("4444444444444444444444444444444444444444444444444444444")
-        print(observation)
+
         observation.set_index('date', inplace = True)
         observation = observation.add_prefix("BTC:")
         observation = observation.select_dtypes(include='number')
         
         if isinstance(observation, pd.DataFrame):
             observation = observation.fillna(0, axis=1)
+            
         print("5555555555555555555555555555555555555555555555555555555")
         print(observation)
         return observation.to_numpy()
