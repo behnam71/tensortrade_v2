@@ -83,10 +83,7 @@ class CCXTExchange():
             observations = self._Obs_DB.iloc[-(window_size):]
         else:
             observations = self._Obs_DB
-        print("111111111111111111111111111111111111111111111111111")
-        print(self._Obs_DB)
-        print("222222222222222222222222222222222222222222222222222")
-        print(observations)
+            
         return observations
 
     
