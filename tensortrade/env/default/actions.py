@@ -96,7 +96,10 @@ class TensorTradeActionScheme(ActionScheme):
         self.broker.update(train)
 
     @abstractmethod
-    def get_orders(self, action: Any, portfolio: 'Portfolio') -> 'List[Order]':
+    def get_orders(self, 
+                   action: Any, 
+                   portfolio: 'Portfolio',
+                   train: bool) -> 'List[Order]':
         """Gets the list of orders to be submitted for the given action.
 
         Parameters
@@ -149,7 +152,10 @@ class BSH(TensorTradeActionScheme):
         self.listeners += [listener]
         return self
 
-    def get_orders(self, action: int, portfolio: 'Portfolio') -> 'Order':
+    def get_orders(self,
+                   action: int, 
+                   portfolio: 'Portfolio',
+                   train: bool) -> 'Order':
         order = None
 
         if abs(action - self.action) > 0:
@@ -244,7 +250,8 @@ class SimpleOrders(TensorTradeActionScheme):
 
     def get_orders(self,
                    action: int,
-                   portfolio: 'Portfolio') -> 'List[Order]':
+                   portfolio: 'Portfolio',
+                   train: bool) -> 'List[Order]':
 
         if action == 0:
             return []
@@ -260,16 +267,22 @@ class SimpleOrders(TensorTradeActionScheme):
 
         quantity = (size * instrument).quantize()
 
-        if size < 10 ** -instrument.precision \
-                or size < self.min_order_abs:
-            return []
+        if train:
+            if size < 10 ** -instrument.precision \
+                    or size < self.min_order_pct * portfolio.net_worth \
+                    or size < self.min_order_abs:
+                return []
+        else:
+            if size < 10 ** -instrument.precision or size < self.min_order_abs:
+                return []
 
+        c_price = ep.price(train)
         order = Order(
             step=self.clock.step,
             side=side,
             trade_type=self._trade_type,
             exchange_pair=ep,
-            price=ep.price,
+            price=c_price,
             quantity=quantity,
             criteria=criteria,
             end=self.clock.step + duration if duration else None,
@@ -372,8 +385,14 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         size = min(balance, size)
         quantity = (size * instrument).quantize()
 
-        if size < 10 ** -instrument.precision or size < self.min_order_abs:
-            return []
+        if train:
+            if size < 10 ** -instrument.precision \
+                    or size < self.min_order_pct * portfolio.net_worth \
+                    or size < self.min_order_abs:
+                return []
+        else:
+            if size < 10 ** -instrument.precision or size < self.min_order_abs:
+                return []
         
         c_price = ep.price(train)
         params = {
