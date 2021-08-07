@@ -81,6 +81,8 @@ class CCXTExchange():
         )
         if len(self._Obs_DB) >= window_size:
             observations = self._Obs_DB.iloc[-(window_size):]
+        else:
+            observations = self._Obs_DB
         print("111111111111111111111111111111111111111111111111111")
         print(self._Obs_DB)
         print("222222222222222222222222222222222222222222222222222")
