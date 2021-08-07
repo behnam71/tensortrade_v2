@@ -59,8 +59,7 @@ class CCXTExchange():
         now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:00")
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
-    def next_observation(self, 
-                         window_size: int = 1) -> pd.DataFrame:
+    def next_observation(self, window_size: int) -> pd.DataFrame:
         while self._f_time == self.UTC_Time():
             sleep(1)
         ohlcv = self._exchange.fetch_ohlcv(
@@ -70,21 +69,22 @@ class CCXTExchange():
         )
         observations = pd.DataFrame.from_records(ohlcv)
         observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
-
-        for i in range(0, len(observations)):
-            observations.loc[i, 'date'] = datetime.utcfromtimestamp(
-                observations.loc[i, 'date']/1000
-            )
-        self._f_time = observations.loc[len(observations)-1, 'date']
+        observations.loc[0, 'date'] = datetime.utcfromtimestamp(
+                observations.loc[0, 'date']/1000
+        )
+        self._f_time = observations.loc[0, 'date']
 
         self._Obs_DB = pd.concat(
             [self._Obs_DB, observations],
-            ignore_index=True, 
+            ignore_index=True,
             sort=False
         )
         if len(self._Obs_DB) >= window_size:
             observations = self._Obs_DB.iloc[-(window_size):]
-        
+        print("111111111111111111111111111111111111111111111111111")
+        print(self._Obs_DB)
+        print("222222222222222222222222222222222222222222222222222")
+        print(observations)
         return observations
 
     
