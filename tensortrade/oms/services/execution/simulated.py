@@ -12,7 +12,8 @@ def execute_buy_order(order: 'Order',
                       quote_wallet: 'Wallet',
                       current_price: float,
                       options: 'ExchangeOptions',
-                      clock: 'Clock') -> 'Trade':
+                      clock: 'Clock',
+                      train: bool) -> 'Trade':
     """Executes a buy order on the exchange.
 
     Parameters
@@ -59,7 +60,8 @@ def execute_buy_order(order: 'Order',
         quantity=quantity,
         commission=commission,
         exchange_pair=order.exchange_pair,
-        reason="BUY"
+        reason="BUY",
+        train=train
     )
 
     trade = Trade(
@@ -81,7 +83,8 @@ def execute_sell_order(order: 'Order',
                        quote_wallet: 'Wallet',
                        current_price: float,
                        options: 'ExchangeOptions',
-                       clock: 'Clock') -> 'Trade':
+                       clock: 'Clock',
+                       train: bool) -> 'Trade':
     """Executes a sell order on the exchange.
 
     Parameters
@@ -125,7 +128,8 @@ def execute_sell_order(order: 'Order',
         quantity=quantity,
         commission=commission,
         exchange_pair=order.exchange_pair,
-        reason="SELL"
+        reason="SELL",
+        train=train
     )
 
     trade = Trade(
@@ -147,7 +151,8 @@ def execute_order(order: 'Order',
                   quote_wallet: 'Wallet',
                   current_price: float,
                   options: 'Options',
-                  clock: 'Clock') -> 'Trade':
+                  clock: 'Clock',
+                  train: bool) -> 'Trade':
     """Executes an order on the exchange.
 
     Parameters
@@ -175,7 +180,8 @@ def execute_order(order: 'Order',
               "quote_wallet": quote_wallet,
               "current_price": current_price,
               "options": options,
-              "clock": clock}
+              "clock": clock,
+              "train": train}
 
     if order.is_buy:
         trade = execute_buy_order(**kwargs)
