@@ -134,17 +134,17 @@ class TradingEnv(gym.Env, TimeIndexed):
 
     def _next_observation(self) -> np.ndarray:
         observation = self.ccxt.next_observation(self._window_size)
+        if self._feature_pipeline is not None:
+            observation = self._feature_pipeline.transform(observation)
+        print("3333333333333333333333333333333333333333333333333333333")
+        print(observation)
 
         if len(observation) < self._window_size:
             size = self._window_size - len(observation)
             padding = np.zeros((size, len(observation.columns)))
             padding = pd.DataFrame(padding, columns=observation.columns)
             observation = pd.concat([padding, observation], ignore_index=True, sort=False)
-
-        print("3333333333333333333333333333333333333333333333333333333")
-        print(observation)
-        if self._feature_pipeline is not None:
-            observation = self._feature_pipeline.transform(observation)
+        
         print("4444444444444444444444444444444444444444444444444444444")
         print(observation)
         observation.set_index('date', inplace = True)
