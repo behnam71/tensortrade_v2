@@ -301,6 +301,7 @@ def proportion_order(portfolio: 'Portfolio',
         'exchange_pair': exchange_pair,
         'price': exchange_pair.price,
         'quantity': quantity
+        'train': train
     }
 
     order = Order(**params)
