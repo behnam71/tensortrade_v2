@@ -165,7 +165,7 @@ class BSH(TensorTradeActionScheme):
             if src.balance == 0:  # We need to check, regardless of the proposed order, if we have balance in 'src'
                 return []  # Otherwise just return an empty order list
 
-            order = proportion_order(portfolio, src, tgt, 1.0)
+            order = proportion_order(portfolio, src, tgt, 1.0, train)
             self.action = action
 
         for listener in self.listeners:
@@ -276,13 +276,13 @@ class SimpleOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
 
-        c_price = ep.price(train)
+        _c_price = ep.price(train)
         order = Order(
             step=self.clock.step,
             side=side,
             trade_type=self._trade_type,
             exchange_pair=ep,
-            price=c_price,
+            price=_c_price,
             quantity=quantity,
             criteria=criteria,
             end=self.clock.step + duration if duration else None,
@@ -395,17 +395,18 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
         
-        c_price = ep.price(train)
+        _c_price = ep.price(train)
         params = {
             'side': side,
             'exchange_pair': ep,
-            'price': c_price,
+            'price': _c_price,
             'quantity': quantity,
             'down_percent': stop,
             'up_percent': take,
             'portfolio': portfolio,
             'trade_type': self._trade_type,
             'end': self.clock.step + duration if duration else None
+            'train': train,
         }
 
         order = risk_managed_order(**params)
