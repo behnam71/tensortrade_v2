@@ -221,7 +221,7 @@ class Order(TimedIdentifiable, Observable):
         self._specs += [order_spec]
         return self
 
-    def execute(self, train) -> None:
+    def execute(self, train: bool) -> None:
         """Executes the order."""
         self.status = OrderStatus.OPEN
 
