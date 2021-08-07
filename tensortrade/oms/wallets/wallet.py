@@ -280,7 +280,8 @@ class Wallet(Identifiable):
                  quantity: 'Quantity',
                  commission: 'Quantity',
                  exchange_pair: 'ExchangePair',
-                 reason: str) -> 'Transfer':
+                 reason: str,
+                 train: bool) -> 'Transfer':
         """Transfers funds from one wallet to another.
 
         Parameters
@@ -323,18 +324,17 @@ class Wallet(Identifiable):
         commission = source.withdraw(commission, "COMMISSION")
         quantity = source.withdraw(quantity, "FILL ORDER")
 
+        c_price = exchange_pair.price(train=train)
         if quantity.instrument == exchange_pair.pair.base:
             instrument = exchange_pair.pair.quote
-            converted_size = quantity.size / exchange_pair.price
+            converted_size = quantity.size / c_price
         else:
             instrument = exchange_pair.pair.base
-            converted_size = quantity.size * exchange_pair.price
+            converted_size = quantity.size * c_price
 
         converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
 
-        converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity,
-                                                                         exchange_pair,
-                                                                         exchange_pair.price))
+        converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity, exchange_pair, c_price))
 
         lsb2 = source.locked.get(poid).size
         ltb2 = target.locked.get(poid, 0 * pair.quote).size
@@ -342,7 +342,7 @@ class Wallet(Identifiable):
         q = quantity.size
         c = commission.size
         cv = converted.size
-        p = exchange_pair.inverse_price if pair == exchange_pair.pair else exchange_pair.price
+        p = exchange_pair.inverse_price if pair == exchange_pair.pair else c_price
 
         source_quantization = Decimal(10) ** -source.instrument.precision
         target_quantization = Decimal(10) ** -target.instrument.precision
@@ -360,7 +360,7 @@ class Wallet(Identifiable):
 
             raise Exception("Invalid Transfer: " + equation)
 
-        return Transfer(quantity, commission, exchange_pair.price)
+        return Transfer(quantity, commission, c_price)
 
     def reset(self) -> None:
         """Resets the wallet."""
