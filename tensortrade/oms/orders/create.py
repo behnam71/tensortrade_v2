@@ -165,6 +165,7 @@ def risk_managed_order(side: "TradeSide",
                        down_percent: float,
                        up_percent: float,
                        portfolio: "Portfolio",
+                       train: bool,
                        start: int = None,
                        end: int = None):
     """Create a stop order that manages for percentages above and below the
@@ -212,7 +213,8 @@ def risk_managed_order(side: "TradeSide",
         start=start,
         end=end,
         quantity=quantity,
-        portfolio=portfolio
+        portfolio=portfolio,
+        train=train
     )
 
     risk_criteria = Stop("down", down_percent) ^ Stop("up", up_percent)
@@ -231,7 +233,8 @@ def risk_managed_order(side: "TradeSide",
 def proportion_order(portfolio: 'Portfolio',
                      source: 'Wallet',
                      target: 'Wallet',
-                     proportion: float) -> 'Order':
+                     proportion: float,
+                     train: bool) -> 'Order':
     """Creates an order that sends a proportion of funds from one wallet to
     another.
 
@@ -279,7 +282,8 @@ def proportion_order(portfolio: 'Portfolio',
             'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
             'exchange_pair': exchange_pair,
             'price': exchange_pair.price,
-            'quantity': quantity
+            'quantity': quantity,
+            'train': train
         }
 
         return Order(**params)
