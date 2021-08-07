@@ -85,7 +85,7 @@ class TensorTradeActionScheme(ActionScheme):
         action : Any
             The specific action selected from the action space.
         """
-        orders = self.get_orders(action, self.portfolio)
+        orders = self.get_orders(action, self.portfolio, train)
         
         for order in orders:
             print("Order Status:\n" + str(order))
@@ -309,7 +309,6 @@ class ManagedRiskOrders(TensorTradeActionScheme):
     """
 
     def __init__(self,
-                 t_signal: bool,
                  stop: 'List[float]' = [0.02, 0.04, 0.06],
                  take: 'List[float]' = [0.01, 0.02, 0.03],
                  trade_sizes: 'Union[List[float], int]' = 10,
@@ -339,8 +338,6 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         self._action_space = None
         self.actions = None
         
-        self.t_signal = t_signal
-
     @property
     def action_space(self) -> 'Space':
         if not self._action_space:
@@ -358,7 +355,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             self._action_space = Discrete(len(self.actions))
         return self._action_space
 
-    def get_orders(self, action: int, portfolio: 'Portfolio') -> 'List[Order]':
+    def get_orders(self, action: int, portfolio: 'Portfolio', train: bool) -> 'List[Order]':
 
         if action == 0:
             return []
@@ -378,7 +375,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         if size < 10 ** -instrument.precision or size < self.min_order_abs:
             return []
         
-        c_price = ep.price(self.t_signal)
+        c_price = ep.price(train)
         params = {
             'side': side,
             'exchange_pair': ep,
