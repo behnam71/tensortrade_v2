@@ -16,16 +16,16 @@ class ExchangePair:
         self.exchange = exchange
         self.pair = pair
         
-
+    @property
     def price(self, train: bool) -> "Decimal":
         """The quoted price of the trading pair. (`Decimal`, read-only)"""
         return self.exchange.quote_price(self.pair, train)
     
     @property
-    def inverse_price(self) -> "Decimal":
+    def inverse_price(self, price: Decimal) -> "Decimal":
         """The inverse price of the trading pair. (`Decimal, read-only)"""
         quantization = Decimal(10) ** -self.pair.quote.precision
-        return Decimal(self.price ** Decimal(-1)).quantize(quantization)
+        return Decimal(price ** Decimal(-1)).quantize(quantization)
 
     def __hash__(self):
         return hash(str(self))
