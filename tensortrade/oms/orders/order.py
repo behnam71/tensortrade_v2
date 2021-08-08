@@ -88,7 +88,7 @@ class Order(TimedIdentifiable, Observable):
                  quantity: 'Quantity',
                  portfolio: 'Portfolio',
                  price: float,
-                 train: bool,
+                 t_signal: bool,
                  criteria: 'Callable[[Order, Exchange], bool]' = None,
                  path_id: str = None,
                  start: int = None,
@@ -96,7 +96,7 @@ class Order(TimedIdentifiable, Observable):
         super().__init__()
         Observable.__init__(self)
 
-        quantity = quantity.contain(exchange_pair, train)
+        quantity = quantity.contain(exchange_pair, t_signal)
         if quantity.size == 0:
             raise InvalidOrderQuantity(quantity)
 
@@ -222,7 +222,7 @@ class Order(TimedIdentifiable, Observable):
         self._specs += [order_spec]
         return self
 
-    def execute(self, train: bool) -> None:
+    def execute(self, t_signal: bool) -> None:
         """Executes the order."""
         self.status = OrderStatus.OPEN
 
@@ -232,9 +232,9 @@ class Order(TimedIdentifiable, Observable):
         for listener in self.listeners or []:
             listener.on_execute(self)
 
-        self.exchange_pair.exchange.execute_order(self, self.portfolio, train)
+        self.exchange_pair.exchange.execute_order(self, self.portfolio, t_signal)
 
-    def fill(self, trade: 'Trade', train: bool) -> None:
+    def fill(self, trade: 'Trade', t_signal: bool) -> None:
         """Fills the order.
 
         Parameters
@@ -250,7 +250,7 @@ class Order(TimedIdentifiable, Observable):
         self.trades += [trade]
 
         for listener in self.listeners or []:
-            listener.on_fill(self, trade, train)
+            listener.on_fill(self, trade, t_signal)
 
     def complete(self) -> 'Order':
         """Completes an order.
