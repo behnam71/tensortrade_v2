@@ -69,7 +69,7 @@ class Exchange(Component, TimedIdentifiable):
     def __init__(self,
                  name: str,
                  service: Callable,
-                 train: bool,
+                 t_signal: bool,
                  options: ExchangeOptions = None):
         super().__init__()
         self.name = name
@@ -77,7 +77,7 @@ class Exchange(Component, TimedIdentifiable):
         self.options = options if options else ExchangeOptions()
         self._price_streams = {}
         
-        if not(train):
+        if not(t_signal):
             from tensortrade.oms.services.execution.ccxt import CCXTExchange
             credentials = { 
                 'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
@@ -116,7 +116,7 @@ class Exchange(Component, TimedIdentifiable):
         """
         return list(self._price_streams.values())
 
-    def quote_price(self, trading_pair: "TradingPair", train: bool) -> "Decimal":
+    def quote_price(self, trading_pair: "TradingPair", t_signal: bool) -> "Decimal":
         """The quote price of a trading pair on the exchange, denoted in the
         core instrument.
 
@@ -130,7 +130,7 @@ class Exchange(Component, TimedIdentifiable):
         `Decimal`
             The quote price of the specified trading pair, denoted in the core instrument.
         """
-        if train:
+        if t_signal:
             price = Decimal(self._price_streams[str(trading_pair)].value)
             if price == 0:
                 raise ValueError("Price of trading pair {} is 0. Please check your input data to make sure there always is "
@@ -172,7 +172,7 @@ class Exchange(Component, TimedIdentifiable):
         """
         return str(trading_pair) in self._price_streams.keys()
 
-    def execute_order(self, order: 'Order', portfolio: 'Portfolio', train: bool) -> None:
+    def execute_order(self, order: 'Order', portfolio: 'Portfolio', t_signal: bool) -> None:
         """Execute an order on the exchange.
 
         Parameters
@@ -182,7 +182,7 @@ class Exchange(Component, TimedIdentifiable):
         portfolio : `Portfolio`
             The portfolio to use.
         """
-        current_price = self.quote_price(order.pair, train)
+        current_price = self.quote_price(order.pair, t_signal)
             
         trade = self._service(
             order=order,
@@ -191,8 +191,8 @@ class Exchange(Component, TimedIdentifiable):
             current_price=current_price,
             options=self.options,
             clock=self.clock,
-            train=train
+            t_signal=t_signal
         )
 
         if trade:
-            order.fill(trade, train)
+            order.fill(trade, t_signal)
