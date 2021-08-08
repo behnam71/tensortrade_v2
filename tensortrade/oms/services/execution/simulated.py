@@ -13,7 +13,7 @@ def execute_buy_order(order: 'Order',
                       current_price: float,
                       options: 'ExchangeOptions',
                       clock: 'Clock',
-                      train: bool) -> 'Trade':
+                      t_signal: bool) -> 'Trade':
     """Executes a buy order on the exchange.
 
     Parameters
@@ -39,7 +39,7 @@ def execute_buy_order(order: 'Order',
     if order.type == TradeType.LIMIT and order.price < current_price:
         return None
 
-    filled = order.remaining.contain(order.exchange_pair, train)
+    filled = order.remaining.contain(order.exchange_pair, t_signal)
 
     if order.type == TradeType.MARKET:
         scale = order.price / max(current_price, order.price)
@@ -61,7 +61,7 @@ def execute_buy_order(order: 'Order',
         commission=commission,
         exchange_pair=order.exchange_pair,
         reason="BUY",
-        train=train
+        t_signal=t_signal
     )
 
     trade = Trade(
@@ -84,7 +84,7 @@ def execute_sell_order(order: 'Order',
                        current_price: float,
                        options: 'ExchangeOptions',
                        clock: 'Clock',
-                       train: bool) -> 'Trade':
+                       t_signal: bool) -> 'Trade':
     """Executes a sell order on the exchange.
 
     Parameters
@@ -110,7 +110,7 @@ def execute_sell_order(order: 'Order',
     if order.type == TradeType.LIMIT and order.price > current_price:
         return None
 
-    filled = order.remaining.contain(order.exchange_pair, train)
+    filled = order.remaining.contain(order.exchange_pair, t_signal)
 
     commission = options.commission * filled
     quantity = filled - commission
@@ -129,7 +129,7 @@ def execute_sell_order(order: 'Order',
         commission=commission,
         exchange_pair=order.exchange_pair,
         reason="SELL",
-        train=train
+        t_signal=t_signal
     )
 
     trade = Trade(
@@ -152,7 +152,7 @@ def execute_order(order: 'Order',
                   current_price: float,
                   options: 'Options',
                   clock: 'Clock',
-                  train: bool) -> 'Trade':
+                  t_signal: bool) -> 'Trade':
     """Executes an order on the exchange.
 
     Parameters
@@ -181,7 +181,7 @@ def execute_order(order: 'Order',
               "current_price": current_price,
               "options": options,
               "clock": clock,
-              "train": train}
+              "t_signal": t_signal}
 
     if order.is_buy:
         trade = execute_buy_order(**kwargs)
