@@ -149,9 +149,7 @@ class TradingEnv(gym.Env, TimeIndexed):
         
         if isinstance(observation, pd.DataFrame):
             observation = observation.fillna(0, axis=1)
-            
-        print("5555555555555555555555555555555555555555555555555555555")
-        print(observation)
+
         return observation.to_numpy()
         
         
