@@ -77,7 +77,7 @@ class Exchange(Component, TimedIdentifiable):
         self.options = options if options else ExchangeOptions()
         self._price_streams = {}
         
-        if train:
+        if not(train):
             from tensortrade.oms.services.execution.ccxt import CCXTExchange
             credentials = { 
                 'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
