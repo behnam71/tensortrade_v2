@@ -283,8 +283,8 @@ def proportion_order(portfolio: 'Portfolio',
             'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
             'exchange_pair': exchange_pair,
             'price': exchange_pair.price,
-            'quantity': quantity,
-            'train': train
+            'train': train,
+            'quantity': quantity
         }
 
         return Order(**params)
@@ -301,8 +301,8 @@ def proportion_order(portfolio: 'Portfolio',
         'side': TradeSide.SELL,
         'exchange_pair': exchange_pair,
         'price': exchange_pair.price,
+        'train': train,
         'quantity': quantity
-        'train': train
     }
 
     order = Order(**params)
@@ -313,7 +313,7 @@ def proportion_order(portfolio: 'Portfolio',
         side=TradeSide.BUY,
         trade_type=TradeType.MARKET,
         exchange_pair=ExchangePair(exchange, pair),
-        criteria=None,
-        train=train
+        train=train,
+        criteria=None
     ))
     return order
