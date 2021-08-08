@@ -1,4 +1,5 @@
 import logging
+from pprint import pprint
 from abc import abstractmethod
 from itertools import product
 from typing import Union, List, Any
@@ -88,7 +89,7 @@ class TensorTradeActionScheme(ActionScheme):
         orders = self.get_orders(action, self.portfolio, train)
         
         for order in orders:
-            print("Order Status:\n" + str(order))
+            pprint(order)
             if order:
                 logging.info('Step {}: {} {}'.format(order.step, order.side, order.quantity))
                 self.broker.submit(order)
