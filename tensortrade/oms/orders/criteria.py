@@ -182,12 +182,15 @@ class Stop(Criteria):
 
     def __init__(self,
                  direction: 'Union[StopDirection, str]',
-                 percent: float) -> None:
+                 percent: float,
+                 train: bool) -> None:
         self.direction = StopDirection(direction)
         self.percent = percent
+        
+        self.train = train
 
     def check(self, order: 'Order', exchange: 'Exchange') -> bool:
-        price = exchange.quote_price(order.pair)
+        price = exchange.quote_price(order.pair, self.train)
         percent = abs(price - order.price) / order.price
 
         is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price)
