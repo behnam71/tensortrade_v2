@@ -78,7 +78,7 @@ class OrderSpec(Identifiable):
                      quantity=quantity,
                      portfolio=order.portfolio,
                      price=self.exchange_pair.price,
-                     train=self._t_signal,
+                     t_signal=self._t_signal,
                      criteria=self.criteria,
                      end=order.end,
                      path_id=order.path_id)
