@@ -194,11 +194,11 @@ class Stop(Criteria):
         price = exchange.quote_price(order.pair, self.train)
         print("111111111111111111111111111111111111111111111111111111111111")
         print(price)
-        print(order.price)
-        percent = abs(price - order.price) / order.price
+        print(order.price(self.train))
+        percent = abs(price - order.price(self.train)) / order.price(self.train)
 
-        is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price)
-        is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price)
+        is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price(self.train))
+        is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price(self.train))
 
         return (is_take_profit or is_stop_loss) and percent >= self.percent
 
