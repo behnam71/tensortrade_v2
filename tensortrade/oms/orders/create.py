@@ -165,7 +165,7 @@ def risk_managed_order(side: "TradeSide",
                        down_percent: float,
                        up_percent: float,
                        portfolio: "Portfolio",
-                       train: bool,
+                       t_signal: bool,
                        start: int = None,
                        end: int = None):
     """Create a stop order that manages for percentages above and below the
@@ -210,19 +210,19 @@ def risk_managed_order(side: "TradeSide",
         trade_type=TradeType(trade_type),
         exchange_pair=exchange_pair,
         price=price,
-        train=train,
+        t_signal=t_signal,
         start=start,
         end=end,
         quantity=quantity,
         portfolio=portfolio,
     )
 
-    risk_criteria = Stop("down", down_percent, train) ^ Stop("up", up_percent, train)
+    risk_criteria = Stop("down", down_percent, t_signal) ^ Stop("up", up_percent, t_signal)
     risk_management = OrderSpec(
         side=TradeSide.SELL if side == TradeSide.BUY else TradeSide.BUY,
         trade_type=TradeType.MARKET,
         exchange_pair=exchange_pair,
-        train=train,
+        t_signal=t_signal,
         criteria=risk_criteria
     )
 
@@ -235,7 +235,7 @@ def proportion_order(portfolio: 'Portfolio',
                      source: 'Wallet',
                      target: 'Wallet',
                      proportion: float,
-                     train: bool) -> 'Order':
+                     t_signal: bool) -> 'Order':
     """Creates an order that sends a proportion of funds from one wallet to
     another.
 
@@ -283,7 +283,7 @@ def proportion_order(portfolio: 'Portfolio',
             'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
             'exchange_pair': exchange_pair,
             'price': exchange_pair.price,
-            'train': train,
+            't_signal': t_signal,
             'quantity': quantity
         }
 
@@ -301,7 +301,7 @@ def proportion_order(portfolio: 'Portfolio',
         'side': TradeSide.SELL,
         'exchange_pair': exchange_pair,
         'price': exchange_pair.price,
-        'train': train,
+        't_signal': t_signal,
         'quantity': quantity
     }
 
@@ -313,7 +313,7 @@ def proportion_order(portfolio: 'Portfolio',
         side=TradeSide.BUY,
         trade_type=TradeType.MARKET,
         exchange_pair=ExchangePair(exchange, pair),
-        train=train,
+        t_signal=t_signal,
         criteria=None
     ))
     return order
