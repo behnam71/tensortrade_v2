@@ -191,6 +191,9 @@ class Stop(Criteria):
 
     def check(self, order: 'Order', exchange: 'Exchange') -> bool:
         price = exchange.quote_price(order.pair, self.train)
+        print("111111111111111111111111111111111111111111111111111111111111")
+        print(price)
+        print(order.price)
         percent = abs(price - order.price) / order.price
 
         is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price)
