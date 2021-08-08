@@ -65,7 +65,7 @@ class TradingEnv(gym.Env, TimeIndexed):
                  informer: Informer,
                  renderer: Renderer,
                  window_size: int,
-                 train: bool,
+                 t_signal: bool,
                  **kwargs) -> None:
         super().__init__()
         self.clock = Clock()
@@ -83,9 +83,9 @@ class TradingEnv(gym.Env, TimeIndexed):
         self.action_space = action_scheme.action_space
         self.observation_space = observer.observation_space
 
-        self._train = train
+        self._t_signal = t_signal
         
-        if not(self._train):
+        if not(self._t_signal):
             credentials = { 
                 'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
                 'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
@@ -167,9 +167,9 @@ class TradingEnv(gym.Env, TimeIndexed):
         bool (Whether or not the episode is complete.)
         dict (The information gathered after completing the step.)
         """
-        self.action_scheme.perform(self, action, self._train)
+        self.action_scheme.perform(self, action, self._t_signal)
         
-        if self._train:
+        if self._t_signal:
             obs = self.observer.observe(self)
             reward = self.reward_scheme.reward(self)
             done = self.stopper.stop(self)
@@ -196,7 +196,7 @@ class TradingEnv(gym.Env, TimeIndexed):
             if hasattr(c, "reset"):
                 c.reset()
 
-        if self._train == True:
+        if self._t_signal:
             obs = self.observer.observe(self)
         else:
             obs = self._next_observation()
