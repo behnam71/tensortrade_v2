@@ -199,8 +199,6 @@ class TradingEnv(gym.Env, TimeIndexed):
             obs = self.observer.observe(self)
         else:
             obs = self._next_observation()
-        print("Online Observation (reset):\n")
-        print(obs)
         
         self.clock.increment()
         return obs
