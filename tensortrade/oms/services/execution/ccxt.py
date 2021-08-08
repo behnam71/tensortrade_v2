@@ -52,6 +52,12 @@ class CCXTExchange():
         self._f_time = self.UTC_Time()
         
         self._exchange.load_markets()
+        
+        self.ohlcv = self._exchange.fetch_ohlcv(
+            self._observation_symbols[0],
+            timeframe=self._timeframe,
+            limit=1,
+        )
                 
 
     def UTC_Time(self):
