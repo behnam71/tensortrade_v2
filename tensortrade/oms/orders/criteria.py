@@ -45,7 +45,6 @@ class Criteria(object, metaclass=ABCMeta):
         raise NotImplementedError
 
     def __call__(self, order: 'Order', exchange: 'Exchange') -> bool:
-        print("999999999999999999999999999999999999999999999999999999999999999")
         if not exchange.is_pair_tradable(order.pair):
             return False
         return self.check(order, exchange)
@@ -192,9 +191,6 @@ class Stop(Criteria):
 
     def check(self, order: 'Order', exchange: 'Exchange') -> bool:
         price = exchange.quote_price(order.pair, self.train)
-        print("111111111111111111111111111111111111111111111111111111111111")
-        print(price)
-        print(order.price(self.train))
         percent = abs(price - order.price(self.train)) / order.price(self.train)
 
         is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price(self.train))
