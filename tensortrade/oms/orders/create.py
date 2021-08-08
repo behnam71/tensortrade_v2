@@ -222,7 +222,8 @@ def risk_managed_order(side: "TradeSide",
         side=TradeSide.SELL if side == TradeSide.BUY else TradeSide.BUY,
         trade_type=TradeType.MARKET,
         exchange_pair=exchange_pair,
-        criteria=risk_criteria
+        criteria=risk_criteria,
+        train=train
     )
 
     order.add_order_spec(risk_management)
@@ -312,6 +313,7 @@ def proportion_order(portfolio: 'Portfolio',
         side=TradeSide.BUY,
         trade_type=TradeType.MARKET,
         exchange_pair=ExchangePair(exchange, pair),
-        criteria=None
+        criteria=None,
+        train=train
     ))
     return order
