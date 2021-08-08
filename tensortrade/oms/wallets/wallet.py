@@ -323,7 +323,7 @@ class Wallet(Identifiable):
         commission = source.withdraw(commission, "COMMISSION")
         quantity = source.withdraw(quantity, "FILL ORDER")
 
-        _c_price = Decimal(exchange_pair.price(train))
+        _c_price = exchange_pair.price(train)
         if quantity.instrument == exchange_pair.pair.base:
             instrument = exchange_pair.pair.quote
             converted_size = quantity.size / _c_price
@@ -341,7 +341,7 @@ class Wallet(Identifiable):
         q = quantity.size
         c = commission.size
         cv = converted.size
-        p = exchange_pair.inverse_price if pair == exchange_pair.pair else _c_price
+        p = exchange_pair.inverse_price(_c_price) if pair == exchange_pair.pair else _c_price
 
         source_quantization = Decimal(10) ** -source.instrument.precision
         target_quantization = Decimal(10) ** -target.instrument.precision
