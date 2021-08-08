@@ -78,10 +78,10 @@ class OrderSpec(Identifiable):
                      quantity=quantity,
                      portfolio=order.portfolio,
                      price=self.exchange_pair.price,
+                     train=self.train,
                      criteria=self.criteria,
                      end=order.end,
-                     path_id=order.path_id,
-                     train=self.train)
+                     path_id=order.path_id)
 
     def to_dict(self) -> dict:
         """Creates dictionary representation of specification.
