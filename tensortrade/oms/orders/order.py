@@ -88,6 +88,7 @@ class Order(TimedIdentifiable, Observable):
                  quantity: 'Quantity',
                  portfolio: 'Portfolio',
                  price: float,
+                 train: bool,
                  criteria: 'Callable[[Order, Exchange], bool]' = None,
                  path_id: str = None,
                  start: int = None,
@@ -95,7 +96,7 @@ class Order(TimedIdentifiable, Observable):
         super().__init__()
         Observable.__init__(self)
 
-        quantity = quantity.contain(exchange_pair)
+        quantity = quantity.contain(exchange_pair, train)
         if quantity.size == 0:
             raise InvalidOrderQuantity(quantity)
 
