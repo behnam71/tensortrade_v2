@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-
 from typing import Dict, Tuple
 from collections import namedtuple
 from decimal import Decimal
@@ -324,17 +323,17 @@ class Wallet(Identifiable):
         commission = source.withdraw(commission, "COMMISSION")
         quantity = source.withdraw(quantity, "FILL ORDER")
 
-        c_price = exchange_pair.price(train)
+        _c_price = decimal.Decimal(exchange_pair.price(train))
         if quantity.instrument == exchange_pair.pair.base:
             instrument = exchange_pair.pair.quote
-            converted_size = quantity.size / c_price
+            converted_size = quantity.size / _c_price
         else:
             instrument = exchange_pair.pair.base
-            converted_size = quantity.size * c_price
+            converted_size = quantity.size * _c_price
 
         converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
 
-        converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity, exchange_pair, c_price))
+        converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity, exchange_pair, _c_price))
 
         lsb2 = source.locked.get(poid).size
         ltb2 = target.locked.get(poid, 0 * pair.quote).size
@@ -342,7 +341,7 @@ class Wallet(Identifiable):
         q = quantity.size
         c = commission.size
         cv = converted.size
-        p = exchange_pair.inverse_price if pair == exchange_pair.pair else c_price
+        p = exchange_pair.inverse_price if pair == exchange_pair.pair else _c_price
 
         source_quantization = Decimal(10) ** -source.instrument.precision
         target_quantization = Decimal(10) ** -target.instrument.precision
@@ -360,7 +359,7 @@ class Wallet(Identifiable):
 
             raise Exception("Invalid Transfer: " + equation)
 
-        return Transfer(quantity, commission, c_price)
+        return Transfer(quantity, commission, _c_price)
 
     def reset(self) -> None:
         """Resets the wallet."""
