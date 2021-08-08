@@ -20,7 +20,6 @@ class ExchangePair:
         """The quoted price of the trading pair. (`Decimal`, read-only)"""
         return self.exchange.quote_price(self.pair, train)
     
-    @property
     def inverse_price(self, price: Decimal) -> "Decimal":
         """The inverse price of the trading pair. (`Decimal, read-only)"""
         quantization = Decimal(10) ** -self.pair.quote.precision
