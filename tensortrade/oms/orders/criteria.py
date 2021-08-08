@@ -183,18 +183,18 @@ class Stop(Criteria):
     def __init__(self,
                  direction: 'Union[StopDirection, str]',
                  percent: float,
-                 train: bool) -> None:
+                 t_signal: bool) -> None:
         self.direction = StopDirection(direction)
         self.percent = percent
         
-        self.train = train
+        self.t_signal = t_signal
 
     def check(self, order: 'Order', exchange: 'Exchange') -> bool:
-        price = exchange.quote_price(order.pair, self.train)
-        percent = abs(price - order.price(self.train)) / order.price(self.train)
+        price = exchange.quote_price(order.pair, self.t_signal)
+        percent = abs(price - order.price(self.train)) / order.price(self.t_signal)
 
-        is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price(self.train))
-        is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price(self.train))
+        is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price(self.t_signal))
+        is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price(self.t_signal))
 
         return (is_take_profit or is_stop_loss) and percent >= self.percent
 
