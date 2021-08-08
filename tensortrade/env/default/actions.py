@@ -72,7 +72,7 @@ class TensorTradeActionScheme(ActionScheme):
             c.clock = clock
         self.broker.clock = clock
  
-    def perform(self, env: 'TradingEnv', action: Any, train: bool) -> None:
+    def perform(self, env: 'TradingEnv', action: Any, t_signal: bool) -> None:
         """Performs the action on the given environment.
 
         Under the TT action scheme, the subclassed action scheme is expected
@@ -86,7 +86,7 @@ class TensorTradeActionScheme(ActionScheme):
         action : Any
             The specific action selected from the action space.
         """
-        orders = self.get_orders(action, self.portfolio, train)
+        orders = self.get_orders(action, self.portfolio, t_signal)
         
         for order in orders:
             pprint(order)
@@ -100,7 +100,7 @@ class TensorTradeActionScheme(ActionScheme):
     def get_orders(self, 
                    action: Any, 
                    portfolio: 'Portfolio',
-                   train: bool) -> 'List[Order]':
+                   t_signal: bool) -> 'List[Order]':
         """Gets the list of orders to be submitted for the given action.
 
         Parameters
@@ -156,7 +156,7 @@ class BSH(TensorTradeActionScheme):
     def get_orders(self,
                    action: int, 
                    portfolio: 'Portfolio',
-                   train: bool) -> 'Order':
+                   t_signal: bool) -> 'Order':
         order = None
 
         if abs(action - self.action) > 0:
@@ -166,7 +166,7 @@ class BSH(TensorTradeActionScheme):
             if src.balance == 0:  # We need to check, regardless of the proposed order, if we have balance in 'src'
                 return []  # Otherwise just return an empty order list
 
-            order = proportion_order(portfolio, src, tgt, 1.0, train)
+            order = proportion_order(portfolio, src, tgt, 1.0, t_signal)
             self.action = action
 
         for listener in self.listeners:
@@ -252,7 +252,7 @@ class SimpleOrders(TensorTradeActionScheme):
     def get_orders(self,
                    action: int,
                    portfolio: 'Portfolio',
-                   train: bool) -> 'List[Order]':
+                   t_signal: bool) -> 'List[Order]':
 
         if action == 0:
             return []
@@ -268,7 +268,7 @@ class SimpleOrders(TensorTradeActionScheme):
 
         quantity = (size * instrument).quantize()
 
-        if train:
+        if t_signal:
             if size < 10 ** -instrument.precision \
                     or size < self.min_order_pct * portfolio.net_worth \
                     or size < self.min_order_abs:
@@ -277,14 +277,14 @@ class SimpleOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
 
-        _c_price = ep.price(train)
+        _c_price = ep.price(t_signal)
         order = Order(
             step=self.clock.step,
             side=side,
             trade_type=self._trade_type,
             exchange_pair=ep,
             price=_c_price,
-            train=train,
+            t_signal=t_signal,
             quantity=quantity,
             criteria=criteria,
             end=self.clock.step + duration if duration else None,
@@ -373,7 +373,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
     def get_orders(self, 
                    action: int, 
                    portfolio: 'Portfolio',
-                   train: bool) -> 'List[Order]':
+                   t_signal: bool) -> 'List[Order]':
 
         if action == 0:
             return []
@@ -390,7 +390,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         size = min(balance, size)
         quantity = (size * instrument).quantize()
 
-        if train:
+        if t_signal:
             if size < 10 ** -instrument.precision \
                     or size < self.min_order_pct * portfolio.net_worth \
                     or size < self.min_order_abs:
@@ -399,7 +399,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
         
-        _c_price = ep.price(train)
+        _c_price = ep.price(t_signal)
         params = {
             'side': side,
             'exchange_pair': ep,
@@ -408,7 +408,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             'down_percent': stop,
             'up_percent': take,
             'portfolio': portfolio,
-            'train': train,
+            't_signal': t_signal,
             'trade_type': self._trade_type,
             'end': self.clock.step + duration if duration else None
         }
