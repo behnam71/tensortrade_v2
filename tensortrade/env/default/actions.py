@@ -283,11 +283,11 @@ class SimpleOrders(TensorTradeActionScheme):
             trade_type=self._trade_type,
             exchange_pair=ep,
             price=_c_price,
+            train=train
             quantity=quantity,
             criteria=criteria,
             end=self.clock.step + duration if duration else None,
             portfolio=portfolio,
-            train=train
         )
 
         if self._order_listener is not None:
@@ -403,13 +403,13 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             'side': side,
             'exchange_pair': ep,
             'price': _c_price,
+            'train': train,
             'quantity': quantity,
             'down_percent': stop,
             'up_percent': take,
             'portfolio': portfolio,
             'trade_type': self._trade_type,
             'end': self.clock.step + duration if duration else None
-            'train': train,
         }
 
         order = risk_managed_order(**params)
