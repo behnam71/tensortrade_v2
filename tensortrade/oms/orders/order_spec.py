@@ -44,7 +44,7 @@ class OrderSpec(Identifiable):
         self.exchange_pair = exchange_pair
         self.criteria = criteria
 
-    def create_order(self, order: 'Order') -> 'Order':
+    def create_order(self, order: 'Order', train: bool) -> 'Order':
         """Creates an order following from another order.
 
         Parameters
@@ -77,7 +77,8 @@ class OrderSpec(Identifiable):
                      price=self.exchange_pair.price,
                      criteria=self.criteria,
                      end=order.end,
-                     path_id=order.path_id)
+                     path_id=order.path_id,
+                     train=train)
 
     def to_dict(self) -> dict:
         """Creates dictionary representation of specification.
