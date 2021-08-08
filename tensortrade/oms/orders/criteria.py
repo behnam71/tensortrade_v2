@@ -45,6 +45,7 @@ class Criteria(object, metaclass=ABCMeta):
         raise NotImplementedError
 
     def __call__(self, order: 'Order', exchange: 'Exchange') -> bool:
+        print("999999999999999999999999999999999999999999999999999999999999999")
         if not exchange.is_pair_tradable(order.pair):
             return False
         return self.check(order, exchange)
