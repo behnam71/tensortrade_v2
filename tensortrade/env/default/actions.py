@@ -94,7 +94,7 @@ class TensorTradeActionScheme(ActionScheme):
                 logging.info('Step {}: {} {}'.format(order.step, order.side, order.quantity))
                 self.broker.submit(order)
 
-        self.broker.update(train)
+        self.broker.update(t_signal)
 
     @abstractmethod
     def get_orders(self, 
