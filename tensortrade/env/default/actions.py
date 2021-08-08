@@ -393,9 +393,11 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision \
                     or size < self.min_order_pct * portfolio.net_worth \
                     or size < self.min_order_abs:
+                print("3333333333333333333333333333333333333333333333333333333333333")
                 return []
         else:
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
+                print("333333333333333333333333333333333333333333333333333333333333344444444")
                 return []
         
         _c_price = ep.price(train)
