@@ -38,14 +38,14 @@ class OrderSpec(Identifiable):
                  side: 'TradeSide',
                  trade_type: 'TradeType',
                  exchange_pair: 'ExchangePair',
-                 train: bool,
+                 t_signal: bool,
                  criteria: 'Callable[[Order, Exchange], bool]' = None):
         self.side = side
         self.type = trade_type
         self.exchange_pair = exchange_pair
         self.criteria = criteria
         
-        self.train = train
+        self._t_signal = t_signal
 
     def create_order(self, order: 'Order') -> 'Order':
         """Creates an order following from another order.
@@ -78,7 +78,7 @@ class OrderSpec(Identifiable):
                      quantity=quantity,
                      portfolio=order.portfolio,
                      price=self.exchange_pair.price,
-                     train=self.train,
+                     train=self._t_signal,
                      criteria=self.criteria,
                      end=order.end,
                      path_id=order.path_id)
