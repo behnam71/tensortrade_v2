@@ -69,6 +69,7 @@ class Exchange(Component, TimedIdentifiable):
     def __init__(self,
                  name: str,
                  service: Callable,
+                 train: bool,
                  options: ExchangeOptions = None):
         super().__init__()
         self.name = name
@@ -76,15 +77,16 @@ class Exchange(Component, TimedIdentifiable):
         self.options = options if options else ExchangeOptions()
         self._price_streams = {}
         
-        from tensortrade.oms.services.execution.ccxt import CCXTExchange
-        credentials = { 
-            'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
-            'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
-        }
-        self.ccxt = CCXTExchange(
-            exchange='binance',
-            credentials=credentials,
-        )
+        if train:
+            from tensortrade.oms.services.execution.ccxt import CCXTExchange
+            credentials = { 
+                'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
+                'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
+            }
+            self.ccxt = CCXTExchange(
+                exchange='binance',
+                credentials=credentials,
+            )
 
     def __call__(self, *streams) -> "Exchange":
         """Sets up the price streams used to generate the prices.
