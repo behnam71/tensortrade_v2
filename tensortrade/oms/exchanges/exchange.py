@@ -141,7 +141,16 @@ class Exchange(Component, TimedIdentifiable):
                                  .format(trading_pair.base.precision, trading_pair.base))
         
         else:
-            price = self.ccxt.quote_price(trading_pair)
+            price = Decimal(self.ccxt.quote_price(trading_pair))
+            if price == 0:
+                raise ValueError("Price of trading pair {} is 0. Please check your input data to make sure there always is "
+                                 "a valid (nonzero) price.".format(trading_pair))
+
+            price = price.quantize(Decimal(10) ** -trading_pair.base.precision)
+            if price == 0:
+                raise ValueError("Price quantized in base currency precision ({}) would amount to 0 {}. "
+                                 "Please consider defining a custom instrument with a higher precision."
+                                 .format(trading_pair.base.precision, trading_pair.base))
 
         return price
     
