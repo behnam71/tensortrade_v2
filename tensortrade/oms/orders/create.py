@@ -210,11 +210,11 @@ def risk_managed_order(side: "TradeSide",
         trade_type=TradeType(trade_type),
         exchange_pair=exchange_pair,
         price=price,
+        train=train,
         start=start,
         end=end,
         quantity=quantity,
         portfolio=portfolio,
-        train=train
     )
 
     risk_criteria = Stop("down", down_percent) ^ Stop("up", up_percent)
@@ -222,8 +222,8 @@ def risk_managed_order(side: "TradeSide",
         side=TradeSide.SELL if side == TradeSide.BUY else TradeSide.BUY,
         trade_type=TradeType.MARKET,
         exchange_pair=exchange_pair,
-        criteria=risk_criteria,
-        train=train
+        train=train,
+        criteria=risk_criteria
     )
 
     order.add_order_spec(risk_management)
