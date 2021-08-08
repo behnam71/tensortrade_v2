@@ -280,7 +280,7 @@ class Wallet(Identifiable):
                  commission: 'Quantity',
                  exchange_pair: 'ExchangePair',
                  reason: str,
-                 train: bool) -> 'Transfer':
+                 t_signal: bool) -> 'Transfer':
         """Transfers funds from one wallet to another.
 
         Parameters
@@ -323,7 +323,7 @@ class Wallet(Identifiable):
         commission = source.withdraw(commission, "COMMISSION")
         quantity = source.withdraw(quantity, "FILL ORDER")
 
-        _c_price = exchange_pair.price(train)
+        _c_price = exchange_pair.price(t_signal)
         if quantity.instrument == exchange_pair.pair.base:
             instrument = exchange_pair.pair.quote
             converted_size = quantity.size / _c_price
