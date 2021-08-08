@@ -39,7 +39,7 @@ class OrderListener(object, metaclass=ABCMeta):
         """
         pass
 
-    def on_fill(self, order: 'Order', trade: 'Trade', train: bool) -> None:
+    def on_fill(self, order: 'Order', trade: 'Trade', t_signal: bool) -> None:
         """Callback for an order after being filled.
 
         Parameters
