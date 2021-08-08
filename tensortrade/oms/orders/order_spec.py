@@ -38,13 +38,16 @@ class OrderSpec(Identifiable):
                  side: 'TradeSide',
                  trade_type: 'TradeType',
                  exchange_pair: 'ExchangePair',
+                 train: bool,
                  criteria: 'Callable[[Order, Exchange], bool]' = None):
         self.side = side
         self.type = trade_type
         self.exchange_pair = exchange_pair
         self.criteria = criteria
+        
+        self.train = train
 
-    def create_order(self, order: 'Order', train: bool) -> 'Order':
+    def create_order(self, order: 'Order') -> 'Order':
         """Creates an order following from another order.
 
         Parameters
@@ -78,7 +81,7 @@ class OrderSpec(Identifiable):
                      criteria=self.criteria,
                      end=order.end,
                      path_id=order.path_id,
-                     train=train)
+                     train=self.train)
 
     def to_dict(self) -> dict:
         """Creates dictionary representation of specification.
