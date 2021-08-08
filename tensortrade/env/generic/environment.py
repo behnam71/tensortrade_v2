@@ -18,7 +18,6 @@ import pandas as pd
 
 import gym
 import numpy as np
-import ccxt
 
 from tensortrade.oms.services.execution.ccxt import CCXTExchange
 from tensortrade.core import TimeIndexed, Clock, Component
@@ -84,17 +83,19 @@ class TradingEnv(gym.Env, TimeIndexed):
         self.action_space = action_scheme.action_space
         self.observation_space = observer.observation_space
 
-        credentials = { 
-            'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
-            'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
-        }
-        self.ccxt = CCXTExchange(
-            exchange='binance',
-            credentials=credentials,
-        )
+        self._train = train
+        
+        if not(self._train):
+            credentials = { 
+                'apiKey': 'SmweB9bNM2qpYkgl4zaQSFPpSzYpyoJ6B3BE9rCm0XYcAdIE0b7n6bm11e8jMwnI',  
+                'secret': '8x6LtJztmIeGPZyiJOC7lVfg2ixCUYkhVV7CKVWq2LVlPh8mo3Ab7SMkaC8qTZLt',
+            }
+            self.ccxt = CCXTExchange(
+                exchange='binance',
+                credentials=credentials,
+            )
         
         self._window_size = window_size
-        self._train = train
         
         with open("/mnt/c/Users/BEHNAMH721AS.RN/OneDrive/Desktop/indicators.txt", "r") as file:
             indicators_list = eval(file.readline())
