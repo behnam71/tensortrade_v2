@@ -283,7 +283,7 @@ class SimpleOrders(TensorTradeActionScheme):
             trade_type=self._trade_type,
             exchange_pair=ep,
             price=_c_price,
-            train=train
+            train=train,
             quantity=quantity,
             criteria=criteria,
             end=self.clock.step + duration if duration else None,
