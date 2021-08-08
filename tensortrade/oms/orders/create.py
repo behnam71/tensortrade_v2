@@ -217,7 +217,7 @@ def risk_managed_order(side: "TradeSide",
         portfolio=portfolio,
     )
 
-    risk_criteria = Stop("down", down_percent) ^ Stop("up", up_percent)
+    risk_criteria = Stop("down", down_percent, train) ^ Stop("up", up_percent, train)
     risk_management = OrderSpec(
         side=TradeSide.SELL if side == TradeSide.BUY else TradeSide.BUY,
         trade_type=TradeType.MARKET,
