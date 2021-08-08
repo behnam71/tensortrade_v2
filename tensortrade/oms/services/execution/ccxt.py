@@ -69,6 +69,8 @@ class CCXTExchange():
         )
         observations = pd.DataFrame.from_records(ohlcv)
         observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
+        print("6666666666666666666666666666666666666666666666666666666666666666666666")
+        print(observations)
         observations.loc[0, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[0, 'date']/1000
         )
@@ -83,7 +85,8 @@ class CCXTExchange():
             observations = self._Obs_DB.iloc[-(window_size):]
         else:
             observations = self._Obs_DB
-            
+        print("7777777777777777777777777777777777777777777777777777777777777777777777777")
+        print(observations)
         return observations
 
     
