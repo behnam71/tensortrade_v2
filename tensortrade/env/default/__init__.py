@@ -19,7 +19,7 @@ def create(portfolio: 'Portfolio',
            feed: 'DataFeed',
            window_size: int = 1,
            min_periods: int = None,
-           train: bool = True,
+           t_signal: bool = True,
            **kwargs) -> TradingEnv:
     """Creates the default `TradingEnv` of the project to be used in training
     RL agents.
@@ -84,6 +84,6 @@ def create(portfolio: 'Portfolio',
         informer=kwargs.get("informer", informers.TensorTradeInformer()),
         renderer=renderer,
         window_size=window_size,
-        train=train
+        t_signal=t_signal
     )
     return env
