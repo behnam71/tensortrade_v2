@@ -403,11 +403,11 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             'side': side,
             'exchange_pair': ep,
             'price': _c_price,
-            'train': train,
             'quantity': quantity,
             'down_percent': stop,
             'up_percent': take,
             'portfolio': portfolio,
+            'train': train,
             'trade_type': self._trade_type,
             'end': self.clock.step + duration if duration else None
         }
