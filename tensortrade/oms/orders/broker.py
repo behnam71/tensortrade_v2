@@ -62,6 +62,7 @@ class Broker(OrderListener, TimeIndexed):
         order : `Order`
             The order to be canceled.
         """
+        print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
         if order.status == OrderStatus.CANCELLED:
             raise Warning(f"Order {order.id} has already been cancelled.")
 
@@ -94,6 +95,7 @@ class Broker(OrderListener, TimeIndexed):
 
         for order in self.unexecuted + list(self.executed.values()):
             if order.is_active and order.is_expired:
+                print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
                 self.cancel(order)
 
     def on_fill(self, order: "Order", trade: "Trade", t_signal: bool) -> None:
@@ -111,6 +113,7 @@ class Broker(OrderListener, TimeIndexed):
             self.trades[trade.order_id] += [trade]
 
             if order.is_complete:
+                print("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 next_order = order.complete()
 
                 if next_order:
