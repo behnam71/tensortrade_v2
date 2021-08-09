@@ -302,6 +302,7 @@ class Order(TimedIdentifiable, Observable):
             The reason for releasing all locked quantities associated with the
             order.
         """
+        print("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         for wallet in self.portfolio.wallets:
             if self.path_id in wallet.locked.keys():
                 quantity = wallet.locked[self.path_id]
