@@ -227,6 +227,7 @@ class Order(TimedIdentifiable, Observable):
         self.status = OrderStatus.OPEN
 
         if self.portfolio.order_listener:
+            print("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooopppppppppppp")
             self.attach(self.portfolio.order_listener)
 
         for listener in self.listeners or []:
