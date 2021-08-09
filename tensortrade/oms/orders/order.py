@@ -219,6 +219,7 @@ class Order(TimedIdentifiable, Observable):
         `Order`
             The current order.
         """
+        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         self._specs += [order_spec]
         return self
 
