@@ -265,6 +265,7 @@ class Order(TimedIdentifiable, Observable):
         order = None
 
         if self._specs:
+            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
             order_spec = self._specs.pop()
             order = order_spec.create_order(self)
 
@@ -272,6 +273,8 @@ class Order(TimedIdentifiable, Observable):
             listener.on_complete(self)
 
         self.listeners = []
+        print("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+        print(order)
 
         return order or self.release("COMPLETED")
 
