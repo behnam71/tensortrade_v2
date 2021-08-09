@@ -220,6 +220,8 @@ class Order(TimedIdentifiable, Observable):
             The current order.
         """
         self._specs += [order_spec]
+        print("44444444444444444444444444444444444444444444444444444444")
+        print(self._specs)
         return self
 
     def execute(self, t_signal: bool) -> None:
@@ -266,6 +268,7 @@ class Order(TimedIdentifiable, Observable):
 
         if self._specs:
             order_spec = self._specs.pop()
+            print("55555555555555555555555555555555555555555555555555555555")
             order = order_spec.create_order(self)
 
         for listener in self.listeners or []:
