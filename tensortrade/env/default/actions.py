@@ -87,7 +87,6 @@ class TensorTradeActionScheme(ActionScheme):
             The specific action selected from the action space.
         """
         orders = self.get_orders(action, self.portfolio, t_signal)
-        print("111111111111111111111111111111111111111111111111111111111")
         for order in orders:
             pprint(order)
             if order:
@@ -389,11 +388,20 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         size = (balance * proportion)
         size = min(balance, size)
         quantity = (size * instrument).quantize()
-
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        print(balance)
+        print(size)
+        print(quantity)
+        print("sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+        print(portfolio.net_worth )
+        print("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
+        print(stop)
+        print(take)
+        
         if t_signal:
             if size < 10 ** -instrument.precision \
-                    or size < self.min_order_pct * portfolio.net_worth \
-                    or size < self.min_order_abs:
+                or size < self.min_order_pct * portfolio.net_worth \
+                or size < self.min_order_abs:
                 print("99999999999999999999999999999999999999999999999999999999")
                 return []
         else:
@@ -414,11 +422,9 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             'trade_type': self._trade_type,
             'end': self.clock.step + duration if duration else None
         }
-        print("222222222222222222222222222222222222222222222222222222222")
         order = risk_managed_order(**params)
 
         if self._order_listener is not None:
-            print("11111111111111111111111111111111111111111111111111111111122")
             order.attach(self._order_listener)
 
         return [order]
