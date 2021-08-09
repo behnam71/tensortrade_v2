@@ -69,9 +69,7 @@ class OrderSpec(Identifiable):
         quantity = wallet.locked.get(order.path_id, None)
 
         if not quantity or quantity.size == 0:
-            print("77777777777777777777777777777777777777777777777777777777")
             return None
-        print("66666666666666666666666666666666666666666666666666666666")
         return Order(step=exchange.clock.step,
                      side=self.side,
                      trade_type=self.type,
