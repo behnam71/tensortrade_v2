@@ -123,6 +123,7 @@ class Broker(OrderListener, TimeIndexed):
                         self.executed[next_order.id] = next_order
 
                         next_order.attach(self)
+                        print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
                         next_order.execute(t_signal)
                     else:
                         self.submit(next_order)
