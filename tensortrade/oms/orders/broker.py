@@ -88,6 +88,8 @@ class Broker(OrderListener, TimeIndexed):
                 self.executed[order.id] = order
 
                 order.attach(self)
+                print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+                
                 order.execute(t_signal)
         
         for order_id in executed_ids:
