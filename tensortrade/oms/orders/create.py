@@ -22,7 +22,8 @@ def market_order(side: "TradeSide",
                  exchange_pair: "ExchangePair",
                  price: float,
                  size: float,
-                 portfolio: "Portfolio") -> "Order":
+                 portfolio: "Portfolio",
+                 t_signal: bool) -> "Order":
     """Creates a market order.
 
     Parameters
@@ -51,6 +52,7 @@ def market_order(side: "TradeSide",
         trade_type=TradeType.MARKET,
         exchange_pair=exchange_pair,
         price=price,
+        t_signal=t_signal,
         quantity=(size * instrument),
         portfolio=portfolio
     )
@@ -63,6 +65,7 @@ def limit_order(side: "TradeSide",
                 limit_price: float,
                 size: float,
                 portfolio: 'Portfolio',
+                t_signal: bool,
                 start: int = None,
                 end: int = None):
     """Creates a limit order.
@@ -98,6 +101,7 @@ def limit_order(side: "TradeSide",
         trade_type=TradeType.LIMIT,
         exchange_pair=exchange_pair,
         price=limit_price,
+        t_signal=t_signal,
         quantity=(size * instrument),
         start=start,
         end=end,
@@ -112,6 +116,7 @@ def hidden_limit_order(side: "TradeSide",
                        limit_price: float,
                        size: float,
                        portfolio: "Portfolio",
+                       t_signal: bool,
                        start: int = None,
                        end: int = None):
     """Creates a hidden limit order.
@@ -147,6 +152,7 @@ def hidden_limit_order(side: "TradeSide",
         trade_type=TradeType.MARKET,
         exchange_pair=exchange_pair,
         price=limit_price,
+        t_signal=t_signal,
         quantity=(size * instrument),
         start=start,
         end=end,
