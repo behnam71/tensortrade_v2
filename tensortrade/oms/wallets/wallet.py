@@ -323,43 +323,83 @@ class Wallet(Identifiable):
         commission = source.withdraw(commission, "COMMISSION")
         quantity = source.withdraw(quantity, "FILL ORDER")
 
-        _c_price = exchange_pair.price(t_signal)
-        if quantity.instrument == exchange_pair.pair.base:
-            instrument = exchange_pair.pair.quote
-            converted_size = quantity.size / _c_price
+        if t_signal:
+            if quantity.instrument == exchange_pair.pair.base:
+                instrument = exchange_pair.pair.quote
+                converted_size = quantity.size / exchange_pair.price
+            else:
+                instrument = exchange_pair.pair.base
+                converted_size = quantity.size * exchange_pair.price
+
+            converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
+
+            converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity,
+                                                                             exchange_pair,
+                                                                             exchange_pair.price))
+
+            lsb2 = source.locked.get(poid).size
+            ltb2 = target.locked.get(poid, 0 * pair.quote).size
+
+            q = quantity.size
+            c = commission.size
+            cv = converted.size
+            p = exchange_pair.inverse_price if pair == exchange_pair.pair else exchange_pair.price
+
+            source_quantization = Decimal(10) ** -source.instrument.precision
+            target_quantization = Decimal(10) ** -target.instrument.precision
+
+            lhs = Decimal((lsb1 - lsb2) - (q + c)).quantize(source_quantization)
+            rhs = Decimal(ltb2 - ltb1 - cv).quantize(target_quantization)
+
+            lhs_eq_zero = np.isclose(float(lhs), 0, atol=float(source_quantization))
+            rhs_eq_zero = np.isclose(float(rhs), 0, atol=float(target_quantization))
+
+            if not lhs_eq_zero or not rhs_eq_zero:
+                equation = "({} - {}) - ({} + {}) != ({} - {}) - {}   [LHS = {}, RHS = {}, Price = {}]".format(
+                    lsb1, lsb2, q, c, ltb2, ltb1, cv, lhs, rhs, p
+                )
+                raise Exception("Invalid Transfer: " + equation)
+
+            return Transfer(quantity, commission, exchange_pair.price)
+        
         else:
-            instrument = exchange_pair.pair.base
-            converted_size = quantity.size * _c_price
+            _c_price = exchange_pair.price_v1
+            if quantity.instrument == exchange_pair.pair.base:
+                instrument = exchange_pair.pair.quote
+                converted_size = quantity.size / _c_price
+            else:
+                instrument = exchange_pair.pair.base
+                converted_size = quantity.size * _c_price
 
-        converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
+            converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
 
-        converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity, exchange_pair, _c_price))
+            converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity, exchange_pair, _c_price))
 
-        lsb2 = source.locked.get(poid).size
-        ltb2 = target.locked.get(poid, 0 * pair.quote).size
+            lsb2 = source.locked.get(poid).size
+            ltb2 = target.locked.get(poid, 0 * pair.quote).size
 
-        q = quantity.size
-        c = commission.size
-        cv = converted.size
-        p = exchange_pair.inverse_price(_c_price) if pair == exchange_pair.pair else _c_price
+            q = quantity.size
+            c = commission.size
+            cv = converted.size
+            p = exchange_pair.inverse_price(_c_price) if pair == exchange_pair.pair else _c_price
 
-        source_quantization = Decimal(10) ** -source.instrument.precision
-        target_quantization = Decimal(10) ** -target.instrument.precision
+            source_quantization = Decimal(10) ** -source.instrument.precision
+            target_quantization = Decimal(10) ** -target.instrument.precision
 
-        lhs = Decimal((lsb1 - lsb2) - (q + c)).quantize(source_quantization)
-        rhs = Decimal(ltb2 - ltb1 - cv).quantize(target_quantization)
+            lhs = Decimal((lsb1 - lsb2) - (q + c)).quantize(source_quantization)
+            rhs = Decimal(ltb2 - ltb1 - cv).quantize(target_quantization)
 
-        lhs_eq_zero = np.isclose(float(lhs), 0, atol=float(source_quantization))
-        rhs_eq_zero = np.isclose(float(rhs), 0, atol=float(target_quantization))
+            lhs_eq_zero = np.isclose(float(lhs), 0, atol=float(source_quantization))
+            rhs_eq_zero = np.isclose(float(rhs), 0, atol=float(target_quantization))
 
-        if not lhs_eq_zero or not rhs_eq_zero:
-            equation = "({} - {}) - ({} + {}) != ({} - {}) - {}   [LHS = {}, RHS = {}, Price = {}]".format(
-                lsb1, lsb2, q, c, ltb2, ltb1, cv, lhs, rhs, p
-            )
+            if not lhs_eq_zero or not rhs_eq_zero:
+                equation = "({} - {}) - ({} + {}) != ({} - {}) - {}   [LHS = {}, RHS = {}, Price = {}]".format(
+                    lsb1, lsb2, q, c, ltb2, ltb1, cv, lhs, rhs, p
+                )
 
-            raise Exception("Invalid Transfer: " + equation)
+                raise Exception("Invalid Transfer: " + equation)
 
-        return Transfer(quantity, commission, _c_price)
+            return Transfer(quantity, commission, _c_price)
 
     def reset(self) -> None:
         """Resets the wallet."""
