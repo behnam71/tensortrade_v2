@@ -421,7 +421,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
                 'down_percent': stop,
                 'up_percent': take,
                 'portfolio': portfolio,
-                't_signal': t_signal
+                't_signal': t_signal,
                 'trade_type': self._trade_type,
                 'end': self.clock.step + duration if duration else None
             }
@@ -434,7 +434,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
                 'down_percent': stop,
                 'up_percent': take,
                 'portfolio': portfolio,
-                't_signal': t_signal
+                't_signal': t_signal,
                 'trade_type': self._trade_type,
                 'end': self.clock.step + duration if duration else None
             }
