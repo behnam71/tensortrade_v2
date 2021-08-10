@@ -156,7 +156,7 @@ class Quantity:
         if t_signal:
             price = exchange_pair.price
         else:
-            price = exchange_pair.price_v1
+            price = exchange_pair.price_online
 
         if exchange_pair.pair.base == self.instrument:
             size = self.size
