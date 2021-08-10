@@ -41,7 +41,6 @@ def execute_buy_order(order: 'Order',
             return None
         
         filled = order.remaining.contain(order.exchange_pair, t_signal)
-        
         if order.type == TradeType.MARKET:
             scale = order.price / max(current_price, order.price)
             filled = scale * filled
@@ -50,7 +49,6 @@ def execute_buy_order(order: 'Order',
             return None
         
         filled = order.remaining.contain(order.exchange_pair, t_signal)
-        
         if order.type == TradeType.MARKET:
             scale = order.price_online / max(current_price, order.price_online)
             filled = scale * filled
