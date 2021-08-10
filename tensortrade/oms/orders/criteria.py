@@ -190,11 +190,15 @@ class Stop(Criteria):
         self._t_signal = t_signal
 
     def check(self, order: 'Order', exchange: 'Exchange') -> bool:
-        price = exchange.quote_price(order.pair, self._t_signal)
-        percent = abs(price - order.price(self._t_signal)) / order.price(self._t_signal)
-
-        is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price(self._t_signal))
-        is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price(self._t_signal))
+        price = exchange.quote_price(order.pair)
+        if self._t_signal:
+            percent = abs(price - order.price) / order.price
+            s_take_profit = (self.direction == StopDirection.UP) and (price >= order.price)
+            is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price)
+        else:
+            percent = abs(price - order.price_v1) / order.price_v1
+            s_take_profit = (self.direction == StopDirection.UP) and (price >= order.price_v1)
+            is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price_v1)
 
         return (is_take_profit or is_stop_loss) and percent >= self.percent
 
