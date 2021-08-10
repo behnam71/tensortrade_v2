@@ -75,7 +75,6 @@ class OrderSpec(Identifiable):
             price = self.exchange_pair.price
         else:
             price = self.exchange_pair.price_online
-            
         return Order(step=exchange.clock.step,
                      side=self.side,
                      trade_type=self.type,
