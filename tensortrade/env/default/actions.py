@@ -296,7 +296,7 @@ class SimpleOrders(TensorTradeActionScheme):
                 side=side,
                 trade_type=self._trade_type,
                 exchange_pair=ep,
-                price=ep.price_v1,
+                price=ep.price_online,
                 t_signal=t_signal,
                 quantity=quantity,
                 criteria=criteria,
@@ -429,7 +429,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             params = {
                 'side': side,
                 'exchange_pair': ep,
-                'price': ep.price_v1,
+                'price': ep.price_online,
                 'quantity': quantity,
                 'down_percent': stop,
                 'up_percent': take,
