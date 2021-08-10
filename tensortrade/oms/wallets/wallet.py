@@ -345,23 +345,6 @@ class Wallet(Identifiable):
             cv = converted.size
             p = exchange_pair.inverse_price if pair == exchange_pair.pair else exchange_pair.price
 
-            source_quantization = Decimal(10) ** -source.instrument.precision
-            target_quantization = Decimal(10) ** -target.instrument.precision
-
-            lhs = Decimal((lsb1 - lsb2) - (q + c)).quantize(source_quantization)
-            rhs = Decimal(ltb2 - ltb1 - cv).quantize(target_quantization)
-
-            lhs_eq_zero = np.isclose(float(lhs), 0, atol=float(source_quantization))
-            rhs_eq_zero = np.isclose(float(rhs), 0, atol=float(target_quantization))
-
-            if not lhs_eq_zero or not rhs_eq_zero:
-                equation = "({} - {}) - ({} + {}) != ({} - {}) - {}   [LHS = {}, RHS = {}, Price = {}]".format(
-                    lsb1, lsb2, q, c, ltb2, ltb1, cv, lhs, rhs, p
-                )
-                raise Exception("Invalid Transfer: " + equation)
-
-            return Transfer(quantity, commission, exchange_pair.price)
-        
         else:
             _c_price = exchange_pair.price_v1
             if quantity.instrument == exchange_pair.pair.base:
@@ -382,25 +365,28 @@ class Wallet(Identifiable):
             c = commission.size
             cv = converted.size
             p = exchange_pair.inverse_price(_c_price) if pair == exchange_pair.pair else _c_price
+            
+        source_quantization = Decimal(10) ** -source.instrument.precision
+        target_quantization = Decimal(10) ** -target.instrument.precision
 
-            source_quantization = Decimal(10) ** -source.instrument.precision
-            target_quantization = Decimal(10) ** -target.instrument.precision
+        lhs = Decimal((lsb1 - lsb2) - (q + c)).quantize(source_quantization)
+        rhs = Decimal(ltb2 - ltb1 - cv).quantize(target_quantization)
 
-            lhs = Decimal((lsb1 - lsb2) - (q + c)).quantize(source_quantization)
-            rhs = Decimal(ltb2 - ltb1 - cv).quantize(target_quantization)
+        lhs_eq_zero = np.isclose(float(lhs), 0, atol=float(source_quantization))
+        rhs_eq_zero = np.isclose(float(rhs), 0, atol=float(target_quantization))
 
-            lhs_eq_zero = np.isclose(float(lhs), 0, atol=float(source_quantization))
-            rhs_eq_zero = np.isclose(float(rhs), 0, atol=float(target_quantization))
+        if not lhs_eq_zero or not rhs_eq_zero:
+            equation = "({} - {}) - ({} + {}) != ({} - {}) - {}   [LHS = {}, RHS = {}, Price = {}]".format(
+                lsb1, lsb2, q, c, ltb2, ltb1, cv, lhs, rhs, p
+            )
+            raise Exception("Invalid Transfer: " + equation)
 
-            if not lhs_eq_zero or not rhs_eq_zero:
-                equation = "({} - {}) - ({} + {}) != ({} - {}) - {}   [LHS = {}, RHS = {}, Price = {}]".format(
-                    lsb1, lsb2, q, c, ltb2, ltb1, cv, lhs, rhs, p
-                )
-
-                raise Exception("Invalid Transfer: " + equation)
-
+        if t_signal:
+            return Transfer(quantity, commission, exchange_pair.price)
+        else:
             return Transfer(quantity, commission, _c_price)
 
+        
     def reset(self) -> None:
         """Resets the wallet."""
         self.balance = Quantity(self.instrument, self._initial_size).quantize()
