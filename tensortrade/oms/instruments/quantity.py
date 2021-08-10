@@ -153,8 +153,10 @@ class Quantity:
             A quantity compatible with the given exchange.
         """
         options = exchange_pair.exchange.options
-        
-        price = exchange_pair.price(t_signal)
+        if t_signal:
+            price = exchange_pair.price
+        else:
+            price = exchange_pair.price_v1
 
         if exchange_pair.pair.base == self.instrument:
             size = self.size
