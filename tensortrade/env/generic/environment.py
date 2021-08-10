@@ -178,7 +178,7 @@ class TradingEnv(gym.Env, TimeIndexed):
             self.clock.increment()
         else:
             obs = self._next_observation()
-            info = self.informer.info(self, self._t_signal)
+            #info = self.informer.info(self, self._t_signal)
             self.clock.increment()
             print("Online Observation:"); print(obs)
             return obs
