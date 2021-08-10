@@ -173,12 +173,6 @@ class Order(TimedIdentifiable, Observable):
         """If this order is executable. (bool, read-only)"""
         is_satisfied = self.criteria is None or self.criteria(self, self.exchange_pair.exchange)
         clock = self.exchange_pair.exchange.clock
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        print(is_satisfied)
-        print(clock.step >= self.start)
-        print(clock.step)
-        print(self.start)
-        print(is_satisfied and clock.step >= self.start)
         return is_satisfied and clock.step >= self.start
 
     @property
@@ -225,7 +219,6 @@ class Order(TimedIdentifiable, Observable):
         `Order`
             The current order.
         """
-        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
         self._specs += [order_spec]
         return self
 
@@ -234,7 +227,6 @@ class Order(TimedIdentifiable, Observable):
         self.status = OrderStatus.OPEN
 
         if self.portfolio.order_listener:
-            print("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooopppppppppppp")
             self.attach(self.portfolio.order_listener)
 
         for listener in self.listeners or []:
@@ -273,7 +265,6 @@ class Order(TimedIdentifiable, Observable):
         order = None
 
         if self._specs:
-            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
             order_spec = self._specs.pop()
             order = order_spec.create_order(self)
 
@@ -281,8 +272,6 @@ class Order(TimedIdentifiable, Observable):
             listener.on_complete(self)
 
         self.listeners = []
-        print("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
-        print(order)
 
         return order or self.release("COMPLETED")
 
@@ -313,7 +302,6 @@ class Order(TimedIdentifiable, Observable):
             The reason for releasing all locked quantities associated with the
             order.
         """
-        print("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
         for wallet in self.portfolio.wallets:
             if self.path_id in wallet.locked.keys():
                 quantity = wallet.locked[self.path_id]
