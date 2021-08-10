@@ -333,9 +333,11 @@ class Wallet(Identifiable):
 
             converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
 
-            converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity,
-                                                                             exchange_pair,
-                                                                             exchange_pair.price))
+            converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(
+                quantity,
+                exchange_pair,
+                exchange_pair.price
+            ))
 
             lsb2 = source.locked.get(poid).size
             ltb2 = target.locked.get(poid, 0 * pair.quote).size
@@ -356,7 +358,11 @@ class Wallet(Identifiable):
 
             converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
 
-            converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(quantity, exchange_pair, _c_price))
+            converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(
+                quantity,
+                exchange_pair,
+                _c_price
+            ))
 
             lsb2 = source.locked.get(poid).size
             ltb2 = target.locked.get(poid, 0 * pair.quote).size
