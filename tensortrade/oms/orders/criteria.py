@@ -195,10 +195,6 @@ class Stop(Criteria):
 
         is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price(self._t_signal))
         is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price(self._t_signal))
-        print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-        print(percent)
-        print(self.percent)
-        print((is_take_profit or is_stop_loss) and percent >= self.percent)
 
         return (is_take_profit or is_stop_loss) and percent >= self.percent
 
