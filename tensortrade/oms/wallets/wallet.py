@@ -348,7 +348,6 @@ class Wallet(Identifiable):
             p = exchange_pair.inverse_price if pair == exchange_pair.pair else exchange_pair.price
 
         else:
-            _c_price = exchange_pair.price_online
             if quantity.instrument == exchange_pair.pair.base:
                 instrument = exchange_pair.pair.quote
                 converted_size = quantity.size / exchange_pair.price_online
