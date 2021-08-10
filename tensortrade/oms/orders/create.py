@@ -305,7 +305,7 @@ def proportion_order(portfolio: 'Portfolio',
         **base_params,
         'side': TradeSide.SELL,
         'exchange_pair': exchange_pair,
-        'quantity': quantity
+        'quantity': quantity,
         'price': exchange_pair.price,
         't_signal': t_signal
     }
