@@ -23,7 +23,7 @@ class ExchangePair:
         return self.exchange.quote_price(self.pair, t_signal)
     
     @property 
-    def price_Ov(self) -> "Decimal":
+    def price_online(self) -> "Decimal":
         """The quoted price of the trading pair. (`Decimal`, read-only)"""
         t_signal = False
         return self.exchange.quote_price(self.pair, t_signal)
@@ -35,10 +35,10 @@ class ExchangePair:
         return Decimal(self.price ** Decimal(-1)).quantize(quantization)
     
     @property
-    def inverse_price_Ov(self, price: Decimal) -> "Decimal":
+    def inverse_price_online(self, price: Decimal) -> "Decimal":
         """The inverse price of the trading pair. (`Decimal, read-only)"""
         quantization = Decimal(10) ** -self.pair.quote.precision
-        return Decimal(self.price_Ov ** Decimal(-1)).quantize(quantization)
+        return Decimal(self.price_online ** Decimal(-1)).quantize(quantization)
 
     def __hash__(self):
         return hash(str(self))
