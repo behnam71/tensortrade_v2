@@ -276,20 +276,32 @@ class SimpleOrders(TensorTradeActionScheme):
         else:
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
-
-        _c_price = ep.price(t_signal)
-        order = Order(
-            step=self.clock.step,
-            side=side,
-            trade_type=self._trade_type,
-            exchange_pair=ep,
-            price=_c_price,
-            t_signal=t_signal,
-            quantity=quantity,
-            criteria=criteria,
-            end=self.clock.step + duration if duration else None,
-            portfolio=portfolio,
-        )
+ 
+        if t_signal:
+            order = Order(
+                step=self.clock.step,
+                side=side,
+                trade_type=self._trade_type,
+                exchange_pair=ep,
+                price=ep.price,
+                quantity=quantity,
+                criteria=criteria,
+                end=self.clock.step + duration if duration else None,
+                portfolio=portfolio
+            )
+        else:
+            order = Order(
+                step=self.clock.step,
+                side=side,
+                trade_type=self._trade_type,
+                exchange_pair=ep,
+                price=ep.price_v1,
+                t_signal=t_signal,
+                quantity=quantity,
+                criteria=criteria,
+                end=self.clock.step + duration if duration else None,
+                portfolio=portfolio,
+            )
 
         if self._order_listener is not None:
             order.attach(self._order_listener)
@@ -399,20 +411,32 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
         
-        _c_price = ep.price(t_signal)
-        params = {
-            'side': side,
-            'exchange_pair': ep,
-            'price': _c_price,
-            'quantity': quantity,
-            'down_percent': stop,
-            'up_percent': take,
-            'portfolio': portfolio,
-            't_signal': t_signal,
-            'trade_type': self._trade_type,
-            'end': self.clock.step + duration if duration else None
-        }
-
+        if t_signal:
+            params = {
+                'side': side,
+                'exchange_pair': ep,
+                'price': ep.price,
+                'quantity': quantity,
+                'down_percent': stop,
+                'up_percent': take,
+                'portfolio': portfolio,
+                't_signal': t_signal
+                'trade_type': self._trade_type,
+                'end': self.clock.step + duration if duration else None
+            }
+        else:
+            params = {
+                'side': side,
+                'exchange_pair': ep,
+                'price': ep.price_v1,
+                'quantity': quantity,
+                'down_percent': stop,
+                'up_percent': take,
+                'portfolio': portfolio,
+                't_signal': t_signal
+                'trade_type': self._trade_type,
+                'end': self.clock.step + duration if duration else None
+            }
         order = risk_managed_order(**params)
 
         if self._order_listener is not None:
