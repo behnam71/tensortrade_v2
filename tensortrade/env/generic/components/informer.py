@@ -25,7 +25,7 @@ class Informer(Component, TimeIndexed):
     registered_name = "monitor"
 
     @abstractmethod
-    def info(self, env: 'TradingEnv', _t_signal: bool) -> dict:
+    def info(self, env: 'TradingEnv') -> dict:
         """Provides information at a given step of an episode.
 
         Parameters
