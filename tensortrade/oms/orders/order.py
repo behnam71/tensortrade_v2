@@ -173,6 +173,8 @@ class Order(TimedIdentifiable, Observable):
         """If this order is executable. (bool, read-only)"""
         is_satisfied = self.criteria is None or self.criteria(self, self.exchange_pair.exchange)
         clock = self.exchange_pair.exchange.clock
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        print(is_satisfied and clock.step >= self.start)
         return is_satisfied and clock.step >= self.start
 
     @property
