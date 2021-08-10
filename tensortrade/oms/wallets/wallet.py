@@ -351,17 +351,17 @@ class Wallet(Identifiable):
             _c_price = exchange_pair.price_online
             if quantity.instrument == exchange_pair.pair.base:
                 instrument = exchange_pair.pair.quote
-                converted_size = quantity.size / _c_price
+                converted_size = quantity.size / exchange_pair.price_online
             else:
                 instrument = exchange_pair.pair.base
-                converted_size = quantity.size * _c_price
+                converted_size = quantity.size * exchange_pair.price_online
 
             converted = Quantity(instrument, converted_size, quantity.path_id).quantize()
 
             converted = target.deposit(converted, 'TRADED {} {} @ {}'.format(
                 quantity,
                 exchange_pair,
-                _c_price
+                exchange_pair.price_online
             ))
 
             lsb2 = source.locked.get(poid).size
@@ -370,7 +370,7 @@ class Wallet(Identifiable):
             q = quantity.size
             c = commission.size
             cv = converted.size
-            p = exchange_pair.inverse_price_online if pair == exchange_pair.pair else _c_price
+            p = exchange_pair.inverse_price_online if pair == exchange_pair.pair else exchange_pair.price_online
             
         source_quantization = Decimal(10) ** -source.instrument.precision
         target_quantization = Decimal(10) ** -target.instrument.precision
@@ -390,7 +390,7 @@ class Wallet(Identifiable):
         if t_signal:
             return Transfer(quantity, commission, exchange_pair.price)
         else:
-            return Transfer(quantity, commission, _c_price)
+            return Transfer(quantity, commission, exchange_pair.price_online)
 
         
     def reset(self) -> None:
