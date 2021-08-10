@@ -75,17 +75,19 @@ class OrderSpec(Identifiable):
             price = self.exchange_pair.price
         else:
             price = self.exchange_pair.price_online
-        return Order(step=exchange.clock.step,
-                     side=self.side,
-                     trade_type=self.type,
-                     exchange_pair=self.exchange_pair,
-                     quantity=quantity,
-                     portfolio=order.portfolio,
-                     price=price,
-                     t_signal=self._t_signal,
-                     criteria=self.criteria,
-                     end=order.end,
-                     path_id=order.path_id)
+        return Order(
+            step=exchange.clock.step,
+            side=self.side,
+            trade_type=self.type,
+            exchange_pair=self.exchange_pair,
+            quantity=quantity,
+            portfolio=order.portfolio,
+            price=price,
+            t_signal=self._t_signal,
+            criteria=self.criteria,
+            end=order.end,
+            path_id=order.path_id
+        )
 
     def to_dict(self) -> dict:
         """Creates dictionary representation of specification.
