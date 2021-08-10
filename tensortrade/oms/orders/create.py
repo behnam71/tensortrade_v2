@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-
 from tensortrade.oms.instruments import ExchangePair
 from tensortrade.oms.wallets import Portfolio
 from tensortrade.oms.orders import Order, OrderSpec, TradeSide, TradeType
@@ -51,10 +50,10 @@ def market_order(side: "TradeSide",
         side=side,
         trade_type=TradeType.MARKET,
         exchange_pair=exchange_pair,
-        price=price,
-        t_signal=t_signal,
         quantity=(size * instrument),
-        portfolio=portfolio
+        portfolio=portfolio,
+        price=price,
+        t_signal=t_signal
     )
 
     return order
@@ -100,12 +99,12 @@ def limit_order(side: "TradeSide",
         side=side,
         trade_type=TradeType.LIMIT,
         exchange_pair=exchange_pair,
+        quantity=(size * instrument),
+        portfolio=portfolio,
         price=limit_price,
         t_signal=t_signal,
-        quantity=(size * instrument),
         start=start,
-        end=end,
-        portfolio=portfolio
+        end=end
     )
 
     return order
@@ -151,13 +150,13 @@ def hidden_limit_order(side: "TradeSide",
         side=side,
         trade_type=TradeType.MARKET,
         exchange_pair=exchange_pair,
+        quantity=(size * instrument),
+        portfolio=portfolio,
         price=limit_price,
         t_signal=t_signal,
-        quantity=(size * instrument),
+        criteria=Limit(limit_price=limit_price),
         start=start,
         end=end,
-        portfolio=portfolio,
-        criteria=Limit(limit_price=limit_price)
     )
 
     return order
@@ -215,12 +214,12 @@ def risk_managed_order(side: "TradeSide",
         side=side,
         trade_type=TradeType(trade_type),
         exchange_pair=exchange_pair,
+        quantity=quantity,
+        portfolio=portfolio,
         price=price,
         t_signal=t_signal,
         start=start,
-        end=end,
-        quantity=quantity,
-        portfolio=portfolio,
+        end=end
     )
 
     risk_criteria = Stop("down", down_percent, t_signal) ^ Stop("up", up_percent, t_signal)
@@ -288,9 +287,9 @@ def proportion_order(portfolio: 'Portfolio',
             **base_params,
             'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
             'exchange_pair': exchange_pair,
+            'quantity': quantity,
             'price': exchange_pair.price,
-            't_signal': t_signal,
-            'quantity': quantity
+            't_signal': t_signal
         }
 
         return Order(**params)
@@ -306,9 +305,9 @@ def proportion_order(portfolio: 'Portfolio',
         **base_params,
         'side': TradeSide.SELL,
         'exchange_pair': exchange_pair,
-        'price': exchange_pair.price,
-        't_signal': t_signal,
         'quantity': quantity
+        'price': exchange_pair.price,
+        't_signal': t_signal
     }
 
     order = Order(**params)
