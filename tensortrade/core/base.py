@@ -148,8 +148,6 @@ class Observable:
         `Observable` :
             The observable being called.
         """
-        print("tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt1122")
-        print(listener)
         self.listeners += [listener]
         return self
 
