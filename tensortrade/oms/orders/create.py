@@ -13,7 +13,7 @@
 # limitations under the License
 from tensortrade.oms.instruments import ExchangePair
 from tensortrade.oms.wallets import Portfolio
-from tensortrade.oms.orders import Order, OrderSpec, TradeSide, TradeType
+from tensortrade.oms.orders import Order, OrderSpec, TradeSide, TradeType, Order_v1
 from tensortrade.oms.orders.criteria import Stop, Limit
 
 
@@ -209,19 +209,33 @@ def risk_managed_order(side: "TradeSide",
     side = TradeSide(side)
     instrument = side.instrument(exchange_pair.pair)
 
-    order = Order(
-        step=portfolio.clock.step,
-        side=side,
-        trade_type=TradeType(trade_type),
-        exchange_pair=exchange_pair,
-        quantity=quantity,
-        portfolio=portfolio,
-        price=price,
-        t_signal=t_signal,
-        start=start,
-        end=end
-    )
-
+    if t_signal:
+        order = Order(
+            step=portfolio.clock.step,
+            side=side,
+            trade_type=TradeType(trade_type),
+            exchange_pair=exchange_pair,
+            quantity=quantity,
+            portfolio=portfolio,
+            price=price,
+            t_signal=t_signal,
+            start=start,
+            end=end
+        )
+    else:
+        order = Order_v1(
+            step=portfolio.clock.step,
+            side=side,
+            trade_type=TradeType(trade_type),
+            exchange_pair=exchange_pair,
+            quantity=quantity,
+            portfolio=portfolio,
+            price_online=price,
+            t_signal=t_signal,
+            start=start,
+            end=end
+        )
+    
     risk_criteria = Stop("down", down_percent, t_signal) ^ Stop("up", up_percent, t_signal)
     risk_management = OrderSpec(
         side=TradeSide.SELL if side == TradeSide.BUY else TradeSide.BUY,
