@@ -39,7 +39,7 @@ class OrderStatus(Enum):
         return self.value
 
 
-class Order(TimedIdentifiable, Observable):
+class Order_v1(TimedIdentifiable, Observable):
     """A class to represent ordering an amount of a financial instrument.
     Responsibilities of the Order:
         1. Confirming its own validity.
