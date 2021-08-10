@@ -36,15 +36,25 @@ def execute_buy_order(order: 'Order',
     `Trade`
         The executed trade that was made.
     """
-    if order.type == TradeType.LIMIT and order.price < current_price:
-        return None
-
-    filled = order.remaining.contain(order.exchange_pair, t_signal)
-
-    if order.type == TradeType.MARKET:
-        scale = order.price / max(current_price, order.price)
-        filled = scale * filled
-
+    if t_signal:
+        if order.type == TradeType.LIMIT and order.price < current_price:
+            return None
+        
+        filled = order.remaining.contain(order.exchange_pair, t_signal)
+        
+        if order.type == TradeType.MARKET:
+            scale = order.price / max(current_price, order.price)
+            filled = scale * filled
+    else:
+        if order.type == TradeType.LIMIT and order.price_online < current_price:
+            return None
+        
+        filled = order.remaining.contain(order.exchange_pair, t_signal)
+        
+        if order.type == TradeType.MARKET:
+            scale = order.price_online / max(current_price, order.price_online)
+            filled = scale * filled
+            
     commission = options.commission * filled
     quantity = filled - commission
 
