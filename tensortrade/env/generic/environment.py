@@ -172,6 +172,7 @@ class TradingEnv(gym.Env, TimeIndexed):
         if self._t_signal:
             obs = self.observer.observe(self)
             reward = self.reward_scheme.reward(self)
+            print("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
             done = self.stopper.stop(self)
             info = self.informer.info(self)
             self.clock.increment()
@@ -200,7 +201,7 @@ class TradingEnv(gym.Env, TimeIndexed):
             obs = self.observer.observe(self)
         else:
             obs = self._next_observation()
-        
+        print("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         self.clock.increment()
         return obs
     
