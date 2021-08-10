@@ -174,6 +174,10 @@ class Order(TimedIdentifiable, Observable):
         is_satisfied = self.criteria is None or self.criteria(self, self.exchange_pair.exchange)
         clock = self.exchange_pair.exchange.clock
         print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        print(is_satisfied)
+        print(clock.step >= self.start)
+        print(clock.step)
+        print(self.start)
         print(is_satisfied and clock.step >= self.start)
         return is_satisfied and clock.step >= self.start
 
