@@ -70,6 +70,7 @@ class OrderSpec(Identifiable):
 
         if not quantity or quantity.size == 0:
             return None
+
         return Order(step=exchange.clock.step,
                      side=self.side,
                      trade_type=self.type,
