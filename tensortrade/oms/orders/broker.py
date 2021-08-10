@@ -83,7 +83,6 @@ class Broker(OrderListener, TimeIndexed):
         proceed to cancel them.
         """
         executed_ids = []
-        print(self.unexecuted)
         for order in self.unexecuted:
             print("7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777")
             
