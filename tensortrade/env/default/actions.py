@@ -281,16 +281,18 @@ class SimpleOrders(TensorTradeActionScheme):
             price = ep.price
         else:
             price = ep.price_online
-        order = Order(step=self.clock.step,
-                      side=side,
-                      trade_type=self._trade_type,
-                      exchange_pair=ep,
-                      quantity=quantity,
-                      portfolio=portfolio,
-                      price=price,
-                      t_signal=t_signal,
-                      criteria=criteria,
-                      end=self.clock.step + duration if duration else None)
+        order = Order(
+            step=self.clock.step,
+            side=side,
+            trade_type=self._trade_type,
+            exchange_pair=ep,
+            quantity=quantity,
+            portfolio=portfolio,
+            price=price,
+            t_signal=t_signal,
+            criteria=criteria,
+            end=self.clock.step + duration if duration else None
+        )
 
         if self._order_listener is not None:
             order.attach(self._order_listener)
