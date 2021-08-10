@@ -277,7 +277,7 @@ class SimpleOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
  
-        if self._t_signal:
+        if t_signal:
             price = ep.price
         else:
             price = ep.price_online
@@ -402,7 +402,7 @@ class ManagedRiskOrders(TensorTradeActionScheme):
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
                 return []
         
-        if self._t_signal:
+        if t_signal:
             price = ep.price
         else:
             price = ep.price_online
