@@ -16,8 +16,16 @@ class ExchangePair:
         self.exchange = exchange
         self.pair = pair
         
-    def price(self, t_signal: bool) -> "Decimal":
+    @property
+    def price(self) -> "Decimal":
         """The quoted price of the trading pair. (`Decimal`, read-only)"""
+        t_signal = True
+        return self.exchange.quote_price(self.pair, t_signal)
+    
+    @property 
+    def price_v1(self) -> "Decimal":
+        """The quoted price of the trading pair. (`Decimal`, read-only)"""
+        t_signal = False
         return self.exchange.quote_price(self.pair, t_signal)
     
     def inverse_price(self, price: Decimal) -> "Decimal":
