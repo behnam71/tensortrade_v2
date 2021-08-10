@@ -52,6 +52,7 @@ class Broker(OrderListener, TimeIndexed):
         order : `Order`
             The order to be submitted.
         """
+        print("8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888")
         self.unexecuted += [order]
 
     def cancel(self, order: "Order") -> None:
@@ -82,7 +83,10 @@ class Broker(OrderListener, TimeIndexed):
         proceed to cancel them.
         """
         executed_ids = []
+        print(self.unexecuted)
         for order in self.unexecuted:
+            print("7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777")
+            
             if order.is_executable:
                 executed_ids.append(order.id)
                 self.executed[order.id] = order
