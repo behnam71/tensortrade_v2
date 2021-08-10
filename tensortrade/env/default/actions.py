@@ -89,7 +89,8 @@ class TensorTradeActionScheme(ActionScheme):
         orders = self.get_orders(action, self.portfolio, t_signal)
         
         for order in orders:
-            pprint(order)
+            if not(t_signal):
+                pprint(order)
             if order:
                 logging.info('Step {}: {} {}'.format(order.step, order.side, order.quantity))
                 self.broker.submit(order)
