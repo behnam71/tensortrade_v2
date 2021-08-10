@@ -52,7 +52,6 @@ class Broker(OrderListener, TimeIndexed):
         order : `Order`
             The order to be submitted.
         """
-        print("8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888")
         self.unexecuted += [order]
 
     def cancel(self, order: "Order") -> None:
@@ -63,7 +62,6 @@ class Broker(OrderListener, TimeIndexed):
         order : `Order`
             The order to be canceled.
         """
-        print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
         if order.status == OrderStatus.CANCELLED:
             raise Warning(f"Order {order.id} has already been cancelled.")
 
@@ -84,15 +82,11 @@ class Broker(OrderListener, TimeIndexed):
         """
         executed_ids = []
         for order in self.unexecuted:
-            print("7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777")
-            
             if order.is_executable:
                 executed_ids.append(order.id)
                 self.executed[order.id] = order
 
                 order.attach(self)
-                print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-                
                 order.execute(t_signal)
         
         for order_id in executed_ids:
@@ -100,7 +94,6 @@ class Broker(OrderListener, TimeIndexed):
 
         for order in self.unexecuted + list(self.executed.values()):
             if order.is_active and order.is_expired:
-                print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
                 self.cancel(order)
 
     def on_fill(self, order: "Order", trade: "Trade", t_signal: bool) -> None:
@@ -118,7 +111,6 @@ class Broker(OrderListener, TimeIndexed):
             self.trades[trade.order_id] += [trade]
 
             if order.is_complete:
-                print("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 next_order = order.complete()
 
                 if next_order:
@@ -126,7 +118,6 @@ class Broker(OrderListener, TimeIndexed):
                         self.executed[next_order.id] = next_order
 
                         next_order.attach(self)
-                        print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
                         next_order.execute(t_signal)
                     else:
                         self.submit(next_order)
