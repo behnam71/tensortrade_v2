@@ -39,7 +39,6 @@ def execute_buy_order(order: 'Order',
     if t_signal:
         if order.type == TradeType.LIMIT and order.price < current_price:
             return None
-        
         filled = order.remaining.contain(order.exchange_pair, t_signal)
         if order.type == TradeType.MARKET:
             scale = order.price / max(current_price, order.price)
@@ -47,7 +46,6 @@ def execute_buy_order(order: 'Order',
     else:
         if order.type == TradeType.LIMIT and order.price_online < current_price:
             return None
-        
         filled = order.remaining.contain(order.exchange_pair, t_signal)
         if order.type == TradeType.MARKET:
             scale = order.price_online / max(current_price, order.price_online)
@@ -123,7 +121,6 @@ def execute_sell_order(order: 'Order',
             return None
         
     filled = order.remaining.contain(order.exchange_pair, t_signal)
-
     commission = options.commission * filled
     quantity = filled - commission
     if commission.size < Decimal(10) ** -quantity.instrument.precision:
