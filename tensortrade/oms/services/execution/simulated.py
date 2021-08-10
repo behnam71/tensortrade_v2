@@ -117,14 +117,17 @@ def execute_sell_order(order: 'Order',
     `Trade`
         The executed trade that was made.
     """
-    if order.type == TradeType.LIMIT and order.price > current_price:
-        return None
-
+    if t_signal:
+        if order.type == TradeType.LIMIT and order.price > current_price:
+            return None
+    else:
+        if order.type == TradeType.LIMIT and order.price_online > current_price:
+            return None
+        
     filled = order.remaining.contain(order.exchange_pair, t_signal)
 
     commission = options.commission * filled
     quantity = filled - commission
-
     if commission.size < Decimal(10) ** -quantity.instrument.precision:
         logging.warning("Commission is less than instrument precision. Canceling order. "
                         "Consider defining a custom instrument with a higher precision.")
