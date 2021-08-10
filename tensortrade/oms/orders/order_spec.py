@@ -16,7 +16,7 @@
 from typing import Callable
 
 from tensortrade.core import Identifiable
-from tensortrade.oms.orders import Order, TradeSide, TradeType
+from tensortrade.oms.orders import Order, TradeSide, TradeType, Order_v1
 
 
 class OrderSpec(Identifiable):
@@ -73,21 +73,34 @@ class OrderSpec(Identifiable):
         
         if self._t_signal:
             price = self.exchange_pair.price
+            return Order(
+                step=exchange.clock.step,
+                side=self.side,
+                trade_type=self.type,
+                exchange_pair=self.exchange_pair,
+                quantity=quantity,
+                portfolio=order.portfolio,
+                price=price,
+                t_signal=self._t_signal,
+                criteria=self.criteria,
+                end=order.end,
+                path_id=order.path_id
+            )
         else:
             price = self.exchange_pair.price_online
-        return Order(
-            step=exchange.clock.step,
-            side=self.side,
-            trade_type=self.type,
-            exchange_pair=self.exchange_pair,
-            quantity=quantity,
-            portfolio=order.portfolio,
-            price=price,
-            t_signal=self._t_signal,
-            criteria=self.criteria,
-            end=order.end,
-            path_id=order.path_id
-        )
+            return Order_v1(
+                step=exchange.clock.step,
+                side=self.side,
+                trade_type=self.type,
+                exchange_pair=self.exchange_pair,
+                quantity=quantity,
+                portfolio=order.portfolio,
+                price_online=price,
+                t_signal=self._t_signal,
+                criteria=self.criteria,
+                end=order.end,
+                path_id=order.path_id
+            )
 
     def to_dict(self) -> dict:
         """Creates dictionary representation of specification.
