@@ -370,7 +370,7 @@ class Wallet(Identifiable):
             q = quantity.size
             c = commission.size
             cv = converted.size
-            p = exchange_pair.inverse_price_online(_c_price) if pair == exchange_pair.pair else _c_price
+            p = exchange_pair.inverse_price_online if pair == exchange_pair.pair else _c_price
             
         source_quantization = Decimal(10) ** -source.instrument.precision
         target_quantization = Decimal(10) ** -target.instrument.precision
