@@ -54,7 +54,7 @@ class Order(TimedIdentifiable, Observable):
         The side of the order.
     exchange_pair : `ExchangePair`
         The exchange pair to perform the order for.
-    price : float
+    price_online : float
         The price of the order.
     trade_type : `TradeType`
         The type of trade being made.
