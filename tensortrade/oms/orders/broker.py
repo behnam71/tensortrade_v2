@@ -13,7 +13,6 @@
 # limitations under the License
 from typing import List, Dict
 from collections import OrderedDict
-from pprint import pprint
 
 from tensortrade.core.base import TimeIndexed
 from tensortrade.oms.orders.order import Order, OrderStatus
