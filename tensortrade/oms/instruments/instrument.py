@@ -137,10 +137,11 @@ BCH = Instrument('BCH', 8, 'Bitcoin Cash')
 LTC = Instrument('LTC', 8, 'Litecoin')
 ETC = Instrument('ETC', 8, 'Ethereum Classic')
 XLM = Instrument('XLM', 8, 'Stellar Lumens')
+DOGE = Instrument('DOGE', 8, 'Dogecoin')
 LINK = Instrument('LINK', 8, 'Chainlink')
 ATOM = Instrument('ATOM', 8, 'Cosmos')
-DAI = Instrument('DAI', 8, 'Dai')
 USDT = Instrument('USDT', 8, 'Tether')
+DAI = Instrument('DAI', 8, 'Dai')
 
 # FX
 USD = Instrument('USD', 2, 'U.S. Dollar')
