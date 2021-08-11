@@ -83,7 +83,6 @@ class Broker(OrderListener, TimeIndexed):
         executed_ids = []
         for order in self.unexecuted:
             if order.is_executable:
-                print("Unexecuted Orders:"); pprint(order)
                 executed_ids.append(order.id)
                 self.executed[order.id] = order
 
