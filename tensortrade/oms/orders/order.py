@@ -219,6 +219,7 @@ class Order(TimedIdentifiable, Observable):
         `Order`
             The current order.
         """
+        print("3333333333333333333333333333333333333333333333333333333333")
         self._specs += [order_spec]
         return self
 
@@ -265,6 +266,8 @@ class Order(TimedIdentifiable, Observable):
         order = None
 
         if self._specs:
+            print("2222222222222222222222222222222222222222222222222222222222")
+            print(order)
             order_spec = self._specs.pop()
             order = order_spec.create_order(self)
 
@@ -302,6 +305,7 @@ class Order(TimedIdentifiable, Observable):
             The reason for releasing all locked quantities associated with the
             order.
         """
+        print("1111111111111111111111111111111111111111111111111111111111")
         for wallet in self.portfolio.wallets:
             if self.path_id in wallet.locked.keys():
                 quantity = wallet.locked[self.path_id]
