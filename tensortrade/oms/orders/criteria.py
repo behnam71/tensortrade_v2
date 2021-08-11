@@ -160,7 +160,6 @@ class Limit(Criteria):
 
 class StopDirection(Enum):
     """An enumeration for the directions of a stop criteria."""
-
     UP = "up"
     DOWN = "down"
 
@@ -195,24 +194,11 @@ class Stop(Criteria):
             percent = abs(price - order.price) / order.price
             is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price)
             is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price)
-            print("55555555555555555555555555555555555555555555555555555555552222222")
-            print(percent)
-            print(self.percent)
-            print(is_take_profit)
-            print(is_stop_loss)
-            print((is_take_profit or is_stop_loss) and percent >= self.percent)
         else:
             percent = abs(price - order.price_online) / order.price_online
             is_take_profit = (self.direction == StopDirection.UP) and (price >= order.price_online)
             is_stop_loss = (self.direction == StopDirection.DOWN) and (price <= order.price_online)
-            print("55555555555555555555555555555555555555555555555555555555557777777")
-            print(percent)
-            print(self.percent)
-            print(is_take_profit)
-            print(is_stop_loss)
-            print((is_take_profit or is_stop_loss) and percent >= self.percent)
             
-
         return (is_take_profit or is_stop_loss) and percent >= self.percent
 
     def __str__(self):
