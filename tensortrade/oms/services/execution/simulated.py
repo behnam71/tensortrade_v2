@@ -184,7 +184,7 @@ def execute_order(order: 'Order',
     `Trade`
         The executed trade that was made.
     """
-    if not(t_signal): pprint(order)
+    pprint(order)
     
     kwargs = {"order": order,
               "base_wallet": base_wallet,
