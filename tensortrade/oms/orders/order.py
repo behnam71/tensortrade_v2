@@ -11,8 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-
-
 import uuid
 
 from enum import Enum
@@ -27,7 +25,6 @@ from tensortrade.oms.orders import Trade, TradeSide, TradeType
 
 class OrderStatus(Enum):
     """An enumeration for the status of an order."""
-
     PENDING = "pending"
     OPEN = "open"
     CANCELLED = "cancelled"
@@ -40,7 +37,6 @@ class OrderStatus(Enum):
 
 class Order(TimedIdentifiable, Observable):
     """A class to represent ordering an amount of a financial instrument.
-
     Responsibilities of the Order:
         1. Confirming its own validity.
         2. Tracking its trades and reporting it back to the broker.
@@ -208,7 +204,6 @@ class Order(TimedIdentifiable, Observable):
 
     def add_order_spec(self, order_spec: 'OrderSpec') -> 'Order':
         """Adds an order specification to the order.
-
         Parameters
         ----------
         order_spec : `OrderSpec`
@@ -219,7 +214,6 @@ class Order(TimedIdentifiable, Observable):
         `Order`
             The current order.
         """
-        print("3333333333333333333333333333333333333333333333333333333333")
         self._specs += [order_spec]
         return self
 
@@ -237,7 +231,6 @@ class Order(TimedIdentifiable, Observable):
 
     def fill(self, trade: 'Trade', t_signal: bool) -> None:
         """Fills the order.
-
         Parameters
         ----------
         trade : `Trade`
@@ -262,14 +255,11 @@ class Order(TimedIdentifiable, Observable):
             The completed order.
         """
         self.status = OrderStatus.FILLED
-
         order = None
 
         if self._specs:
             order_spec = self._specs.pop()
             order = order_spec.create_order(self)
-            print("2222222222222222222222222222222222222222222222222222222222")
-            print(order)
 
         for listener in self.listeners or []:
             listener.on_complete(self)
@@ -305,7 +295,6 @@ class Order(TimedIdentifiable, Observable):
             The reason for releasing all locked quantities associated with the
             order.
         """
-        print("1111111111111111111111111111111111111111111111111111111111")
         for wallet in self.portfolio.wallets:
             if self.path_id in wallet.locked.keys():
                 quantity = wallet.locked[self.path_id]
