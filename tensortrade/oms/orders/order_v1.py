@@ -12,8 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-
-
 import uuid
 
 from enum import Enum
@@ -28,7 +26,6 @@ from tensortrade.oms.orders import Trade, TradeSide, TradeType
 
 class OrderStatus(Enum):
     """An enumeration for the status of an order."""
-
     PENDING = "pending"
     OPEN = "open"
     CANCELLED = "cancelled"
@@ -77,7 +74,6 @@ class Order_v1(TimedIdentifiable, Observable):
     InvalidOrderQuantity
         Raised if the given quantity has a size of 0.
     """
-
     def __init__(self,
                  step: int,
                  side: TradeSide,
