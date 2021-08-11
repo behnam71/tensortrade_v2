@@ -244,6 +244,7 @@ def risk_managed_order(side: "TradeSide",
         t_signal=t_signal,
         criteria=risk_criteria
     )
+    print("7777777777777777777777777777777777777777777777777777777777")
 
     order.add_order_spec(risk_management)
 
