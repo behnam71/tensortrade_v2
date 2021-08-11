@@ -1,5 +1,6 @@
 import logging
 from decimal import Decimal
+from pprint import pprint
 
 from tensortrade.core import Clock
 from tensortrade.oms.wallets import Wallet
@@ -183,6 +184,10 @@ def execute_order(order: 'Order',
     `Trade`
         The executed trade that was made.
     """
+    if not(t_signal):
+      print("Unexecuted Orders:")
+      pprint(order)
+    
     kwargs = {"order": order,
               "base_wallet": base_wallet,
               "quote_wallet": quote_wallet,
