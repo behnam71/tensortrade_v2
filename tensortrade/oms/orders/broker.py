@@ -11,9 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-
 from typing import List, Dict
 from collections import OrderedDict
+from pprint import pprint
 
 from tensortrade.core.base import TimeIndexed
 from tensortrade.oms.orders.order import Order, OrderStatus
@@ -83,6 +83,7 @@ class Broker(OrderListener, TimeIndexed):
         executed_ids = []
         for order in self.unexecuted:
             if order.is_executable:
+                print("Unexecuted Orders:"); pprint(order)
                 executed_ids.append(order.id)
                 self.executed[order.id] = order
 
