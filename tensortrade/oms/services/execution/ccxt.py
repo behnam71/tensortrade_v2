@@ -14,7 +14,7 @@
 import ccxt
 import numpy as np
 import pandas as pd
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from time import sleep
 
 from typing import List, Union
@@ -61,9 +61,9 @@ class CCXTExchange():
                 
 
     def UTC_Time(self):
-        now_utc = datetime.now(timezone.utc)
-        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:00")
-        return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
+        now_utc = datetime.now(timezone.utc) + timedelta(hours=4)
+        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:00:00")
+        return datetime.strptime(now_utc, "%Y-%m-%d %H:00:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
         while self._f_time == self.UTC_Time():
