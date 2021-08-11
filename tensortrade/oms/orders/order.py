@@ -266,10 +266,10 @@ class Order(TimedIdentifiable, Observable):
         order = None
 
         if self._specs:
-            print("2222222222222222222222222222222222222222222222222222222222")
-            print(order)
             order_spec = self._specs.pop()
             order = order_spec.create_order(self)
+            print("2222222222222222222222222222222222222222222222222222222222")
+            print(order)
 
         for listener in self.listeners or []:
             listener.on_complete(self)
