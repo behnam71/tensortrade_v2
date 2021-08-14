@@ -41,12 +41,14 @@ class CCXTExchange():
         self._exchange.secret = credentials['secret']
         self._base_instrument = USDT; self._quote_instrument = BTC
         
-        self._BTC_USDT_PAIR = TradingPair(USDT, BTC)
-        self._observation_pairs = [self._BTC_USDT_PAIR]
+        #self._BTC_USDT_PAIR = TradingPair(USDT, BTC)
+        self._DOGE_USDT_PAIR = TradingPair(USDT, DOGE)
+        
+        self._observation_pairs = [self._DOGE_USDT_PAIR]
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
-        self._timeframe = '1m'
+        self._timeframe = '4h'
         
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
@@ -66,7 +68,13 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:00:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        while self._f_time == self.UTC_Time():
+        self._f_time = self._f_time + timedelta(hours=4)
+        self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:00:00")
+        self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:00:00")
+        print("111111111111111111111111111111111111111111111111111")
+        print(type(self._f_time))
+        print(self._f_time)
+        while self._f_time != self.UTC_Time():
             sleep(1)
             
         temp_dt = self.ohlcv[0]
@@ -75,13 +83,6 @@ class CCXTExchange():
             timeframe=self._timeframe,
             limit=1,
         )
-        if temp_dt == self.ohlcv[0]:
-            while temp_dt == self.ohlcv[0]:
-                self.ohlcv = self._exchange.fetch_ohlcv(
-                    self._observation_symbols[0],
-                    timeframe=self._timeframe,
-                    limit=1,
-                )
                 
         observations = pd.DataFrame.from_records(self.ohlcv)
         observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
