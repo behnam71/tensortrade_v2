@@ -21,7 +21,7 @@ from typing import List, Union
 from ccxt import BadRequest
 
 from tensortrade.oms.exchanges import Exchange
-from tensortrade.oms.instruments import TradingPair, BTC, USDT
+from tensortrade.oms.instruments import TradingPair, BTC, USDT, DOGE
 
 
 class CCXTExchange():
