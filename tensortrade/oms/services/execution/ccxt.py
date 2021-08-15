@@ -55,7 +55,7 @@ class CCXTExchange():
         self._exchange.load_markets()
         
         self.ohlcv = self._exchange.fetch_ohlcv(
-            self._observation_symbols[0],
+            'DOGE/USDT',
             timeframe=self._timeframe,
             limit=1,
         )
