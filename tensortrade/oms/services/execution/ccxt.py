@@ -62,28 +62,27 @@ class CCXTExchange():
         self._f_time = datetime.utcfromtimestamp(
             self.ohlcv[0][0]/1000
         )
-        print("dddddddddddddddddddddddddddddddd")
-        print(self._f_time)
                 
 
     def UTC_Time(self):
         now_utc = datetime.now(timezone.utc)
         now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:00:00")
+        print("11111111111111111111111")
+        print(now_utc)
         return datetime.strptime(now_utc, "%Y-%m-%d %H:00:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
         self._f_time = self._f_time + timedelta(hours=4)
         self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:00:00")
         self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:00:00")
-        print("111111111111111111111111111111111111111111111111111")
-        print(type(self._f_time))
-        print(self._f_time)
+        observations = pd.DataFrame.from_records(self.ohlcv)
+        print("2222222222222222222222222222")
+        print(observations)
         while self._f_time != self.UTC_Time():
-            sleep(1)
+            sleep(60)
             
-        temp_dt = self.ohlcv[0]
         self.ohlcv = self._exchange.fetch_ohlcv(
-            self._observation_symbols[0],
+            str(self._observation_symbols[0]),
             timeframe=self._timeframe,
             limit=1,
         )
