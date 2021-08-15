@@ -33,7 +33,7 @@ class CCXTExchange():
         self._exchange = getattr(
             ccxt, self._exchange_str
         )() if isinstance(self._exchange_str, str) else self._exchange_str
-        self._exchange.urls['api'] = self._exchange.urls['test'] # use the testnet
+        #self._exchange.urls['api'] = self._exchange.urls['test'] # use the testnet
         
         self._exchange.enableRateLimit = True
         
