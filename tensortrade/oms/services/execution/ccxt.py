@@ -60,8 +60,8 @@ class CCXTExchange():
             limit=1,
         )
         print("dddddddddddddddddddddddddddddddd")
-        print(self.ohlcv[0])
-        self._f_time = self.ohlcv[0]
+        print(self.ohlcv[0][0])
+        self._f_time = self.ohlcv[0][0]
                 
 
     def UTC_Time(self):
