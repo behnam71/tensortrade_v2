@@ -59,9 +59,11 @@ class CCXTExchange():
             timeframe=self._timeframe,
             limit=1,
         )
+        self._f_time = datetime.utcfromtimestamp(
+            self.ohlcv[0][0]/1000
+        )
         print("dddddddddddddddddddddddddddddddd")
-        print(self.ohlcv[0][0])
-        self._f_time = self.ohlcv[0][0]
+        print(self._f_time)
                 
 
     def UTC_Time(self):
