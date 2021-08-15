@@ -35,10 +35,10 @@ class CCXTExchange():
         )() if isinstance(self._exchange_str, str) else self._exchange_str
         #self._exchange.urls['api'] = self._exchange.urls['test'] # use the testnet
         
-        #self._exchange.enableRateLimit = True
+        self._exchange.enableRateLimit = True
         
-        #self._exchange.apiKey = credentials['apiKey']
-        #self._exchange.secret = credentials['secret']
+        self._exchange.apiKey = credentials['apiKey']
+        self._exchange.secret = credentials['secret']
         self._base_instrument = USDT; self._quote_instrument = BTC
         
         #self._BTC_USDT_PAIR = TradingPair(USDT, BTC)
@@ -55,7 +55,7 @@ class CCXTExchange():
         self._exchange.load_markets()
         
         self.ohlcv = self._exchange.fetch_ohlcv(
-            'DOGE/USDT',
+            str(self._observation_symbols),
             timeframe=self._timeframe,
             limit=1,
         )
