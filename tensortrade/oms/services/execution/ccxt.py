@@ -72,7 +72,7 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:00:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._f_time = self._f_time + timedelta(hours=4)
+        self._f_time = self._f_time + timedelta(minutes=2)
         self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:00:00")
         self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:00:00")
         observations = pd.DataFrame.from_records(self.ohlcv)
