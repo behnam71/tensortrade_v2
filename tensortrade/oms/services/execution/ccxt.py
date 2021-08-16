@@ -57,7 +57,7 @@ class CCXTExchange():
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
             timeframe=self._timeframe,
-            limit=1,
+            limit=5,
         )
         self._f_time = datetime.utcfromtimestamp(
             self.ohlcv[0][0]/1000
@@ -79,7 +79,7 @@ class CCXTExchange():
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
             timeframe=self._timeframe,
-            limit=1,
+            limit=5,
         )
                 
         observations = pd.DataFrame.from_records(self.ohlcv)
