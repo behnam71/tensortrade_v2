@@ -11,8 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-
-
 import sys
 import os
 
@@ -50,7 +48,8 @@ setup(
         'gym>=0.14.0',
         'pyyaml>=5.1.2',
         'stochastic>=0.6.0',
-        'tensorflow==2.1.0',
+        'tensorflow-gpu==2.1.0',
+        #'tensorflow==2.1.0',
         'ipython>=7.12.0',
         'matplotlib>=3.1.1',
         'plotly>=4.5.0'
