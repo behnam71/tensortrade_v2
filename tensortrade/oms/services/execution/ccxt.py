@@ -48,7 +48,7 @@ class CCXTExchange():
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
-        self._timeframe = '4h'
+        self._timeframe = '15m'
         
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
@@ -66,15 +66,15 @@ class CCXTExchange():
 
     def UTC_Time(self):
         now_utc = datetime.now(timezone.utc)
-        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:00:00")
-        return datetime.strptime(now_utc, "%Y-%m-%d %H:00:00")
+        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:00")
+        return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._f_time = self._f_time + timedelta(hours=4)
-        self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:00:00")
-        self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:00:00")
+        self._f_time = self._f_time + timedelta(minutes=15)
+        self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:%M:00")
+        self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:%M:00")
         while self._f_time != self.UTC_Time():
-            sleep(15)
+            sleep(1)
             
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
