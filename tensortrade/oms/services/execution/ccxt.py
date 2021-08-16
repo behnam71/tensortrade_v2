@@ -74,7 +74,7 @@ class CCXTExchange():
         self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:00:00")
         self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:00:00")
         while self._f_time != self.UTC_Time():
-            sleep(5)
+            sleep(15)
             
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
