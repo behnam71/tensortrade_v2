@@ -46,12 +46,10 @@ class TAlibIndicator(FeatureTransformer):
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = pd.DataFrame(X)
         self.db = pd.concat(
-            [self.db, X],
+            [self.db, X[-1:]],
             ignore_index=True, 
             sort=False
         )
-        self.db.drop_duplicates(subset=['date'], 
-                                keep='first', inplace=True)
         self.db = self.db.reset_index(drop=True)
 
         for idx, indicator in enumerate(self._indicators):
