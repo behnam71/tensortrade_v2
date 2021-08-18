@@ -73,9 +73,6 @@ class CCXTExchange():
         self._f_time = self._f_time + timedelta(minutes=30)
         self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:%M:00")
         self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:%M:00")
-        print("111111111111111111111111111111111111111111111")
-        print(self._f_time)
-        print(self.UTC_Time())
         while self._f_time != self.UTC_Time():
             sleep(5)
             
