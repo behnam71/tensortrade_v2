@@ -70,11 +70,11 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._f_time = self._f_time + timedelta(minutes=15)
+        self._f_time = self._f_time + timedelta(minutes=30)
         self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:%M:00")
         self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:%M:00")
         while self._f_time != self.UTC_Time():
-            sleep(1)
+            sleep(5)
             
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
