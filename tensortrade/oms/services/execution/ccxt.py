@@ -48,7 +48,7 @@ class CCXTExchange():
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
-        self._timeframe = '15m'
+        self._timeframe = '30m'
         
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
@@ -73,6 +73,9 @@ class CCXTExchange():
         self._f_time = self._f_time + timedelta(minutes=30)
         self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:%M:00")
         self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:%M:00")
+        print("111111111111111111111111111111111111111111111")
+        print(self._f_time)
+        print(self.UTC_Time())
         while self._f_time != self.UTC_Time():
             sleep(5)
             
