@@ -94,7 +94,6 @@ class TradingEnv(gym.Env, TimeIndexed):
             self.ccxt = CCXTExchange(
                 exchange='binance',
                 credentials=credentials,
-                window_size=self._window_size,
             )
         
         with open("/mnt/c/Users/BEHNAMH721AS.RN/OneDrive/Desktop/crypto_v2/indicators.txt", "r") as file:
@@ -137,13 +136,13 @@ class TradingEnv(gym.Env, TimeIndexed):
         observation = self.ccxt.next_observation(self._window_size)
         if self._feature_pipeline is not None:
             observation = self._feature_pipeline.transform(observation)
-
+        """
         if len(observation) < self._window_size:
             size = self._window_size - len(observation)
             padding = np.zeros((size, len(observation.columns)))
             padding = pd.DataFrame(padding, columns=observation.columns)
             observation = pd.concat([padding, observation], ignore_index=True, sort=False)
-
+        """
         observation.set_index('date', inplace = True)
         observation = observation.add_prefix("BTC:")
         observation = observation.select_dtypes(include='number')
