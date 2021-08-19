@@ -83,6 +83,7 @@ class TradingEnv(gym.Env, TimeIndexed):
         self.action_space = action_scheme.action_space
         self.observation_space = observer.observation_space
 
+        self._window_size = window_size
         self._t_signal = t_signal
         
         if not(self._t_signal):
@@ -93,9 +94,8 @@ class TradingEnv(gym.Env, TimeIndexed):
             self.ccxt = CCXTExchange(
                 exchange='binance',
                 credentials=credentials,
+                window_size=self._window_size
             )
-        
-        self._window_size = window_size
         
         with open("/mnt/c/Users/BEHNAMH721AS.RN/OneDrive/Desktop/crypto_v2/indicators.txt", "r") as file:
             indicators_list = eval(file.readline())
