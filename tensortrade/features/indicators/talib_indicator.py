@@ -39,23 +39,21 @@ class TAlibIndicator(FeatureTransformer):
         self._indicators = [getattr(talib, name.split('-')[0]) for name in self._indicator_names]
         
         self._window_size = window_size
-        
-        self.db = pd.DataFrame(columns=['date', 'open', 'high', 'low', 'close', 'volume'], dtype=float)
-        
+                
         
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
-        X = pd.DataFrame(X)
-        self.db = pd.concat(
-            [self.db, X[-1:]],
-            ignore_index=True, 
-            sort=False
+        X = pd.DataFrame(
+            X, 
+            columns=['date', 'open', 'high', 'low', 'close', 'volume'], 
+            dtype=float
         )
-        self.db = self.db.reset_index(drop=True)
 
+        print("777777777777777777777777777777777777777777777777777777")
+        print(X)
         for idx, indicator in enumerate(self._indicators):
             indicator_name = self._indicator_names[idx]
             indicator_args = [
-                self.db[arg].values for arg in self._indicator_args[indicator_name]
+                X[arg].values for arg in self._indicator_args[indicator_name]
             ]
             indicator_params = self._indicator_params[indicator_name]
             
