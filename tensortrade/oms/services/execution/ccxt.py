@@ -104,8 +104,6 @@ class CCXTExchange():
             sort=False
         )
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
-        print("11111111111111111111111111111111111111111111111111")
-        print(self._Obs_DB)
 
         return self._Obs_DB
 
