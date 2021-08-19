@@ -94,7 +94,7 @@ class TradingEnv(gym.Env, TimeIndexed):
             self.ccxt = CCXTExchange(
                 exchange='binance',
                 credentials=credentials,
-                window_size=self._window_size
+                window_size=self._window_size,
             )
         
         with open("/mnt/c/Users/BEHNAMH721AS.RN/OneDrive/Desktop/crypto_v2/indicators.txt", "r") as file:
