@@ -55,7 +55,7 @@ class CCXTExchange():
         self._prev_ft = self._exchange.fetch_ohlcv(
                 str(self._observation_symbols[0]),
                 timeframe=self._timeframe,
-                limit=window_size,
+                limit=1,
         )
         
         self._exchange.load_markets()
