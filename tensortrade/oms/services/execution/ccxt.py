@@ -51,8 +51,12 @@ class CCXTExchange():
         self._timeframe = '5m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
-        self._prev_ft = self.UTC_Time()
         self._fetch_cnt = 0
+        self._prev_ft = self._exchange.fetch_ohlcv(
+                str(self._observation_symbols[0]),
+                timeframe=self._timeframe,
+                limit=window_size,
+        )
         
         self._exchange.load_markets()
         
