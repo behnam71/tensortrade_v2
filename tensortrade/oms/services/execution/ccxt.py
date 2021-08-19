@@ -98,7 +98,7 @@ class CCXTExchange():
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
             )
-        self._prev_ft = observations.loc[-1, 'date']
+        self._prev_ft = observations.loc[len(observations)-1, 'date']
         print("11111111111111111111111111111111111111111111111111")
         print(observations)
         print("22222222222222222222222222222222222222222222222222")
