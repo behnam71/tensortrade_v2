@@ -28,7 +28,8 @@ class CCXTExchange():
     """An exchange for trading on CCXT-supported cryptocurrency exchanges."""
     def __init__(self, 
                  exchange: Union[ccxt.Exchange, str],
-                 credentials: dict):
+                 credentials: dict,
+                 window_size: int):
         self._exchange_str = exchange
         self._exchange = getattr(
             ccxt, self._exchange_str
@@ -49,21 +50,13 @@ class CCXTExchange():
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
         self._timeframe = '30m'
-        
+        self._window_size = window_size
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
+        self._prev_ft = self.UTC_Time()
+        self._fetch_cnt = 0
+        
         self._exchange.load_markets()
-        
-        self.ohlcv = self._exchange.fetch_ohlcv(
-            str(self._observation_symbols[0]),
-            timeframe=self._timeframe,
-            limit=48,
-        )
-        self._f_time = datetime.utcfromtimestamp(
-            self.ohlcv[0][0]/1000
-        )
-        
-        self._fetching_obs = 0
         
 
     def UTC_Time(self):
@@ -72,37 +65,49 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._fetching_obs += 1
-        
-        self._f_time = self._f_time + timedelta(minutes=30)
-        self._f_time = datetime.strftime(self._f_time, "%Y-%m-%d %H:%M:00")
-        self._f_time = datetime.strptime(self._f_time, "%Y-%m-%d %H:%M:00")
-        while self._f_time != self.UTC_Time():
+        self._prev_ft = self._prev_ft + timedelta(minutes=30)
+        self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
+        self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
+        print("111111111111111111111111111111111111111111111")
+        print(self._prev_ft)
+        while self._prev_ft != self.UTC_Time():
             sleep(5)
-            
-        self.ohlcv = self._exchange.fetch_ohlcv(
-            str(self._observation_symbols[0]),
-            timeframe=self._timeframe,
-            limit=1,
-        )
+        
+        self._fetch_cnt += 1
+        if self._fetch_cnt == 1:
+            self.ohlcv = self._exchange.fetch_ohlcv(
+                str(self._observation_symbols[0]),
+                timeframe=self._timeframe,
+                limit=self._window_size,
+            )
+        else:
+            self.ohlcv = self._exchange.fetch_ohlcv(
+                str(self._observation_symbols[0]),
+                timeframe=self._timeframe,
+                limit=1,
+            )
                 
         observations = pd.DataFrame.from_records(self.ohlcv)
         observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
-        observations.loc[0, 'date'] = datetime.utcfromtimestamp(
-                observations.loc[0, 'date']/1000
-        )
-        self._f_time = observations.loc[0, 'date']
-
+        for i in range(0, len(observations)):
+            observations.loc[i, 'date'] = datetime.utcfromtimestamp(
+                observations.loc[i, 'date']/1000
+            )
+        self._prev_ft = observations.loc[-1, 'date']
+        print("11111111111111111111111111111111111111111111111111")
+        print(observations)
+        print("22222222222222222222222222222222222222222222222222")
+        print(self._prev_ft)
+        
         self._Obs_DB = pd.concat(
             [self._Obs_DB, observations],
             ignore_index=True,
             sort=False
         )
-        if len(self._Obs_DB) >= window_size:
-            observations = self._Obs_DB.iloc[-(window_size):]
-        else:
-            observations = self._Obs_DB
-        return observations
+        print("33333333333333333333333333333333333333333333333333")
+        print(self._Obs_DB)
+
+        return self._Obs_DB
 
     
     def pair_to_symbol(self, 
