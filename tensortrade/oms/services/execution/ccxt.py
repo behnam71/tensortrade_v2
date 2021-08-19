@@ -73,8 +73,6 @@ class CCXTExchange():
         self._prev_ft = self._prev_ft + timedelta(minutes=5)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
-        print("111111111111111111111111111111111111111111111")
-        print(self._prev_ft)
         while self._prev_ft != self.UTC_Time():
             sleep(5)
         
@@ -99,19 +97,13 @@ class CCXTExchange():
                 observations.loc[i, 'date']/1000
             )
         self._prev_ft = observations.loc[len(observations)-1, 'date']
-        print("11111111111111111111111111111111111111111111111111")
-        print(observations)
-        print("22222222222222222222222222222222222222222222222222")
-        print(self._prev_ft)
-        
+
         self._Obs_DB = pd.concat(
             [self._Obs_DB, observations],
             ignore_index=True,
             sort=False
         )
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
-        print("33333333333333333333333333333333333333333333333333")
-        print(self._Obs_DB)
 
         return self._Obs_DB
 
