@@ -45,7 +45,6 @@ class TAlibIndicator(FeatureTransformer):
         X = pd.DataFrame(
             X, 
             columns=['date', 'open', 'high', 'low', 'close', 'volume'], 
-            dtype=float
         )
 
         print("777777777777777777777777777777777777777777777777777777")
