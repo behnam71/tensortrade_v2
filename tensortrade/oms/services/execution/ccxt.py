@@ -28,8 +28,7 @@ class CCXTExchange():
     """An exchange for trading on CCXT-supported cryptocurrency exchanges."""
     def __init__(self, 
                  exchange: Union[ccxt.Exchange, str],
-                 credentials: dict,
-                 window_size: int):
+                 credentials: dict):
         self._exchange_str = exchange
         self._exchange = getattr(
             ccxt, self._exchange_str
@@ -50,7 +49,6 @@ class CCXTExchange():
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
         self._timeframe = '30m'
-        self._window_size = window_size
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
         self._prev_ft = self.UTC_Time()
@@ -78,7 +76,7 @@ class CCXTExchange():
             self.ohlcv = self._exchange.fetch_ohlcv(
                 str(self._observation_symbols[0]),
                 timeframe=self._timeframe,
-                limit=self._window_size,
+                limit=window_size,
             )
         else:
             self.ohlcv = self._exchange.fetch_ohlcv(
