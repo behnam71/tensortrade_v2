@@ -46,9 +46,7 @@ class TAlibIndicator(FeatureTransformer):
             X, 
             columns=['date', 'open', 'high', 'low', 'close', 'volume'], 
         )
-        print("22222222222222222222222222222222222222222222222222")
-        print(X)
-
+        
         for idx, indicator in enumerate(self._indicators):
             indicator_name = self._indicator_names[idx]
             indicator_args = [
@@ -70,6 +68,9 @@ class TAlibIndicator(FeatureTransformer):
            
             else:
                 value = indicator(*indicator_args, **indicator_params)
+                print("22222222222222222222222222222222222222222222222222")
+                print(value)
+                print(len(value))
                 X[indicator_name] = value[-self._window_size:]
 
         return X
