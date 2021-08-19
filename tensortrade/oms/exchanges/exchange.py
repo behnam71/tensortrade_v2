@@ -71,6 +71,7 @@ class Exchange(Component, TimedIdentifiable):
     def __init__(self,
                  name: str,
                  service: Callable,
+                 window_size: int,
                  t_signal: bool,
                  options: ExchangeOptions = None):
         super().__init__()
@@ -78,6 +79,7 @@ class Exchange(Component, TimedIdentifiable):
         self._service = service
         self.options = options if options else ExchangeOptions()
         self._price_streams = {}
+        self._window_size = window_size
         
         if not(t_signal):
             from tensortrade.oms.services.execution.ccxt import CCXTExchange
@@ -88,6 +90,7 @@ class Exchange(Component, TimedIdentifiable):
             self.ccxt = CCXTExchange(
                 exchange='binance',
                 credentials=credentials,
+                window_size=self._window_size,
             )
 
     def __call__(self, *streams) -> "Exchange":
