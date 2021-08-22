@@ -48,7 +48,7 @@ class CCXTExchange():
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
-        self._timeframe = '1m'
+        self._timeframe = '30m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
         self._fetch_cnt = 0
@@ -70,7 +70,7 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._prev_ft = self._prev_ft + timedelta(minutes=1)
+        self._prev_ft = self._prev_ft + timedelta(minutes=30)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         while self._prev_ft != self.UTC_Time():
