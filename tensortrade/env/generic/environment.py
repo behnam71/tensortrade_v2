@@ -96,7 +96,7 @@ class TradingEnv(gym.Env, TimeIndexed):
                 credentials=credentials,
             )
         
-        with open("./crypto-v1/indicators.txt", "r") as file:
+        with open("/mnt/c/Users/BEHNAMH721AS.RN/OneDrive/Desktop/crypto_v2/indicators.txt", "r") as file:
             indicators_list = eval(file.readline())
         TAlib_Indicator = TAlibIndicator(indicators_list, self._window_size)
         self.feature_pipeline = FeaturePipeline(
