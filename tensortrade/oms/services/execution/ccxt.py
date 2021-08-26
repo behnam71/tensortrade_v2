@@ -48,7 +48,7 @@ class CCXTExchange():
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
-        self._timeframe = '5m'
+        self._timeframe = '1m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
         self._cnt = 0
