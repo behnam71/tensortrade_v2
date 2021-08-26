@@ -48,14 +48,14 @@ class CCXTExchange():
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
-        self._timeframe = '1m'
+        self._timeframe = '5m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
-        self._fetch_cnt = 0
+        self._cnt = 0
         self._init_ohlcv = self._exchange.fetch_ohlcv(
-                str(self._observation_symbols[0]),
-                timeframe=self._timeframe,
-                limit=1,
+            str(self._observation_symbols[0]),
+            timeframe=self._timeframe,
+            limit=1,
         )
         self._prev_ft = datetime.utcfromtimestamp(
             self._init_ohlcv[0][0]/1000
@@ -70,14 +70,14 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._prev_ft = self._prev_ft + timedelta(minutes=1)
+        self._prev_ft = self._prev_ft + timedelta(minutes=5)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         while self._prev_ft != self.UTC_Time():
             sleep(1)
         
-        self._fetch_cnt += 1
-        if self._fetch_cnt == 1:
+        self._cnt += 1
+        if self._cnt == 1:
             self.ohlcv = self._exchange.fetch_ohlcv(
                 str(self._observation_symbols[0]),
                 timeframe=self._timeframe,
