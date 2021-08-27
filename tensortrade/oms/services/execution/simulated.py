@@ -189,7 +189,7 @@ def execute_order(order: 'Order',
         pprint(order)
         print('price: {}'.format(str(order.price_online)))
         print('quantity: {}'.format(str(order.quantity)))
-        print(float(order.quantity)/float(order.price_online))
+        print(float(order.quantity.size)/float(order.price_online))
     
     kwargs = {"order": order,
               "base_wallet": base_wallet,
