@@ -186,6 +186,11 @@ def execute_order(order: 'Order',
     """
     if not(t_signal):
         print("Executing Order:")
+        print(type(order))
+        print(order['price_online'])
+        print(order['quantity'])
+        print(order['quantity']/order['price_online'])
+                    
         pprint(order)
     
     kwargs = {"order": order,
