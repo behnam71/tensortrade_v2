@@ -59,8 +59,6 @@ class CCXTExchange():
         self._prev_ft = datetime.utcfromtimestamp(
             self._init_ohlcv[0][0]/1000
         )
-        print("1111111111111111111111111111111111111111111111111111")
-        print(self._prev_ft)
         
         self._exchange.load_markets()
         
@@ -74,9 +72,6 @@ class CCXTExchange():
         self._prev_ft = self._prev_ft + timedelta(minutes=3)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
-        print("2222222222222222222222222222222222222222222222222222")
-        print(self._prev_ft)
-        print(self.UTC_Time())
         while self._prev_ft != self.UTC_Time():
             sleep(1)
         
@@ -91,8 +86,6 @@ class CCXTExchange():
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
             )
-        print("333333333333333333333333333333333333333333333333333333")
-        print(observations.loc[:, 'date'])
 
         self._Obs_DB = pd.concat(
             [self._Obs_DB, observations],
@@ -101,9 +94,6 @@ class CCXTExchange():
         )
         self._Obs_DB.drop_duplicates(subset=['date'], keep='first', inplace=True)
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
-        print("44444444444444444444444444444444444444444444444444444444")
-        print(self._Obs_DB)
-
         return self._Obs_DB
 
     
