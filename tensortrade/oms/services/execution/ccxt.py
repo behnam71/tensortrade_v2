@@ -81,19 +81,12 @@ class CCXTExchange():
         while self._prev_ft != self.UTC_Time():
             sleep(1)
         
-        self._cnt += 1
-        if self._cnt == 1:
-            self.ohlcv = self._exchange.fetch_ohlcv(
-                str(self._observation_symbols[0]),
-                timeframe=self._timeframe,
-                limit=window_size,
-            )
-        else:
-            self.ohlcv = self._exchange.fetch_ohlcv(
-                str(self._observation_symbols[0]),
-                timeframe=self._timeframe,
-                limit=1,
-            )
+        self.ohlcv = self._exchange.fetch_ohlcv(
+            str(self._observation_symbols[0]),
+            timeframe=self._timeframe,
+            limit=window_size,
+        )
+
                 
         observations = pd.DataFrame.from_records(self.ohlcv)
         observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
