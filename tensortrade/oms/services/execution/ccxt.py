@@ -60,6 +60,8 @@ class CCXTExchange():
         self._prev_ft = datetime.utcfromtimestamp(
             self._init_ohlcv[0][0]/1000
         )
+        print("1111111111111111111111111111111111111111111111111111")
+        print(self._prev_ft)
         
         self._exchange.load_markets()
         
@@ -73,6 +75,9 @@ class CCXTExchange():
         self._prev_ft = self._prev_ft + timedelta(minutes=3)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
+        print("2222222222222222222222222222222222222222222222222222")
+        print(self._prev_ft)
+        print(self.UTC_Time())
         while self._prev_ft != self.UTC_Time():
             sleep(1)
         
