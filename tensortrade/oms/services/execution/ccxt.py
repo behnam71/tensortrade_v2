@@ -21,7 +21,7 @@ from typing import List, Union
 from ccxt import BadRequest
 
 from tensortrade.oms.exchanges import Exchange
-from tensortrade.oms.instruments import TradingPair, BTC, USDT, DOGE
+from tensortrade.oms.instruments import TradingPair, BTC, USDT, XRP
 
 
 class CCXTExchange():
@@ -42,9 +42,9 @@ class CCXTExchange():
         self._base_instrument = USDT; self._quote_instrument = BTC
         
         #self._BTC_USDT_PAIR = TradingPair(USDT, BTC)
-        self._DOGE_USDT_PAIR = TradingPair(USDT, DOGE)
+        self._XRP_USDT_PAIR = TradingPair(USDT, XRP)
         
-        self._observation_pairs = [self._DOGE_USDT_PAIR]
+        self._observation_pairs = [self._XRP_USDT_PAIR]
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
