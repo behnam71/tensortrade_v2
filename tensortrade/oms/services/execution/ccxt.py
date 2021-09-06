@@ -51,7 +51,6 @@ class CCXTExchange():
         self._timeframe = '3m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
-        self._cnt = 0
         self._init_ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
             timeframe=self._timeframe,
@@ -72,7 +71,7 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._prev_ft = self._prev_ft + timedelta(minutes=2*3)
+        self._prev_ft = self._prev_ft + timedelta(minutes=3)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         print("2222222222222222222222222222222222222222222222222222")
@@ -86,17 +85,13 @@ class CCXTExchange():
             timeframe=self._timeframe,
             limit=window_size,
         )
-
-                
         observations = pd.DataFrame.from_records(self.ohlcv)
         observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
         for i in range(0, len(observations)):
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
             )
-        self._prev_ft = observations.loc[len(observations)-1, 'date']
         print("333333333333333333333333333333333333333333333333333333")
-        print(observations.loc[len(observations)-1, 'date'])
         print(observations.loc[:, 'date'])
 
         self._Obs_DB = pd.concat(
@@ -104,6 +99,7 @@ class CCXTExchange():
             ignore_index=True,
             sort=False
         )
+        self._Obs_DB.drop_duplicates(subset=['date'], keep='first', inplace=True)
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
 
         return self._Obs_DB
