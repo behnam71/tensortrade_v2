@@ -102,6 +102,9 @@ class CCXTExchange():
                 observations.loc[i, 'date']/1000
             )
         self._prev_ft = observations.loc[len(observations)-1, 'date']
+        print("333333333333333333333333333333333333333333333333333333")
+        print(observations.loc[len(observations)-1, 'date'])
+        print(observations.loc[:, 'date'])
 
         self._Obs_DB = pd.concat(
             [self._Obs_DB, observations],
