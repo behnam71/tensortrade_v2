@@ -49,7 +49,7 @@ setup(
         'pyyaml>=5.1.2',
         'stochastic>=0.6.0',
         'tensorflow==2.6.0',
-        #'tensorflow-gpu==2.6.0',
+        'tensorflow-gpu==2.6.0',
         'ipython>=7.12.0',
         'matplotlib>=3.1.1',
         'plotly>=4.5.0'
