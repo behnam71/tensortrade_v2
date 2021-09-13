@@ -295,22 +295,26 @@ def proportion_order(portfolio: 'Portfolio',
         quantity = (size * source.instrument).quantize()
 
         if t_signal:
-            order = Order(
+            params = {
                 **base_params,
                 'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
                 'exchange_pair': exchange_pair,
-                'quantity': quantity,
                 'price': exchange_pair.price,
-                't_signal': t_signal
+                'quantity': quantity
+            }
+            order = Order(
+                **params
             )
         else:
-            order = Order_v1(
+            params = {
                 **base_params,
                 'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
                 'exchange_pair': exchange_pair,
-                'quantity': quantity,
-                'price_online': exchange_pair.price_online,
-                't_signal': t_signal
+                'price': exchange_pair.price_online,
+                'quantity': quantity
+            }
+            order = Order_v1(
+                **params
             )
             
         return order
@@ -323,22 +327,26 @@ def proportion_order(portfolio: 'Portfolio',
     quantity = (size * source.instrument).quantize()
 
     if t_signal:
-        order = Order(
+        params = {
             **base_params,
             'side': TradeSide.SELL,
             'exchange_pair': exchange_pair,
-            'quantity': quantity,
             'price': exchange_pair.price,
-            't_signal': t_signal
+            'quantity': quantity
+        }
+        order = Order(
+            **params
         )
     else:
-        order = Order_v1(
+        params = {
             **base_params,
             'side': TradeSide.SELL,
             'exchange_pair': exchange_pair,
-            'quantity': quantity,
-            'price_online': exchange_pair.price_online,
-            't_signal': t_signal
+            'price': exchange_pair.price_online,
+            'quantity': quantity
+        }
+        order = Order(
+            **params
         )
 
     pair = portfolio.base_instrument / target.instrument
