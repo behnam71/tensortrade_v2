@@ -282,12 +282,6 @@ def proportion_order(portfolio: 'Portfolio',
 
     is_source_base = (source.instrument == portfolio.base_instrument)
     is_target_base = (target.instrument == portfolio.base_instrument)
-
-    if t_signal:
-        price = exchange_pair.price
-    else:
-        price = exchange_pair.price_online
-            
     if is_source_base or is_target_base:
         if is_source_base:
             pair = source.instrument / target.instrument
@@ -295,6 +289,11 @@ def proportion_order(portfolio: 'Portfolio',
             pair = target.instrument / source.instrument
 
         exchange_pair = ExchangePair(exchange, pair)
+        
+        if t_signal:
+            price = exchange_pair.price
+        else:
+            price = exchange_pair.price_online
 
         balance = source.balance.as_float()
         size = min(balance * proportion, balance)
@@ -321,6 +320,11 @@ def proportion_order(portfolio: 'Portfolio',
 
     pair = portfolio.base_instrument / source.instrument
     exchange_pair = ExchangePair(exchange, pair)
+    
+    if t_signal:
+        price = exchange_pair.price
+    else:
+        price = exchange_pair.price_online
 
     balance = source.balance.as_float()
     size = min(balance * proportion, balance)
