@@ -289,64 +289,57 @@ def proportion_order(portfolio: 'Portfolio',
             pair = target.instrument / source.instrument
 
         exchange_pair = ExchangePair(exchange, pair)
-        
-        if t_signal:
-            price = exchange_pair.price
-        else:
-            price = exchange_pair.price_online
 
         balance = source.balance.as_float()
         size = min(balance * proportion, balance)
         quantity = (size * source.instrument).quantize()
 
-        params = {
-            **base_params,
-            'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
-            'exchange_pair': exchange_pair,
-            'quantity': quantity,
-            'price': price,
-            't_signal': t_signal
-        }
         if t_signal:
             order = Order(
-                **params
+                **base_params,
+                'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
+                'exchange_pair': exchange_pair,
+                'quantity': quantity,
+                'price': exchange_pair.price,
+                't_signal': t_signal
             )
         else:
             order = Order_v1(
-                **params
+                **base_params,
+                'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
+                'exchange_pair': exchange_pair,
+                'quantity': quantity,
+                'price_online': exchange_pair.price_online,
+                't_signal': t_signal
             )
             
         return order
 
     pair = portfolio.base_instrument / source.instrument
     exchange_pair = ExchangePair(exchange, pair)
-    
-    if t_signal:
-        price = exchange_pair.price
-    else:
-        price = exchange_pair.price_online
 
     balance = source.balance.as_float()
     size = min(balance * proportion, balance)
     quantity = (size * source.instrument).quantize()
 
-    params = {
-        **base_params,
-        'side': TradeSide.SELL,
-        'exchange_pair': exchange_pair,
-        'quantity': quantity,
-        'price': price,
-        't_signal': t_signal
-    }
     if t_signal:
         order = Order(
-            **params
+            **base_params,
+            'side': TradeSide.SELL,
+            'exchange_pair': exchange_pair,
+            'quantity': quantity,
+            'price': exchange_pair.price,
+            't_signal': t_signal
         )
     else:
         order = Order_v1(
-            **params
+            **base_params,
+            'side': TradeSide.SELL,
+            'exchange_pair': exchange_pair,
+            'quantity': quantity,
+            'price_online': exchange_pair.price_online,
+            't_signal': t_signal
         )
-    order = Order(**params)
 
     pair = portfolio.base_instrument / target.instrument
     order.add_order_spec(OrderSpec(
