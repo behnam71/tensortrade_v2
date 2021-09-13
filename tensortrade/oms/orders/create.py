@@ -278,8 +278,8 @@ def proportion_order(portfolio: 'Portfolio',
         'start': portfolio.clock.step,
         'end': portfolio.clock.step + 1
     }
+    
     pair = None
-
     is_source_base = (source.instrument == portfolio.base_instrument)
     is_target_base = (target.instrument == portfolio.base_instrument)
     if is_source_base or is_target_base:
