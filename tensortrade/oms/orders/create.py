@@ -283,6 +283,11 @@ def proportion_order(portfolio: 'Portfolio',
     is_source_base = (source.instrument == portfolio.base_instrument)
     is_target_base = (target.instrument == portfolio.base_instrument)
 
+    if t_signal:
+        price = ep.price
+    else:
+        price = ep.price_online
+            
     if is_source_base or is_target_base:
         if is_source_base:
             pair = source.instrument / target.instrument
@@ -300,7 +305,7 @@ def proportion_order(portfolio: 'Portfolio',
             'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
             'exchange_pair': exchange_pair,
             'quantity': quantity,
-            'price': exchange_pair.price,
+            'price': price,
             't_signal': t_signal
         }
         if t_signal:
@@ -326,7 +331,7 @@ def proportion_order(portfolio: 'Portfolio',
         'side': TradeSide.SELL,
         'exchange_pair': exchange_pair,
         'quantity': quantity,
-        'price': exchange_pair.price,
+        'price': price,
         't_signal': t_signal
     }
     if t_signal:
