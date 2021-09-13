@@ -284,7 +284,6 @@ def proportion_order(portfolio: 'Portfolio',
     is_target_base = (target.instrument == portfolio.base_instrument)
 
     if is_source_base or is_target_base:
-
         if is_source_base:
             pair = source.instrument / target.instrument
         else:
@@ -304,8 +303,16 @@ def proportion_order(portfolio: 'Portfolio',
             'price': exchange_pair.price,
             't_signal': t_signal
         }
-
-        return Order(**params)
+        if t_signal:
+            order = Order(
+                **params
+            )
+        else:
+            order = Order_v1(
+                **params
+            )
+            
+        return order
 
     pair = portfolio.base_instrument / source.instrument
     exchange_pair = ExchangePair(exchange, pair)
@@ -322,11 +329,17 @@ def proportion_order(portfolio: 'Portfolio',
         'price': exchange_pair.price,
         't_signal': t_signal
     }
-
+    if t_signal:
+        order = Order(
+            **params
+        )
+    else:
+        order = Order_v1(
+            **params
+        )
     order = Order(**params)
 
     pair = portfolio.base_instrument / target.instrument
-
     order.add_order_spec(OrderSpec(
         side=TradeSide.BUY,
         trade_type=TradeType.MARKET,
