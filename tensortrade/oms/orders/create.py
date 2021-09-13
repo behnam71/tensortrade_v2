@@ -276,7 +276,8 @@ def proportion_order(portfolio: 'Portfolio',
         'portfolio': portfolio,
         'trade_type': TradeType.MARKET,
         'start': portfolio.clock.step,
-        'end': portfolio.clock.step + 1
+        'end': portfolio.clock.step + 1,
+        't_signal': t_signal
     }
     
     pair = None
