@@ -284,9 +284,9 @@ def proportion_order(portfolio: 'Portfolio',
     is_target_base = (target.instrument == portfolio.base_instrument)
 
     if t_signal:
-        price = ep.price
+        price = exchange_pair.price
     else:
-        price = ep.price_online
+        price = exchange_pair.price_online
             
     if is_source_base or is_target_base:
         if is_source_base:
