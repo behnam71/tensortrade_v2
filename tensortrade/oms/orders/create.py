@@ -310,7 +310,7 @@ def proportion_order(portfolio: 'Portfolio',
                 **base_params,
                 'side': TradeSide.BUY if is_source_base else TradeSide.SELL,
                 'exchange_pair': exchange_pair,
-                'price': exchange_pair.price_online,
+                'price_online': exchange_pair.price_online,
                 'quantity': quantity
             }
             order = Order_v1(
@@ -342,7 +342,7 @@ def proportion_order(portfolio: 'Portfolio',
             **base_params,
             'side': TradeSide.SELL,
             'exchange_pair': exchange_pair,
-            'price': exchange_pair.price_online,
+            'price_online': exchange_pair.price_online,
             'quantity': quantity
         }
         order = Order(
