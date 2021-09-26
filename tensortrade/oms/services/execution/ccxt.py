@@ -62,7 +62,7 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._ft = self._ft + timedelta(seconds=105)
+        self._ft = self._ft + timedelta(seconds=75)
         self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
         self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:00")
         while self._ft != self.UTC_Time():
@@ -88,7 +88,6 @@ class CCXTExchange():
         )
         self._Obs_DB.drop_duplicates(subset=['date'], keep='first', inplace=True)
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
-        print("1111111111111111111111111111111111111111111")
         print(self._Obs_DB)
         return self._Obs_DB
 
