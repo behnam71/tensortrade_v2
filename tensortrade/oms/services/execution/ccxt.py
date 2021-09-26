@@ -62,7 +62,7 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._ft = self._ft + timedelta(seconds=60)
+        self._ft = self._ft + timedelta(seconds=90)
         self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
         self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:00")
         while self._ft != self.UTC_Time():
