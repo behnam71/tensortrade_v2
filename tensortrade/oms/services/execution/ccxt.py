@@ -77,7 +77,7 @@ class CCXTExchange():
         self._prev_ft = datetime.utcfromtimestamp(
             self._init_ohlcv[0][0]/1000
         )
-        self._prev_ft = self._prev_ft + timedelta(seconds=120)
+        self._prev_ft = self._prev_ft + timedelta(seconds=60)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         while self._prev_ft != self.UTC_Time():
