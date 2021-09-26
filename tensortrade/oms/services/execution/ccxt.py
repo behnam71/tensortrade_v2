@@ -51,8 +51,8 @@ class CCXTExchange():
         self._timeframe = '1m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
         
-        p = UTC_Time
-        while p <= UTC_Time + timedelta(seconds=60):
+        p = self.UTC_Time
+        while p <= self.UTC_Time + timedelta(seconds=60):
             now_utc = datetime.now(timezone.utc)
             now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:%S")
             p = datetime.strptime(now_utc, "%Y-%m-%d %H:%M:%S")
