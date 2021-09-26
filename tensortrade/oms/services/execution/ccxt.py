@@ -50,25 +50,8 @@ class CCXTExchange():
         ]
         self._timeframe = '1m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
-        now_utc = datetime.now(timezone.utc)
-        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:00")
-        p = datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
-        now_utc = datetime.now(timezone.utc) + timedelta(seconds=60)
-        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:00")
-        h = datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
-        while p <= h:
-            now_utc = datetime.now(timezone.utc)
-            now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:%S")
-            p = datetime.strptime(now_utc, "%Y-%m-%d %H:%M:%S")
             
-        self._init_ohlcv = self._exchange.fetch_ohlcv(
-            str(self._observation_symbols[0]),
-            timeframe=self._timeframe,
-            limit=1,
-        )
-        self._prev_ft = datetime.utcfromtimestamp(
-            self._init_ohlcv[0][0]/1000
-        )
+        self._ft = self.UTC_Time()
         
         self._exchange.load_markets()
         
@@ -79,10 +62,10 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._prev_ft = self._prev_ft + timedelta(seconds=60)
-        #self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
-        #self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
-        while self._prev_ft != self.UTC_Time():
+        self._ft = self._ft + timedelta(seconds=60)
+        self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
+        self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:00")
+        while self._ft != self.UTC_Time():
             sleep(1)        
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
@@ -95,6 +78,8 @@ class CCXTExchange():
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
             )
+        
+        self._ft = self.UTC_Time()
 
         self._Obs_DB = pd.concat(
             [self._Obs_DB, observations],
@@ -103,7 +88,6 @@ class CCXTExchange():
         )
         self._Obs_DB.drop_duplicates(subset=['date'], keep='first', inplace=True)
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
-        self._prev_ft = self._Obs_DB.loc[len(self._Obs_DB)-1, 'date']
         print("1111111111111111111111111111111111111111111")
         print(self._Obs_DB)
         return self._Obs_DB
