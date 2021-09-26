@@ -103,7 +103,7 @@ class CCXTExchange():
         )
         self._Obs_DB.drop_duplicates(subset=['date'], keep='first', inplace=True)
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
-        self._prev_ft = self._Obs_DB.loc[-1, 'date']
+        self._prev_ft = self._Obs_DB.loc[len(self._Obs_DB)-1, 'date']
         print("1111111111111111111111111111111111111111111")
         print(self._Obs_DB)
         return self._Obs_DB
