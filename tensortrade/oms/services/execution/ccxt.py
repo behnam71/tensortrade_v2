@@ -66,10 +66,10 @@ class CCXTExchange():
     def UTC_Time(self):
         now_utc = datetime.now(timezone.utc)
         now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:00")
-        return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00") + timedelta(minutes=1)
+        return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._prev_ft = self._prev_ft + timedelta(minutes=1)
+        self._prev_ft = self._prev_ft + timedelta(minutes=2)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         while self._prev_ft != self.UTC_Time():
