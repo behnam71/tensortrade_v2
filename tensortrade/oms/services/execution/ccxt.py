@@ -69,6 +69,14 @@ class CCXTExchange():
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
 
     def next_observation(self, window_size: int) -> pd.DataFrame:
+        self._init_ohlcv = self._exchange.fetch_ohlcv(
+            str(self._observation_symbols[0]),
+            timeframe=self._timeframe,
+            limit=1,
+        )
+        self._prev_ft = datetime.utcfromtimestamp(
+            self._init_ohlcv[0][0]/1000
+        )
         self._prev_ft = self._prev_ft + timedelta(seconds=120)
         self._prev_ft = datetime.strftime(self._prev_ft, "%Y-%m-%d %H:%M:00")
         self._prev_ft = datetime.strptime(self._prev_ft, "%Y-%m-%d %H:%M:00")
