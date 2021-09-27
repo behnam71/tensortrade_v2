@@ -51,14 +51,8 @@ class CCXTExchange():
         self._timeframe = '1m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
             
-        self._init_ohlcv = self._exchange.fetch_ohlcv(
-            str(self._observation_symbols[0]),
-            timeframe=self._timeframe,
-            limit=1,
-        )
-        self._ft = datetime.utcfromtimestamp(
-                self._init_ohlcv[0][0]/1000
-        )
+        observations = self.fetch_ohlcv()
+        self._ft = observations.loc[len(observations)-1, 'date']
 
         self._exchange.load_markets()
         
@@ -67,14 +61,8 @@ class CCXTExchange():
         now_utc = datetime.now(timezone.utc)
         now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:%S")
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:%S")
-
-    def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._ft = self._ft + timedelta(minutes=1)
-        self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
-        self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:00")
-        while self._ft > self.UTC_Time():
-            pass     
-            
+    
+    def fetch_ohlcv(self):
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
             timeframe=self._timeframe,
@@ -87,7 +75,17 @@ class CCXTExchange():
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
             )
-        
+         
+        return observations
+
+    def next_observation(self, window_size: int) -> pd.DataFrame:
+        self._ft = self._ft + timedelta(minutes=1)
+        self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
+        self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:00")
+        while self._ft > self.UTC_Time():
+            pass     
+            
+        observations = self.fetch_ohlcv()
         self._ft = observations.loc[len(observations)-1, 'date']
 
         self._Obs_DB = pd.concat(
