@@ -51,7 +51,7 @@ class CCXTExchange():
         self._timeframe = '1m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
             
-        observations = self.fetch_ohlcv()
+        observations = self.fetch_ohlcv(window_size=24)
         self._ft = observations.loc[len(observations)-1, 'date']
 
         self._exchange.load_markets()
@@ -62,7 +62,8 @@ class CCXTExchange():
         now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:%S")
         return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:%S")
     
-    def fetch_ohlcv(self):
+    
+    def fetch_ohlcv(self, window_size):
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
             timeframe=self._timeframe,
@@ -74,10 +75,10 @@ class CCXTExchange():
         for i in range(0, len(observations)):
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
-            )
-         
+            )         
         return observations
 
+    
     def next_observation(self, window_size: int) -> pd.DataFrame:
         self._ft = self._ft + timedelta(minutes=1)
         self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
@@ -85,7 +86,7 @@ class CCXTExchange():
         while self._ft > self.UTC_Time():
             pass     
             
-        observations = self.fetch_ohlcv()
+        observations = self.fetch_ohlcv(window_size)
         self._ft = observations.loc[len(observations)-1, 'date']
 
         self._Obs_DB = pd.concat(
