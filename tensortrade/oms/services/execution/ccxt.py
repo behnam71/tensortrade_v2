@@ -56,9 +56,10 @@ class CCXTExchange():
             timeframe=self._timeframe,
             limit=1,
         )
-        print(self._init_ohlcv)
+        print("22222222222222222222222222222222")
+        print(self._init_ohlcv[0])
         self._ft = datetime.utcfromtimestamp(
-                self._init_ohlcv[0, 0]/1000
+                self._init_ohlcv[0][0]/1000
             )
         
         self._exchange.load_markets()
