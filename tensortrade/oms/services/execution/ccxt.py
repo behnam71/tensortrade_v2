@@ -48,7 +48,7 @@ class CCXTExchange():
         self._observation_symbols = [
             self.pair_to_symbol(pair) for pair in self._observation_pairs
         ]
-        self._timeframe = '1m'
+        self._timeframe = '5m'
         self._Obs_DB = pd.DataFrame([], columns=['date', 'open', 'high', 'low', 'close', 'volume'])
             
         observations = self.fetch_ohlcv(window_size=24)
@@ -80,7 +80,7 @@ class CCXTExchange():
 
     
     def next_observation(self, window_size: int) -> pd.DataFrame:
-        self._ft = self._ft + timedelta(minutes=1) + timedelta(seconds=1)
+        self._ft = self._ft + timedelta(minutes=5) + timedelta(seconds=1)
         self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:%S")
         self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:%S")
         while self._ft > self.UTC_Time():
