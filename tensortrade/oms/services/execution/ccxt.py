@@ -96,7 +96,6 @@ class CCXTExchange():
         )
         self._Obs_DB.drop_duplicates(subset=['date'], keep='first', inplace=True)
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
-        print(self._Obs_DB)
         return self._Obs_DB
 
     
