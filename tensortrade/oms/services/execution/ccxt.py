@@ -75,7 +75,20 @@ class CCXTExchange():
         for i in range(0, len(observations)):
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
-            )         
+            )
+        while observations.loc[len(observations)-1, 'date'] == self._Obs_DB.loc[len(self._Obs_DB)-1, 'date']:
+            self.ohlcv = self._exchange.fetch_ohlcv(
+                str(self._observation_symbols[0]),
+                timeframe=self._timeframe,
+                limit=window_size,
+            )
+            
+            observations = pd.DataFrame.from_records(self.ohlcv)
+            observations.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
+            for i in range(0, len(observations)):
+                observations.loc[i, 'date'] = datetime.utcfromtimestamp(
+                    observations.loc[i, 'date']/1000
+                )
         return observations
 
     
