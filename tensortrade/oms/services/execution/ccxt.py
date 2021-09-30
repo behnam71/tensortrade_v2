@@ -59,8 +59,8 @@ class CCXTExchange():
 
     def UTC_Time(self):
         now_utc = datetime.now(timezone.utc)
-        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:%S")
-        return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:%S")
+        now_utc = datetime.strftime(now_utc, "%Y-%m-%d %H:%M:00")
+        return datetime.strptime(now_utc, "%Y-%m-%d %H:%M:00")
     
     
     def fetch_ohlcv(self, window_size):
