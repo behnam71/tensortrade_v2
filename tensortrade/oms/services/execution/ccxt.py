@@ -83,6 +83,8 @@ class CCXTExchange():
         self._ft = self._ft + timedelta(minutes=2*5)
         self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
         self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:00")
+        print("111111111111111111111111111111111111111111111")
+        print(self._ft)
         while self._ft > self.UTC_Time():
             pass     
             
@@ -96,6 +98,8 @@ class CCXTExchange():
         )
         self._Obs_DB.drop_duplicates(subset=['date'], keep='first', inplace=True)
         self._Obs_DB = self._Obs_DB.reset_index(drop=True)
+        print("2222222222222222222222222222222222222222222222222")
+        print(self._Obs_DB)
         return self._Obs_DB
 
     
