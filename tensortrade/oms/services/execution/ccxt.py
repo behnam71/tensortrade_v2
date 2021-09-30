@@ -68,7 +68,7 @@ class CCXTExchange():
         self.ohlcv = self._exchange.fetch_ohlcv(
             str(self._observation_symbols[0]),
             timeframe=self._timeframe,
-            limit=window_size,
+            limit=window_size+1,
         )
         
         observations = pd.DataFrame.from_records(self.ohlcv)
@@ -82,7 +82,7 @@ class CCXTExchange():
             self.ohlcv = self._exchange.fetch_ohlcv(
                 str(self._observation_symbols[0]),
                 timeframe=self._timeframe,
-                limit=window_size,
+                limit=window_size+1,
             )
             
             observations = pd.DataFrame.from_records(self.ohlcv)
@@ -92,6 +92,7 @@ class CCXTExchange():
                     observations.loc[i, 'date']/1000
                 )
         self._last_raw = observations.loc[len(observations)-1, 'date']
+        observations = observations.iloc[:-1,:]
         return observations
 
     
