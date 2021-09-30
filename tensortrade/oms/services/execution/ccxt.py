@@ -53,6 +53,7 @@ class CCXTExchange():
             
         observations = self.fetch_ohlcv(window_size=24)
         self._ft = observations.loc[len(observations)-1, 'date']
+        self._last_raw = UTC_Time(self)
 
         self._exchange.load_markets()
         
@@ -76,7 +77,8 @@ class CCXTExchange():
             observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                 observations.loc[i, 'date']/1000
             )
-        while observations.loc[len(observations)-1, 'date'] == self._Obs_DB.loc[len(self._Obs_DB)-1, 'date']:
+        
+        while observations.loc[len(observations)-1, 'date'] == self._last_raw:
             self.ohlcv = self._exchange.fetch_ohlcv(
                 str(self._observation_symbols[0]),
                 timeframe=self._timeframe,
@@ -89,6 +91,7 @@ class CCXTExchange():
                 observations.loc[i, 'date'] = datetime.utcfromtimestamp(
                     observations.loc[i, 'date']/1000
                 )
+        self._last_raw = observations.loc[len(observations)-1, 'date']
         return observations
 
     
@@ -96,9 +99,6 @@ class CCXTExchange():
         self._ft = self._ft + timedelta(minutes=5)
         self._ft = datetime.strftime(self._ft, "%Y-%m-%d %H:%M:00")
         self._ft = datetime.strptime(self._ft, "%Y-%m-%d %H:%M:00")
-        print("111111111111111111111111111111111111111111111")
-        print(self._ft)
-        print(self.UTC_Time())
         while self._ft > self.UTC_Time():
             pass     
             
