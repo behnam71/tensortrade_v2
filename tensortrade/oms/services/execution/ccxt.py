@@ -53,7 +53,7 @@ class CCXTExchange():
             
         observations = self.fetch_ohlcv(window_size=24)
         self._ft = observations.loc[len(observations)-1, 'date']
-        self._last_raw = UTC_Time(self)
+        self._last_raw = self.UTC_Time()
 
         self._exchange.load_markets()
         
