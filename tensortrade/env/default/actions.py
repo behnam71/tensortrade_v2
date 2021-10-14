@@ -390,10 +390,6 @@ class ManagedRiskOrders(TensorTradeActionScheme):
         size = (balance * proportion)
         size = min(balance, size)
         quantity = (size * instrument).quantize()
-        
-        print("Order Pre-Details:")
-        print("Side:{}".format(str(side)))
-        print("Size:{}".format(str(size)))
 
         if t_signal:
             if size < 10 ** -instrument.precision \
@@ -402,6 +398,11 @@ class ManagedRiskOrders(TensorTradeActionScheme):
                 return []
         else:
             if size < 10 ** -instrument.precision or size < self.min_order_abs:
+                print("Order Pre-Details:")
+                print("Side:{}".format(str(side)))
+                print("Size:{}".format(str(size)))
+                print("Quantity:{}".format(str(quantity)))
+                print("=======>> RETURN NULL...")
                 return []
         
         if t_signal:
